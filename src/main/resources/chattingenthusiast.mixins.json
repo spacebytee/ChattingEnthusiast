@@ -2,6 +2,7 @@
 	"required": true,
 	"package": "com.bytespacegames.chattingenthusiast.mixin",
 	"compatibilityLevel": "JAVA_21",
+	"accessWidener": "chattingenthusiast.accesswidener",
 	"mixins": [
 		"ChatComponentMixin"
 	],
@@ -10,5 +11,8 @@
 	},
 	"overwrites": {
 		"requireAnnotations": true
-	}
+	},
+	"client": [
+		"IChatComponentAccessor"
+	]
 }

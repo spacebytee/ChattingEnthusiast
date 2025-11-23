@@ -51,6 +51,10 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/chattingenthusiast.accesswidener")
+}
+
 jar {
 	inputs.property "archivesName", project.base.archivesName
 
