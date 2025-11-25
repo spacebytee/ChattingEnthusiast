@@ -43,7 +43,7 @@ public class ChatComponentMixin {
 	@Shadow
 	private void drawTagIcon(GuiGraphics guiGraphics, int i, int j, GuiMessageTag.Icon icon) {}
 	@Shadow
-	private double getScale() { return 0; }
+    public double getScale() { return 0; }
 	@Shadow
 	private int getMessageEndIndexAt(double d, double e) { return 0;}
 	@Shadow
@@ -60,8 +60,6 @@ public class ChatComponentMixin {
 	private double screenToChatY(double d) {
 		return 0;
 	}
-	@Shadow
-	public int getWidth() { return 0; }
 	@ModifyExpressionValue(
 			method = {"addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", "addMessageToDisplayQueue", "addRecentChat"},
 			at = @At(value = "CONSTANT", args = "intValue=100")
@@ -100,6 +98,7 @@ public class ChatComponentMixin {
 		lastGraphics = graphics;
 		lastMouseX = j;
 		lastMouseY = k;
+		ChattingEnthusiast.chatting.updateMouse(j,k);
 	}
 	@Redirect(
 			method = "render",
@@ -111,20 +110,14 @@ public class ChatComponentMixin {
 	)
 	private int renderLine(ChatComponent instance, int i, int j, boolean bl, int k, ChatComponent.LineConsumer consumer) {
 		Minecraft minecraft = Minecraft.getInstance();
-		float h = minecraft.options.textBackgroundOpacity().get().floatValue();
 		float g = minecraft.options.chatOpacity().get().floatValue() * 0.9F + 0.1F;
 		int q = getMessageEndIndexAt(screenToChatX(lastMouseX), screenToChatY(lastMouseY));
-		// ox is relative to the bottom chat message as scrolled, so we need to account for scroll position
-		int rq = ChattingEnthusiast.INSTANCE.getHoveredMessage(lastMouseX,lastMouseY) - chatScrollbarPos;
 		double d = minecraft.options.chatLineSpacing().get();
 		int r = (int)Math.round(-8.0 * (d + 1.0) + 4.0 * d);
-		int n = Mth.ceil(getWidth() / getScale());
-		int p = Mth.floor((lastGraphics.guiHeight() - 40) / getScale());;
+		int p = Mth.floor((lastGraphics.guiHeight() - 40) / getScale());
 		return forEachLine(getLinesPerPage(), i, bl, p, (lx, mx, nx, line, ox, hx) -> {
 			float fakeHx = bl ? 1.0f : ((float) getTimeFactor(j-line.addedTime()));
-			int color = ox == rq ? 0xFFFFFFFF : 0xFF000000;
-			System.out.println(rq + " | " + ox + " | " + lastMouseX + ", " + lastMouseY);
-			lastGraphics.fill(lx - 4, mx, lx + n + 4 + 4, nx, ARGB.color(fakeHx * h, color));
+			ChattingEnthusiast.chatting.renderCustomLine(lastGraphics, lx, mx, nx, ox,fakeHx);
 			GuiMessageTag guiMessageTag = line.tag();
 			if (guiMessageTag != null) {
 				int px = ARGB.color(fakeHx * g, guiMessageTag.indicatorColor());

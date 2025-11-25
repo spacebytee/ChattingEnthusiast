@@ -12,8 +12,14 @@ import java.util.List;
 public interface IChatComponentAccessor {
     @Accessor("trimmedMessages")
     public List<GuiMessage.Line> getTrimmedMessages();
+    @Accessor("allMessages")
+    public List<GuiMessage> getAllMessages();
     @Accessor("chatScrollbarPos")
     public int getChatScrollbarPos();
     @Invoker("getLineHeight")
     public int mixin$getLineHeight();
+    @Invoker("getWidth")
+    public int mixin$getWidth();
+    @Invoker("getLinesPerPage")
+    public int mixin$getLinesPerPage();
 }
