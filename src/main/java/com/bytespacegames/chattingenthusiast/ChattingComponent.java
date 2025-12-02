@@ -71,9 +71,7 @@ public class ChattingComponent {
 
     public void onClick() {
         for (AbstractGuiElement e : elements) {
-            if (!e.isVisible()) continue;
-            if (!e.isHovering(mouseX,mouseY)) continue;
-            e.onClick();
+            e.handleClick(mouseX,mouseY);
         }
     }
 }

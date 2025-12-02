@@ -65,8 +65,14 @@ public abstract class AbstractGuiElement {
     public boolean isHovering(int mouseX, int mouseY) {
         int rOX =  + ChattingEnthusiast.chatting.renderOffsetX;
         int rOY =  + ChattingEnthusiast.chatting.renderOffsetY;
-        return mouseX >= x + rOX && mouseX < x + rOX + width && mouseY >= y + rOY && mouseY < y + rOY + height;
+        return mouseX >= x + rOX && mouseX < x + rOX + width && mouseY >= y + rOY && mouseY <= y + rOY + height;
     }
     public abstract void render(GuiGraphics g);
     public abstract void onClick();
+
+    public void handleClick(int mouseX, int mouseY) {
+        if (!isVisible()) return;
+        if (!isHovering(mouseX,mouseY)) return;
+        onClick();
+    }
 }
