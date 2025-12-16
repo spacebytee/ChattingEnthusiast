@@ -1,10 +1,10 @@
 package com.bytespacegames.chattingenthusiast;
 
-import com.bytespacegames.chattingenthusiast.gui.AbstractGuiElement;
-import com.bytespacegames.chattingenthusiast.gui.CopyElement;
-import com.bytespacegames.chattingenthusiast.gui.DeleteElement;
+import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
+import com.bytespacegames.chattingenthusiast.gui.elements.AbstractGuiElement;
+import com.bytespacegames.chattingenthusiast.gui.elements.CopyElement;
+import com.bytespacegames.chattingenthusiast.gui.elements.DeleteElement;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
-import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
@@ -18,16 +18,16 @@ public class ChattingComponent {
     private Minecraft mc;
     public int renderOffsetX = 0;
     public int renderOffsetY = 0;
-    public List<AbstractGuiElement> elements;
+    public BasicContainer container;
     CopyElement copy;
     DeleteElement delete;
     public ChattingComponent() {
         this.mc = Minecraft.getInstance();
-        elements = new ArrayList<AbstractGuiElement>();
+        container = new BasicContainer(0,0,true);
         copy = new CopyElement(0,0,0,0, false);
         delete = new DeleteElement(0,0,0,0, false);
-        elements.add(copy);
-        elements.add(delete);
+        container.addElement(copy);
+        container.addElement(delete);
     }
     public void renderCustomLine(GuiGraphics graphics, int x, int mx, int nx, int lineIndex, float opacity) {
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
@@ -63,17 +63,10 @@ public class ChattingComponent {
             copy.setVisible(false);
             delete.setVisible(false);
         }
-        for (AbstractGuiElement e : elements) {
-            if (!e.isVisible()) continue;
-            e.render(g);
-        }
+        container.render(g);
     }
 
     public void onClick() {
-        for (AbstractGuiElement e : elements) {
-            if (!e.isVisible()) continue;
-            if (!e.isHovering(mouseX,mouseY)) continue;
-            e.onClick();
-        }
+        container.onClick();
     }
 }

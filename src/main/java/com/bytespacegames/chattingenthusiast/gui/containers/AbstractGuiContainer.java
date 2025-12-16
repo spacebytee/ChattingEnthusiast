@@ -1,0 +1,66 @@
+package com.bytespacegames.chattingenthusiast.gui.containers;
+
+import com.bytespacegames.chattingenthusiast.ChattingComponent;
+import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.gui.elements.AbstractGuiElement;
+import net.minecraft.client.gui.GuiGraphics;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class AbstractGuiContainer extends AbstractGuiElement {
+    protected final List<AbstractGuiElement> elements;
+    public AbstractGuiContainer(int x, int y, int width, int height, boolean visible) {
+        super(x, y, width, height, visible);
+        elements = new ArrayList<AbstractGuiElement>();
+    }
+    // define how an element should be positioned (relative to the containers x,y)
+    public abstract int getEffectiveX(int elementIndex);
+    public abstract int getEffectiveY(int elementIndex);
+
+    public List<AbstractGuiElement> getElements() {
+        return elements;
+    }
+    public void addElement(AbstractGuiElement e) {
+        if (e.parent != null) {
+            throw new IllegalStateException("Element already has a parent.");
+        }
+        elements.add(e);
+        e.parent = this;
+    }
+    public void removeElement(AbstractGuiElement e) {
+        if (!elements.contains(e)) {
+            return;
+        }
+        elements.remove(e);
+        e.parent = null;
+    }
+
+    @Override
+    public void render(GuiGraphics g) {
+        if (!visible) return;
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            int effectiveX = this.x + getEffectiveX(i);
+            int effectiveY = this.y + getEffectiveY(i);
+            e.setAbsolutePosition(effectiveX,effectiveY);
+            e.render(g);
+        }
+    }
+
+    @Override
+    public void onClick() {
+        if (!visible) return;
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            int effectiveX = this.x + getEffectiveX(i);
+            int effectiveY = this.y + getEffectiveY(i);
+            e.setAbsolutePosition(effectiveX,effectiveY);
+            ChattingComponent c = ChattingEnthusiast.chatting;
+            if (!e.isHovering(c.getMouseX(),c.getMouseY())) continue;
+            e.onClick();
+        }
+    }
+}
