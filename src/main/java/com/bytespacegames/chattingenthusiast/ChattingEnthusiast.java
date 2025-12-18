@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 public class ChattingEnthusiast implements ClientModInitializer {
 	public static final String MOD_ID = "chattingenthusiast";
 	public static final int MAX_MESSAGES = 16384;
+	public static final int SCROLLING_INTERVAL = 1;
 	public static ChattingEnthusiast INSTANCE;
 	public static ChattingComponent chatting;
 	public static int offsetChatHeight = 0;

@@ -12,7 +12,7 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
     protected final List<AbstractGuiElement> elements;
     public AbstractGuiContainer(int x, int y, int width, int height, boolean visible) {
         super(x, y, width, height, visible);
-        elements = new ArrayList<AbstractGuiElement>();
+        elements = new ArrayList<>();
     }
     // define how an element should be positioned (relative to the containers x,y)
     public abstract int getEffectiveX(int elementIndex);

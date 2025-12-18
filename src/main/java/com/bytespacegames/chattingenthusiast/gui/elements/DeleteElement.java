@@ -45,19 +45,5 @@ public class DeleteElement extends AbstractGuiElement {
         ChatComponent cc = Minecraft.getInstance().gui.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         cca.getTrimmedMessages().remove(messageIndex + cca.getChatScrollbarPos());
-
-        /*GuiMessage.Line attemptedDelete = cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos());
-        for (GuiMessage msg : cca.getAllMessages()) {
-            if (msg.addedTime() != attemptedDelete.addedTime())  {
-                System.out.println(msg.addedTime() + ", " + attemptedDelete.addedTime());
-                continue;
-            }
-            if (msg.tag() != attemptedDelete.tag()) {
-                System.out.println(msg.tag() + ", " + attemptedDelete.tag());
-                continue;
-            }
-            System.out.println("attempt delete");
-            cc.deleteMessage(msg.signature());
-        }*/
     }
 }

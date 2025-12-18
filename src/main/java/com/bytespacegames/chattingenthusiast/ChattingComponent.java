@@ -1,23 +1,24 @@
 package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
-import com.bytespacegames.chattingenthusiast.gui.elements.AbstractGuiElement;
 import com.bytespacegames.chattingenthusiast.gui.elements.CopyElement;
 import com.bytespacegames.chattingenthusiast.gui.elements.DeleteElement;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ChattingComponent {
     private int mouseX,mouseY;
-    private Minecraft mc;
+    private final Minecraft mc;
     public int renderOffsetX = 0;
     public int renderOffsetY = 0;
+    public int desiredScrollbarPos;
+    public boolean ignoreScroll = false;
+    TimerUtils scrollTimer = new TimerUtils();
+
     public BasicContainer container;
     CopyElement copy;
     DeleteElement delete;
@@ -64,9 +65,19 @@ public class ChattingComponent {
             delete.setVisible(false);
         }
         container.render(g);
+
+        if (!scrollTimer.hasTimeElapsed(1000/80, true)) return;
+        IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+        int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
+        ignoreScroll = true;
+        mc.gui.getChat().scrollChat(scrollDelta);
     }
 
     public void onClick() {
         container.onClick();
+    }
+
+    public void tick() {
+
     }
 }

@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
+import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
@@ -29,9 +30,7 @@ public class ChatComponentMixin {
 	@Unique
 	private int lastMouseY;
 	@Shadow
-	private int chatScrollbarPos;
-	@Shadow
-	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<GuiMessage.Line>();
+	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
 	@Shadow
 	private static double getTimeFactor(int i) { return 0; }
 	@Shadow
@@ -46,8 +45,6 @@ public class ChatComponentMixin {
     public double getScale() { return 0; }
 	@Shadow
 	private int getMessageEndIndexAt(double d, double e) { return 0;}
-	@Shadow
-	private int getMessageLineIndexAt(double d, double e) { return 0;}
 	@Shadow
 	public int getLinesPerPage() {
 		return 0;
@@ -129,5 +126,38 @@ public class ChatComponentMixin {
 				}
 			}
 		});
+	}
+	@Inject(method = "resetChatScroll",
+			at = @At("HEAD"))
+	public void mixin$resetChatScroll(CallbackInfo ci) {
+		ChattingEnthusiast.chatting.desiredScrollbarPos = 0;
+	}
+	@Inject(method = "scrollChat",
+			at = @At("HEAD"),
+			cancellable = true)
+	public void mixin$scrollChat(int i, CallbackInfo ci) {
+		ChattingComponent ch = ChattingEnthusiast.chatting;
+		boolean cancel = true;
+		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
+			if (ChattingEnthusiast.chatting.ignoreScroll) {
+				ChattingEnthusiast.chatting.ignoreScroll = false;
+				return;
+			}
+			cancel = false;
+		}
+		if (cancel) ci.cancel();
+		ch.desiredScrollbarPos += i;
+		int j = trimmedMessages.size();
+		if (ch.desiredScrollbarPos > j - this.getLinesPerPage()) {
+			ch.desiredScrollbarPos = j - this.getLinesPerPage();
+		}
+		if (ch.desiredScrollbarPos <= 0) {
+			ch.desiredScrollbarPos = 0;
+		}
+	}
+	@Inject(method = "tick",
+			at = @At("HEAD"))
+	public void mixin$tick(CallbackInfo ci) {
+		ChattingEnthusiast.chatting.tick();
 	}
 }

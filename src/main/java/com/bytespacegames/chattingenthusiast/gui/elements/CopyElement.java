@@ -1,17 +1,16 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
+import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.GuiMessage;
-import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.util.ARGB;
-import net.minecraft.util.FormattedCharSequence;
 import org.lwjgl.glfw.GLFW;
 
 import static com.bytespacegames.chattingenthusiast.gui.GuiUtil.drawRect;
@@ -36,8 +35,6 @@ public class CopyElement extends AbstractGuiElement {
             iconColor = 0xFFFFFFFF;
         }
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
-        IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
 
         int gx = x + 1;
         int gy = y + 1;
@@ -62,26 +59,11 @@ public class CopyElement extends AbstractGuiElement {
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // single line
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
-            setClipboard(getPlainText(cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos()).content()));
+            setClipboard(ChatUtil.getPlainText(cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos()).content()));
             return;
         }
-        GuiMessage.Line line = cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos());
-        for (GuiMessage gm : cca.getAllMessages()) {
-            if (gm.tag() == line.tag() && gm.addedTime() == line.addedTime()) {
-                setClipboard(gm.content().getString());
-                return;
-            }
-        }
-    }
-
-    public static String getPlainText(FormattedCharSequence seq) {
-        StringBuilder sb = new StringBuilder();
-
-        seq.accept((index, style, codePoint) -> {
-            sb.appendCodePoint(codePoint);
-            return true;
-        });
-
-        return sb.toString();
+        GuiMessage message = ChatUtil.getMessageFromLine(cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos()));
+        if (message == null) return;
+        setClipboard(message.content().getString());
     }
 }
