@@ -80,9 +80,7 @@ public abstract class AbstractGuiElement {
     }
 
     public boolean isHovering(int mouseX, int mouseY) {
-        int rOX = ChattingEnthusiast.chatting.renderOffsetX;
-        int rOY = ChattingEnthusiast.chatting.renderOffsetY;
-        return mouseX >= x + rOX && mouseX < x + rOX + width && mouseY >= y + rOY && mouseY < y + rOY + height;
+        return mouseX >= x && mouseX < x + width && mouseY >= y  && mouseY < y + height;
     }
     public abstract void render(GuiGraphics g);
     public abstract void onClick();

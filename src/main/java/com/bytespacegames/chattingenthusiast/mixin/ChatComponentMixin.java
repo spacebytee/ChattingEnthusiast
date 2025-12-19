@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatComponent.class)
-public class ChatComponentMixin {
+public abstract class ChatComponentMixin {
 	@Unique
 	private GuiGraphics lastGraphics;
 	@Unique
@@ -42,8 +43,6 @@ public class ChatComponentMixin {
 	@Shadow
 	private void drawTagIcon(GuiGraphics guiGraphics, int i, int j, GuiMessageTag.Icon icon) {}
 	@Shadow
-    public double getScale() { return 0; }
-	@Shadow
 	private int getMessageEndIndexAt(double d, double e) { return 0;}
 	@Shadow
 	public int getLinesPerPage() {
@@ -57,12 +56,24 @@ public class ChatComponentMixin {
 	private double screenToChatY(double d) {
 		return 0;
 	}
+	@Shadow
+	public boolean isChatFocused() { return false; }
+
+	@Shadow protected abstract int getLineHeight();
+
+	@Shadow private int chatScrollbarPos;
+
 	@ModifyExpressionValue(
 			method = {"addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", "addMessageToDisplayQueue", "addRecentChat"},
 			at = @At(value = "CONSTANT", args = "intValue=100")
 	)
 	private int chatHistoryLength(int i) {
 		return ChattingEnthusiast.MAX_MESSAGES;
+	}
+
+	@ModifyVariable(method = "render", at = @At("STORE"), ordinal = 6)
+	private int moveChat(int m) {
+		return (int) (m + ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting.getChatOffset());
 	}
 
 	@Redirect(
@@ -111,8 +122,7 @@ public class ChatComponentMixin {
 		int q = getMessageEndIndexAt(screenToChatX(lastMouseX), screenToChatY(lastMouseY));
 		double d = minecraft.options.chatLineSpacing().get();
 		int r = (int)Math.round(-8.0 * (d + 1.0) + 4.0 * d);
-		int p = Mth.floor((lastGraphics.guiHeight() - 40) / getScale());
-		return forEachLine(getLinesPerPage(), i, bl, p, (lx, mx, nx, line, ox, hx) -> {
+		return forEachLine(i, j, bl, k, (lx, mx, nx, line, ox, hx) -> {
 			float fakeHx = bl ? 1.0f : ((float) getTimeFactor(j-line.addedTime()));
 			ChattingEnthusiast.chatting.renderCustomLine(lastGraphics, lx, mx, nx, ox,fakeHx);
 			GuiMessageTag guiMessageTag = line.tag();
@@ -155,9 +165,11 @@ public class ChatComponentMixin {
 			ch.desiredScrollbarPos = 0;
 		}
 	}
-	@Inject(method = "tick",
+
+	@Inject(method = "addMessageToDisplayQueue",
 			at = @At("HEAD"))
-	public void mixin$tick(CallbackInfo ci) {
-		ChattingEnthusiast.chatting.tick();
+	private void mixin$addMessageToDisplayQueue(GuiMessage guiMessage, CallbackInfo ci) {
+		if (isChatFocused() && chatScrollbarPos != 0) return;
+		ChattingEnthusiast.chatting.setChatOffset(ChattingEnthusiast.chatting.getChatOffset() + getLineHeight());
 	}
 }
