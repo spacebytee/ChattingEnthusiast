@@ -51,7 +51,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		// we add the line height * 2, and 2 additional pixels to account for the copy/delete buttons as part of the line
 		if (mouseX > effectiveWidth + 2 + cca.mixin$getLineHeight() * 2) return -1;
 		int scrollBarOffset = cca.getChatScrollbarPos();
-		double chatHeight = cca.mixin$getLineHeight() * mc.gui.getChat().getScale();
+		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale();
 		// mouse offset is the pixels away from the bottom of the chat your mouse is at
 		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 + OFFSET_CHAT_HEIGHT + (int) chatting.getChatOffset();
 		if (mouseOffset < 0) return -1;

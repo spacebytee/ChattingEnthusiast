@@ -22,4 +22,6 @@ public interface IChatComponentAccessor {
     int mixin$getWidth();
     @Invoker("getLinesPerPage")
     int mixin$getLinesPerPage();
+    @Invoker("getScale")
+    double mixin$getScale();
 }

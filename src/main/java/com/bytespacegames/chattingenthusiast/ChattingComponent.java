@@ -97,11 +97,11 @@ public class ChattingComponent {
     }
     public int getMouseX() {
         if (!mouseTransformations) return mouseX;
-        return (int) (mouseX / mc.gui.getChat().getScale()) - 4;
+        return (int) (mouseX / ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale()) - 4;
     }
     public int getMouseY() {
         if (!mouseTransformations) return mouseY;
-        return (int) (mouseY / mc.gui.getChat().getScale());
+        return (int) (mouseY / ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale());
     }
 
     // these methods come from ChatScreen, and therefore only are called when chat is focused
