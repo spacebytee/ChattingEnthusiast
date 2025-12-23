@@ -4,6 +4,9 @@ import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.gui.elements.AbstractGuiElement;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +57,45 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
         if (!visible) return;
         for (int i = 0; i < elements.size(); i++) {
             AbstractGuiElement e = elements.get(i);
-            if (!e.isVisible()) continue;
+            if (!e.isVisible() && !(e instanceof AbstractGuiContainer)) continue;
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
             ChattingComponent c = ChattingEnthusiast.chatting;
-            if (!e.isHovering(c.getMouseX(),c.getMouseY())) continue;
+            if (!e.isHovering(c.getMouseX(),c.getMouseY()) && !(e instanceof AbstractGuiContainer)) {
+                e.clickOff();
+                continue;
+            }
             e.onClick();
+        }
+    }
+
+    public void clickOff() {}
+
+    @Override
+    public void keyPressed(KeyEvent keyEvent) {
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            e.keyPressed(keyEvent);
+        }
+    }
+
+    @Override
+    public void charTyped(CharacterEvent characterEvent) {
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            e.charTyped(characterEvent);
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double f) {
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            e.mouseDragged(mouseButtonEvent, d, f);
         }
     }
 }

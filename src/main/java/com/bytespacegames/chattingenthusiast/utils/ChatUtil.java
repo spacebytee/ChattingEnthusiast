@@ -11,8 +11,12 @@ import java.util.List;
 public class ChatUtil {
     public static GuiMessage getMessageFromLine(GuiMessage.Line line) {
         ChatComponent cc = Minecraft.getInstance().gui.getChat();
-        IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
+        IChatComponentAccessor cca = (IChatComponentAccessor) cc;
         List<GuiMessage> msgs = cca.getAllMessages();
+        return getMessageFromLine(line, msgs);
+    }
+    public static GuiMessage getMessageFromLine(GuiMessage.Line line, List<GuiMessage> msgs) {
+        ChatComponent cc = Minecraft.getInstance().gui.getChat();
         int found = -1;
         int low = 0;
         int high = msgs.size() - 1;

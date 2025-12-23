@@ -1,8 +1,11 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
-import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.gui.containers.AbstractGuiContainer;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 
 public abstract class AbstractGuiElement {
     protected int x,y,relativeX,relativeY;
@@ -84,4 +87,8 @@ public abstract class AbstractGuiElement {
     }
     public abstract void render(GuiGraphics g);
     public abstract void onClick();
+    public abstract void keyPressed(KeyEvent keyEvent);
+    public abstract void charTyped(CharacterEvent characterEvent);
+    public abstract void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e);
+    public abstract void clickOff();
 }

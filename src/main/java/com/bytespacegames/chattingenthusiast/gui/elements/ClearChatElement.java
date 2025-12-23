@@ -10,19 +10,16 @@ import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 
 import java.util.List;
 
 import static com.bytespacegames.chattingenthusiast.gui.GuiUtil.drawRect;
 
-public class DeleteElement extends AbstractGuiElement {
-    public DeleteElement(int x, int y, int width, int height) {
-        super(x, y, width, height, false);
-    }
-    int messageIndex;
-    public void setMessage(int index) {
-        messageIndex = index;
+public class ClearChatElement extends AbstractGuiElement {
+    public ClearChatElement(int x, int y, int width, int height, boolean visible) {
+        super(x, y, width, height, visible);
     }
     @Override
     public void render(GuiGraphics graphics) {
@@ -38,25 +35,23 @@ public class DeleteElement extends AbstractGuiElement {
 
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
 
-        drawRect(graphics,x+3,y+1,3,1,iconColor);
-        drawRect(graphics,x+1,y+2,7,1,iconColor);
-        for (int i = 0; i < 3; i++) {
-            drawRect(graphics,x+2 + 2*i,y+3,1,4,iconColor);
+        drawRect(graphics,x+4,y+2,5,1,iconColor);
+        drawRect(graphics,x+2,y+3,9,1,iconColor);
+        for (int i = 0; i < 4; i++) {
+            drawRect(graphics,x+3 + 2*i,y+4,1,7,iconColor);
         }
-        drawRect(graphics,x+2,y+7,5,1,iconColor);
+        drawRect(graphics,x+3,y+10,7,1,iconColor);
     }
-
+    long lastClicked = 0;
     @Override
     public void onClick() {
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
-        IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
-        List<GuiMessage.Line> effLines = ChattingEnthusiast.chatting.getEffectiveLines();
-        List<GuiMessage.Line> trimmedLines = cca.getTrimmedMessages();
-
-        GuiMessage.Line line = effLines.get(messageIndex + cca.getChatScrollbarPos());
-        effLines.remove(messageIndex + cca.getChatScrollbarPos());
-        if (effLines == trimmedLines) return;
-        trimmedLines.remove(line);
+        if (System.currentTimeMillis() - lastClicked > 3000) {
+            Minecraft.getInstance().gui.getChat().addMessage(Component.literal("§c§lClick again to clear the chat!"));
+            lastClicked = System.currentTimeMillis();
+        } else {
+            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            ChattingEnthusiast.filter.clear();
+        }
     }
 
     public void keyPressed(KeyEvent keyEvent) {

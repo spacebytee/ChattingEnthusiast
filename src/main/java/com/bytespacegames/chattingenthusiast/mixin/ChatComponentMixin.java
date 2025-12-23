@@ -172,4 +172,13 @@ public abstract class ChatComponentMixin {
 		if (isChatFocused() && chatScrollbarPos != 0) return;
 		ChattingEnthusiast.chatting.setChatOffset(ChattingEnthusiast.chatting.getChatOffset() + getLineHeight());
 	}
+
+	@Redirect(
+			method = "addMessageToDisplayQueue",
+			at = @At(value = "INVOKE",target = "Ljava/util/List;add(ILjava/lang/Object;)V"))
+	private void onTrimmedMessageAdd(List<GuiMessage.Line> list, int index, Object element) {
+		GuiMessage.Line line = (GuiMessage.Line) element;
+		ChattingEnthusiast.filter.onAddLine(line);
+		list.add(index, line);
+	}
 }

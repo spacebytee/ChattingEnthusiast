@@ -10,13 +10,16 @@ import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.ARGB;
 import org.lwjgl.glfw.GLFW;
 
 import static com.bytespacegames.chattingenthusiast.gui.GuiUtil.drawRect;
 
 public class CopyElement extends AbstractGuiElement {
-    public CopyElement(int x, int y, int width, int height, boolean visible) {
+    public CopyElement(int x, int y, int width, int height) {
         super(x, y, width, height, false);
     }
     int messageIndex;
@@ -35,7 +38,7 @@ public class CopyElement extends AbstractGuiElement {
             iconColor = 0xFFFFFFFF;
         }
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
-
+        System.out.println(x + ", " + y);
         int gx = x + 1;
         int gy = y + 1;
         drawRect(graphics, gx,gy,5,1,iconColor);
@@ -50,7 +53,7 @@ public class CopyElement extends AbstractGuiElement {
         drawRect(graphics, gx + 4,gy,1,5,iconColor);
     }
     public void setClipboard(String s) {
-        Minecraft.getInstance().keyboardHandler.setClipboard(s);
+        Minecraft.getInstance().keyboardHandler.setClipboard(s.replaceAll("§.",""));
     }
     @Override
     public void onClick() {
@@ -59,11 +62,26 @@ public class CopyElement extends AbstractGuiElement {
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // single line
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
-            setClipboard(ChatUtil.getPlainText(cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos()).content()));
+            setClipboard(ChatUtil.getPlainText(ChattingEnthusiast.chatting.getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content()));
             return;
         }
-        GuiMessage message = ChatUtil.getMessageFromLine(cca.getTrimmedMessages().get(messageIndex + cca.getChatScrollbarPos()));
+        GuiMessage message = ChatUtil.getMessageFromLine(ChattingEnthusiast.chatting.getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()));
         if (message == null) return;
         setClipboard(message.content().getString());
+    }
+
+    public void keyPressed(KeyEvent keyEvent) {
+
+    }
+
+    public void charTyped(CharacterEvent characterEvent) {
+
+    }
+
+    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
+
+    }
+    public void clickOff() {
+
     }
 }

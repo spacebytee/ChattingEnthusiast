@@ -18,6 +18,8 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final int OFFSET_CHAT_HEIGHT = 0;
 	public static ChattingEnthusiast INSTANCE;
 	public static ChattingComponent chatting;
+	public static ChatFilter filter;
+	private ChattingEventListener listener;
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -30,6 +32,12 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		INSTANCE = this;
 		mc = Minecraft.getInstance();
 		chatting = new ChattingComponent();
+		filter = new ChatFilter();
+		listener = new ChattingEventListener();
+	}
+
+	public ChattingEventListener getListener() {
+		return listener;
 	}
 
 	public int getHoveredMessage(int mouseX, int mouseY) {
