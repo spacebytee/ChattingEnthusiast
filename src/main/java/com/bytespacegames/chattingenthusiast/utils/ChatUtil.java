@@ -36,7 +36,8 @@ public class ChatUtil {
                 break;
             }
         }
-        if (found == -1) return null;
+        if (found == -1)
+            return null;
 
         // move the index to the earliest message matching the time
         while (found > 0 && msgs.get(found-1).addedTime() == targetAddedTime) {
@@ -48,7 +49,9 @@ public class ChatUtil {
                 found++;
                 continue;
             }
-            if (msgs.get(found).content().getString().contains(getPlainText(line.content()).trim())) return msgs.get(found);
+            if (msgs.get(found).content().getString().replaceAll("§.","").contains(getPlainText(line.content()).trim().replaceAll("§.",""))) {
+                return msgs.get(found);
+            }
             found++;
         }
         return null;

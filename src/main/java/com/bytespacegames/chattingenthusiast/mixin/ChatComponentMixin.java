@@ -104,7 +104,6 @@ public abstract class ChatComponentMixin {
 	)
 	private int renderLine(ChatComponent instance, final ChatComponent.AlphaCalculator alphaCalculator, final ChatComponent.LineConsumer lineConsumer) {
 		Minecraft minecraft = Minecraft.getInstance();
-		int maxWidth = Mth.ceil((float)getWidth() / getScale());
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
 		final int chatLX = chatBottom + (int) (ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting.getChatOffset());
 		int messageHeight = 9;

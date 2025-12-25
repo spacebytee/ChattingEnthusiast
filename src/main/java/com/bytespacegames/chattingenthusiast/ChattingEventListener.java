@@ -20,7 +20,6 @@ public class ChattingEventListener implements GuiEventListener {
         return false;
     }
     public boolean charTyped(CharacterEvent characterEvent) {
-        System.out.println("type");
         if (Minecraft.getInstance().screen == null || !(Minecraft.getInstance().screen instanceof ChatScreen)) return false;
         ChattingEnthusiast.chatting.charTyped(characterEvent);
         return false;

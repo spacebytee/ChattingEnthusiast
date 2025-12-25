@@ -38,7 +38,6 @@ public class CopyElement extends AbstractGuiElement {
             iconColor = 0xFFFFFFFF;
         }
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
-        System.out.println(x + ", " + y);
         int gx = x + 1;
         int gy = y + 1;
         drawRect(graphics, gx,gy,5,1,iconColor);

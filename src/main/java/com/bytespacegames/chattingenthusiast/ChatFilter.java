@@ -66,7 +66,7 @@ public class ChatFilter {
         GuiMessage msg = ChatUtil.getMessageFromLine(line, cca.getAllMessages());
         if (msg == null) return false;
 
-        String contents = msg.content().getString();
+        String contents = msg.content().getString().replaceAll("§.","");
 
         if (!searchCriteria.isEmpty() && !contents.toLowerCase().contains(searchCriteria.toLowerCase())) return false;
         if (filter == ChattingComponent.TabFilter.GUILD && !contents.startsWith("Guild > ")) return false;
