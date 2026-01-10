@@ -13,6 +13,7 @@
 	},
 	"client": [
 		"ChatScreenMixin",
+		"GuiMixin",
 		"IChatComponentAccessor",
 		"IChatScreenAccessor",
 		"ScreenMixin"
