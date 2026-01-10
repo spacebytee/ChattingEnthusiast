@@ -13,9 +13,13 @@ import org.slf4j.LoggerFactory;
 public class ChattingEnthusiast implements ClientModInitializer {
 	public static final String MOD_ID = "chattingenthusiast";
 	public static final int MAX_MESSAGES = 16384;
+	public static final int SCROLLING_INTERVAL = 1;
+	public static final int ANIMATION_INTERVAL = 1000/60;
+	public static final int OFFSET_CHAT_HEIGHT = 0;
 	public static ChattingEnthusiast INSTANCE;
 	public static ChattingComponent chatting;
-	public static int offsetChatHeight = 0;
+	public static ChatFilter filter;
+	private ChattingEventListener listener;
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -28,6 +32,12 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		INSTANCE = this;
 		mc = Minecraft.getInstance();
 		chatting = new ChattingComponent();
+		filter = new ChatFilter();
+		listener = new ChattingEventListener();
+	}
+
+	public ChattingEventListener getListener() {
+		return listener;
 	}
 
 	public int getHoveredMessage(int mouseX, int mouseY) {
@@ -41,11 +51,11 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		// we add the line height * 2, and 2 additional pixels to account for the copy/delete buttons as part of the line
 		if (mouseX > effectiveWidth + 2 + cca.mixin$getLineHeight() * 2) return -1;
 		int scrollBarOffset = cca.getChatScrollbarPos();
-		int chatHeight = cca.mixin$getLineHeight();
+		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale();
 		// mouse offset is the pixels away from the bottom of the chat your mouse is at
-		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 - offsetChatHeight;
+		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 + OFFSET_CHAT_HEIGHT + (int) chatting.getChatOffset();
 		if (mouseOffset < 0) return -1;
-		int index = (mouseOffset/chatHeight) + scrollBarOffset;
+		int index = (int) ((mouseOffset/chatHeight) + scrollBarOffset);
 		if (index >= cca.getTrimmedMessages().size()) return -1;
 		if (index-scrollBarOffset >= cca.mixin$getLinesPerPage()) return -1;
 		return index;

@@ -3,6 +3,8 @@ package com.bytespacegames.chattingenthusiast.mixin;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,5 +29,12 @@ public class ChatScreenMixin {
         if (mouseButtonEvent.button() == 0) {
             ChattingEnthusiast.chatting.onClick();
         }
+    }
+    @Inject(
+            method = "keyPressed",
+            at = @At("HEAD")
+    )
+    public void keyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
+        ChattingEnthusiast.chatting.keyPressed(keyEvent);
     }
 }

@@ -11,15 +11,17 @@ import java.util.List;
 @Mixin(ChatComponent.class)
 public interface IChatComponentAccessor {
     @Accessor("trimmedMessages")
-    public List<GuiMessage.Line> getTrimmedMessages();
+    List<GuiMessage.Line> getTrimmedMessages();
     @Accessor("allMessages")
-    public List<GuiMessage> getAllMessages();
+    List<GuiMessage> getAllMessages();
     @Accessor("chatScrollbarPos")
-    public int getChatScrollbarPos();
+    int getChatScrollbarPos();
     @Invoker("getLineHeight")
-    public int mixin$getLineHeight();
+    int mixin$getLineHeight();
     @Invoker("getWidth")
-    public int mixin$getWidth();
+    int mixin$getWidth();
     @Invoker("getLinesPerPage")
-    public int mixin$getLinesPerPage();
+    int mixin$getLinesPerPage();
+    @Invoker("getScale")
+    double mixin$getScale();
 }
