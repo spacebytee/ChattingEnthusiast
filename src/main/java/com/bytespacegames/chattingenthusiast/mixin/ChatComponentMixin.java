@@ -56,7 +56,7 @@ public abstract class ChatComponentMixin {
 
 	@ModifyVariable(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("STORE"), ordinal = 4)
 	private int moveChat(int m) {
-		return (int) (m + ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting.getChatOffset());
+		return (int) (m + ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting().getChatOffset());
 	}
 
 	@Redirect(
@@ -87,13 +87,12 @@ public abstract class ChatComponentMixin {
 	)
 	private void captureGraphics(final GuiGraphics graphics, final Font font, final int ticks, final int mouseX, final int mouseY, final boolean isChatting, final boolean changeCursorOnInsertions, CallbackInfo ci) {
 		lastGraphics = graphics;
-		ChattingEnthusiast.chatting.updateMouse(mouseX,mouseY);
+		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
 	@Shadow
 	private int getWidth() { return 0; }
 	@Shadow
 	private double getScale() { return 0; }
-	@Shadow
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At(
@@ -105,7 +104,7 @@ public abstract class ChatComponentMixin {
 	private int renderLine(ChatComponent instance, final ChatComponent.AlphaCalculator alphaCalculator, final ChatComponent.LineConsumer lineConsumer) {
 		Minecraft minecraft = Minecraft.getInstance();
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
-		final int chatLX = chatBottom + (int) (ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting.getChatOffset());
+		final int chatLX = chatBottom + (int) (ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting().getChatOffset());
 		int messageHeight = 9;
 		double chatLineSpacing = (Double)minecraft.options.chatLineSpacing().get();
 		int entryHeight = (int)((double)messageHeight * (chatLineSpacing + 1.0D));
@@ -113,23 +112,23 @@ public abstract class ChatComponentMixin {
 		return forEachLine(alphaCalculator, (line, lineIndex, alphax) -> {
 			int entryBottom = chatLX - lineIndex * entryHeight;
 			int entryTop = entryBottom - entryHeight;
-			ChattingEnthusiast.chatting.renderCustomLine(lastGraphics, -4, entryTop, entryBottom, lineIndex, alphax);
+			ChattingEnthusiast.chatting().renderCustomLine(lastGraphics, -4, entryTop, entryBottom, lineIndex, alphax);
 		});
 	}
 	@Inject(method = "resetChatScroll",
 			at = @At("HEAD"))
 	public void mixin$resetChatScroll(CallbackInfo ci) {
-		ChattingEnthusiast.chatting.desiredScrollbarPos = 0;
+		ChattingEnthusiast.chatting().desiredScrollbarPos = 0;
 	}
 	@Inject(method = "scrollChat",
 			at = @At("HEAD"),
 			cancellable = true)
 	public void mixin$scrollChat(int i, CallbackInfo ci) {
-		ChattingComponent ch = ChattingEnthusiast.chatting;
+		ChattingComponent ch = ChattingEnthusiast.chatting();
 		boolean cancel = true;
 		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
-			if (ChattingEnthusiast.chatting.ignoreScroll) {
-				ChattingEnthusiast.chatting.ignoreScroll = false;
+			if (ChattingEnthusiast.chatting().ignoreScroll) {
+				ChattingEnthusiast.chatting().ignoreScroll = false;
 				return;
 			}
 			cancel = false;
@@ -149,7 +148,7 @@ public abstract class ChatComponentMixin {
 			at = @At("HEAD"))
 	private void mixin$addMessageToDisplayQueue(GuiMessage guiMessage, CallbackInfo ci) {
 		if (isChatFocused() && chatScrollbarPos != 0) return;
-		ChattingEnthusiast.chatting.setChatOffset(ChattingEnthusiast.chatting.getChatOffset() + getLineHeight());
+		ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + getLineHeight());
 	}
 
 	@Redirect(
@@ -157,7 +156,7 @@ public abstract class ChatComponentMixin {
 			at = @At(value = "INVOKE",target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
 	private void onTrimmedMessageAdd(List<GuiMessage.Line> list, Object element) {
 		GuiMessage.Line line = (GuiMessage.Line) element;
-		ChattingEnthusiast.filter.onAddLine(line);
+		ChattingEnthusiast.filter().onAddLine(line);
 		list.addFirst(line);
 	}
 }

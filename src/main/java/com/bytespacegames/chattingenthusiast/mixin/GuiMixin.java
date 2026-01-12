@@ -17,6 +17,6 @@ public class GuiMixin {
             )
     )
     public void mixin$onDisconnected(ChatComponent instance, boolean bl) {
-
+        instance.clearMessages(bl);
     }
 }

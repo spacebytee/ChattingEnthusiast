@@ -61,7 +61,7 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            ChattingComponent c = ChattingEnthusiast.chatting;
+            ChattingComponent c = ChattingEnthusiast.chatting();
             if (!e.isHovering(c.getMouseX(),c.getMouseY()) && !(e instanceof AbstractGuiContainer)) {
                 e.clickOff();
                 continue;

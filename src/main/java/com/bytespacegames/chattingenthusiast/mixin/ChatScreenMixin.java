@@ -19,7 +19,7 @@ public class ChatScreenMixin {
             at = @At("HEAD")
     )
     public void render(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
-        ChattingEnthusiast.chatting.render(guiGraphics);
+        ChattingEnthusiast.chatting().render(guiGraphics);
     }
     @Inject(
             method = "mouseClicked",
@@ -27,7 +27,7 @@ public class ChatScreenMixin {
     )
     public void mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
         if (mouseButtonEvent.button() == 0) {
-            ChattingEnthusiast.chatting.onClick();
+            ChattingEnthusiast.chatting().onClick();
         }
     }
     @Inject(
@@ -35,6 +35,6 @@ public class ChatScreenMixin {
             at = @At("HEAD")
     )
     public void keyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
-        ChattingEnthusiast.chatting.keyPressed(keyEvent);
+        ChattingEnthusiast.chatting().keyPressed(keyEvent);
     }
 }

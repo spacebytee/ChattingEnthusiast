@@ -20,13 +20,13 @@ public class WidgetElement extends AbstractGuiElement {
     public void render(GuiGraphics g) {
         widget.setX(x);
         widget.setY(y);
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         widget.render(g,c.getMouseX(),c.getMouseY(), 0);
     }
 
     @Override
     public void onClick() {
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         widget.setFocused(true);
         widget.setX(x);
         widget.setY(y);

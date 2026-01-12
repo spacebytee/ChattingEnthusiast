@@ -17,13 +17,10 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final int ANIMATION_INTERVAL = 1000/60;
 	public static final int OFFSET_CHAT_HEIGHT = 0;
 	public static ChattingEnthusiast INSTANCE;
-	public static ChattingComponent chatting;
-	public static ChatFilter filter;
+	private ChattingComponent chatting;
+	private ChatFilter filter;
 	private ChattingEventListener listener;
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	Minecraft mc;
 
@@ -60,4 +57,13 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		if (index-scrollBarOffset >= cca.mixin$getLinesPerPage()) return -1;
 		return index;
 	}
+
+	public static ChattingComponent chatting() {
+		return INSTANCE.chatting;
+	}
+
+	public static ChatFilter filter() {
+		return INSTANCE.filter;
+	}
+
 }

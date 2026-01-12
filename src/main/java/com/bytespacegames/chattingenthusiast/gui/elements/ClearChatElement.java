@@ -23,7 +23,7 @@ public class ClearChatElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -50,7 +50,7 @@ public class ClearChatElement extends AbstractGuiElement {
             lastClicked = System.currentTimeMillis();
         } else {
             Minecraft.getInstance().gui.getChat().clearMessages(false);
-            ChattingEnthusiast.filter.clear();
+            ChattingEnthusiast.filter().clear();
         }
     }
 

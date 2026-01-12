@@ -29,7 +29,7 @@ public class CopyElement extends AbstractGuiElement {
 
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
         int color = 0xFF000000;
         int iconColor = 0xFF7F7F7F;
@@ -61,10 +61,10 @@ public class CopyElement extends AbstractGuiElement {
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // single line
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
-            setClipboard(ChatUtil.getPlainText(ChattingEnthusiast.chatting.getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content()));
+            setClipboard(ChatUtil.getPlainText(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content()));
             return;
         }
-        GuiMessage message = ChatUtil.getMessageFromLine(ChattingEnthusiast.chatting.getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()));
+        GuiMessage message = ChatUtil.getMessageFromLine(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()));
         if (message == null) return;
         setClipboard(message.content().getString());
     }

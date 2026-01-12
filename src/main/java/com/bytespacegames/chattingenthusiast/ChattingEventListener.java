@@ -16,12 +16,12 @@ public class ChattingEventListener implements GuiEventListener {
     }
     public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
         if (Minecraft.getInstance().screen == null || !(Minecraft.getInstance().screen instanceof ChatScreen)) return false;
-        ChattingEnthusiast.chatting.mouseDragged(mouseButtonEvent,d,e);
+        ChattingEnthusiast.chatting().mouseDragged(mouseButtonEvent,d,e);
         return false;
     }
     public boolean charTyped(CharacterEvent characterEvent) {
         if (Minecraft.getInstance().screen == null || !(Minecraft.getInstance().screen instanceof ChatScreen)) return false;
-        ChattingEnthusiast.chatting.charTyped(characterEvent);
+        ChattingEnthusiast.chatting().charTyped(characterEvent);
         return false;
     }
 }

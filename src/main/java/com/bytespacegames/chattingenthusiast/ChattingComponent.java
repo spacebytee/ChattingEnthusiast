@@ -46,11 +46,11 @@ public class ChattingComponent {
     public WidgetElement search;
 
     public List<GuiMessage.Line> getEffectiveLines() {
-        if (ChattingEnthusiast.filter.unfiltered()) {
+        if (ChattingEnthusiast.filter().unfiltered()) {
             IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
             return cca.getTrimmedMessages();
         }
-        return ChattingEnthusiast.filter.getEffectiveLines();
+        return ChattingEnthusiast.filter().getEffectiveLines();
     }
 
     public ChattingComponent() {

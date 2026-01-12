@@ -26,7 +26,7 @@ public class DeleteElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -50,7 +50,7 @@ public class DeleteElement extends AbstractGuiElement {
     public void onClick() {
         ChatComponent cc = Minecraft.getInstance().gui.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
-        List<GuiMessage.Line> effLines = ChattingEnthusiast.chatting.getEffectiveLines();
+        List<GuiMessage.Line> effLines = ChattingEnthusiast.chatting().getEffectiveLines();
         List<GuiMessage.Line> trimmedLines = cca.getTrimmedMessages();
 
         GuiMessage.Line line = effLines.get(messageIndex + cca.getChatScrollbarPos());

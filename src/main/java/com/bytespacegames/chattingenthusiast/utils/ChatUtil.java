@@ -16,7 +16,6 @@ public class ChatUtil {
         return getMessageFromLine(line, msgs);
     }
     public static GuiMessage getMessageFromLine(GuiMessage.Line line, List<GuiMessage> msgs) {
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
         int found = -1;
         int low = 0;
         int high = msgs.size() - 1;

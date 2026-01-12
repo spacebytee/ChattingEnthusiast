@@ -19,7 +19,7 @@ public class ScreenMixin {
             at = @At("HEAD"))
     public void mixin$tick(CallbackInfo ci) {
         if (!((Object) this instanceof ChatScreen)) return;
-        ChattingEnthusiast.chatting.tick();
+        ChattingEnthusiast.chatting().tick();
     }
     @Inject(method = "children", at = @At("RETURN"), cancellable = true)
     private void addCustomChild(CallbackInfoReturnable<List<? extends GuiEventListener>> cir) {
