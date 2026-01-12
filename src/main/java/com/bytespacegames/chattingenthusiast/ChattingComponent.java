@@ -2,10 +2,7 @@ package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
 import com.bytespacegames.chattingenthusiast.gui.containers.BottomRightOriginatingContainer;
-import com.bytespacegames.chattingenthusiast.gui.elements.ClearChatElement;
-import com.bytespacegames.chattingenthusiast.gui.elements.CopyElement;
-import com.bytespacegames.chattingenthusiast.gui.elements.DeleteElement;
-import com.bytespacegames.chattingenthusiast.gui.elements.WidgetElement;
+import com.bytespacegames.chattingenthusiast.gui.elements.*;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.mixin.IChatScreenAccessor;
 import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
@@ -63,6 +60,7 @@ public class ChattingComponent {
         lineContainer.addElement(delete);
         chatControls = new BottomRightOriginatingContainer(0,0,1,true);
         chatControls.addElement(new ClearChatElement(0,0,13,13, true));
+        chatControls.addElement(new SearchElement(0,0,13,13, true));
         chatContainer.addElement(chatControls);
     }
     public void renderCustomLine(GuiGraphics graphics, int x, int mx, int nx, int lineIndex, float opacity) {
