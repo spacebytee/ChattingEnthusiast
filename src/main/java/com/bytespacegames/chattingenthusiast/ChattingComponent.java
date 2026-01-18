@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast;
 
+import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
 import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
 import com.bytespacegames.chattingenthusiast.gui.containers.BottomRightOriginatingContainer;
 import com.bytespacegames.chattingenthusiast.gui.elements.*;
@@ -59,8 +60,8 @@ public class ChattingComponent {
         lineContainer.addElement(copy);
         lineContainer.addElement(delete);
         chatControls = new BottomRightOriginatingContainer(0,0,1,true);
-        chatControls.addElement(new ClearChatElement(0,0,13,13, true));
         chatControls.addElement(new SearchElement(0,0,13,13, true));
+        chatControls.addElement(new ClearChatElement(0,0,13,13, true));
         chatContainer.addElement(chatControls);
     }
     public void renderCustomLine(GuiGraphics graphics, int x, int mx, int nx, int lineIndex, float opacity) {
@@ -113,7 +114,8 @@ public class ChattingComponent {
         // yes im using a magic number here because the original code does that too.
         search.setRelativePosition(mc.getWindow().getGuiScaledWidth() - 230, mc.getWindow().getGuiScaledHeight() - 15 - search.getHeight());
         chatContainer.render(g);
-        if (!scrollTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true)) return;
+        boolean smoothscroll = ((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("smoothscroll")).getValue();
+        if (!scrollTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true) || !smoothscroll) return;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
         ignoreScroll = true;
@@ -131,8 +133,6 @@ public class ChattingComponent {
     public void keyPressed(KeyEvent keyEvent) {
         lineContainer.keyPressed(keyEvent);
         chatContainer.keyPressed(keyEvent);
-
-        System.out.println(keyEvent.modifiers());
         CharacterEvent ce = new CharacterEvent(CharacterUtils.scancodeToCodepoint(keyEvent.scancode(), keyEvent.modifiers() > 0), keyEvent.modifiers());
         charTyped(ce);
     }

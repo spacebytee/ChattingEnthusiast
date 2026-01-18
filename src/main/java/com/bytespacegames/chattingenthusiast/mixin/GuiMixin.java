@@ -1,5 +1,7 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
+import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,6 +19,8 @@ public class GuiMixin {
             )
     )
     public void mixin$onDisconnected(ChatComponent instance, boolean bl) {
-        instance.clearMessages(bl);
+        if (!((BooleanSetting) ChattingSettingsManager.INSTANCE.getSettingById("clearchat")).getValue()) {
+            instance.clearMessages(bl);
+        }
     }
 }

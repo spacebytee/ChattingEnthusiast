@@ -9,7 +9,7 @@ public class SettingsCategory {
     public SettingsCategory(String name, String identifier) {
         this.name = name;
         this.identifier = identifier;
-        this.settings = new ArrayList<Setting>();
+        this.settings = new ArrayList<>();
     }
     public String getName() {
         return name;

@@ -17,11 +17,11 @@ public class BooleanSetting extends Setting {
 
     @Override
     public void saveToProperties(Properties p, String location) {
-        p.put(location,value);
+        p.setProperty(location,String.valueOf(value));
     }
 
     @Override
     public void loadFromProperties(Properties p, String location) {
-        value = Boolean.parseBoolean(p.getProperty("message", String.valueOf(value)));
+        value = Boolean.parseBoolean(p.getProperty(location, String.valueOf(value)));
     }
 }

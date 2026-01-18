@@ -1,21 +1,22 @@
 {
-	"required": true,
-	"package": "com.bytespacegames.chattingenthusiast.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ChatComponentMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
-	},
-	"client": [
-		"ChatScreenMixin",
-		"GuiMixin",
-		"IChatComponentAccessor",
-		"IChatScreenAccessor",
-		"ScreenMixin"
-	]
+  "required": true,
+  "package": "com.bytespacegames.chattingenthusiast.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ChatComponentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "client": [
+    "ChatScreenMixin",
+    "GuiMixin",
+    "IChatComponentAccessor",
+    "IChatScreenAccessor",
+    "MinecraftMixin",
+    "ScreenMixin"
+  ]
 }

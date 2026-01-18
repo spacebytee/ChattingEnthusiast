@@ -2,6 +2,8 @@ package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
+import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.Font;
@@ -122,6 +124,10 @@ public abstract class ChatComponentMixin {
 			at = @At("HEAD"),
 			cancellable = true)
 	public void mixin$scrollChat(int i, CallbackInfo ci) {
+		boolean smoothscroll = ((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("smoothscroll")).getValue();
+		if (!smoothscroll) {
+			return;
+		}
 		ChattingComponent ch = ChattingEnthusiast.chatting();
 		boolean cancel = true;
 		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
@@ -146,6 +152,7 @@ public abstract class ChatComponentMixin {
 			at = @At("HEAD"))
 	private void mixin$addMessageToDisplayQueue(GuiMessage guiMessage, CallbackInfo ci) {
 		if (isChatFocused() && chatScrollbarPos != 0) return;
+		if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
 		ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + getLineHeight());
 	}
 

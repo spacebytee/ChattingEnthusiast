@@ -18,7 +18,7 @@ public class ConfigManager {
     public ConfigManager(String saveLocation, String name) {
         path = saveLocation;
         this.name = name;
-        this.categories = new ArrayList<SettingsCategory>();
+        this.categories = new ArrayList<>();
     }
     public void addCategory(SettingsCategory c) {
         categories.add(c);
@@ -28,6 +28,14 @@ public class ConfigManager {
     }
     public String getName() {
         return name;
+    }
+    public Setting getSettingById(String id) {
+        for (SettingsCategory c : categories) {
+            for (Setting s : c.getSettings()) {
+                if (s.getIdentifier().equalsIgnoreCase(id)) return s;
+            }
+        }
+        return null;
     }
     public String getAbsolutePath() {
         return Minecraft.getInstance().gameDirectory.getAbsolutePath() + path;
@@ -40,7 +48,13 @@ public class ConfigManager {
                 props.load(in);
                 for (SettingsCategory c : categories) {
                     for (Setting s : c.getSettings()) {
-                        s.loadFromProperties(props, c.getIdentifier() + "." + s.getIdentifier());
+                        String property = c.getIdentifier() + "." + s.getIdentifier();
+                        if (!props.containsKey(property)) {
+                            System.out.println("no conmtain" + property);
+                            continue;
+                        }
+                        System.out.println("value of " + property + ": " + props.getProperty(property));
+                        s.loadFromProperties(props, property);
                     }
                 }
             } catch (IOException | NumberFormatException e) {

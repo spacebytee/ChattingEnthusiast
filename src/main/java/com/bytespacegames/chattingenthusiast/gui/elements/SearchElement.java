@@ -23,7 +23,7 @@ public class SearchElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting;
+        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -51,8 +51,8 @@ public class SearchElement extends AbstractGuiElement {
     long lastClicked = 0;
     @Override
     public void onClick() {
-        ChattingEnthusiast.chatting.search.visible = !ChattingEnthusiast.chatting.search.visible;
-        ChattingEnthusiast.chatting.search.getWidget().setFocused(ChattingEnthusiast.chatting.search.visible);
+        ChattingEnthusiast.chatting().search.visible = !ChattingEnthusiast.chatting().search.visible;
+        ChattingEnthusiast.chatting().search.getWidget().setFocused(ChattingEnthusiast.chatting().search.visible);
     }
 
     public void keyPressed(KeyEvent keyEvent) {

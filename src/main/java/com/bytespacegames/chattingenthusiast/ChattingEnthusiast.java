@@ -1,8 +1,12 @@
 package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -20,6 +24,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	private ChattingComponent chatting;
 	private ChatFilter filter;
 	private ChattingEventListener listener;
+	public boolean shouldOpenGui = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	Minecraft mc;
@@ -28,9 +33,21 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public void onInitializeClient() {
 		INSTANCE = this;
 		mc = Minecraft.getInstance();
+		new ChattingSettingsManager();
 		chatting = new ChattingComponent();
 		filter = new ChatFilter();
 		listener = new ChattingEventListener();
+
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			LiteralArgumentBuilder cmd = ClientCommandManager.literal("chatting")
+					.executes(this::openGui);
+			dispatcher.register(cmd);
+		});
+	}
+
+	public int openGui(CommandContext commandContext) {
+		shouldOpenGui = true;
+		return 1;
 	}
 
 	public ChattingEventListener getListener() {
