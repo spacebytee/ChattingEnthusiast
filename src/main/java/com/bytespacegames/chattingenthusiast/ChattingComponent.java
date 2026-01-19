@@ -1,6 +1,7 @@
 package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
 import com.bytespacegames.chattingenthusiast.gui.containers.BottomRightOriginatingContainer;
 import com.bytespacegames.chattingenthusiast.gui.elements.*;
@@ -93,6 +94,8 @@ public class ChattingComponent {
     public void updateMouse(int x, int y) {
         this.mouseX = x;
         this.mouseY = y;
+        GuiManager.INSTANCE.setMouseX(x);
+        GuiManager.INSTANCE.setMouseY(y);
     }
     public int getMouseX() {
         if (!mouseTransformations) return mouseX;

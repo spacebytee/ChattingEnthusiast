@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
@@ -29,11 +30,10 @@ public class CopyElement extends AbstractGuiElement {
 
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
         int color = 0xFF000000;
         int iconColor = 0xFF7F7F7F;
-        if (isHovering(c.getMouseX(),c.getMouseY())) {
+        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             color = 0xFFFFFFFF;
             iconColor = 0xFFFFFFFF;
         }

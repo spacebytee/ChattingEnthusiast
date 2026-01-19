@@ -2,6 +2,7 @@ package com.bytespacegames.chattingenthusiast.config.gui;
 
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.gui.elements.RectangleElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,8 +13,7 @@ public class CloseButton extends RectangleElement {
     }
 
     public void render(GuiGraphics g) {
-        ChattingComponent c = ChattingEnthusiast.chatting();
-        if (isHovering(c.getMouseX(),c.getMouseY())) {
+        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             g.fill(x,y,x+width,y+height,0xFFFF568E);
             return;
         }
@@ -21,6 +21,7 @@ public class CloseButton extends RectangleElement {
     }
 
     public void onClick() {
-        Minecraft.getInstance().setScreen(null);
+        if (Minecraft.getInstance().screen == null) return;
+        Minecraft.getInstance().screen.onClose();
     }
 }

@@ -17,11 +17,21 @@ public class TopLeftOriginatingContainer extends AbstractGuiContainer {
     @Override
     public int getEffectiveY(int elementIndex) {
         int elementY = 0;
-        for (int i = 1; i <= elementIndex; i++) {
+        for (int i = 0; i < elementIndex; i++) {
             if (!elements.get(i).isVisible()) continue;
-            elementY += elements.get(i).getHeight() + spacing;
+            elementY += elements.get(i).getBottomBound() + spacing;
         }
         return elementY;
+    }
+    @Override
+    public int getBottomBound() {
+        int elementY = 0;
+        int elementIndex = elements.size() - 1;
+        for (int i = 0; i < elementIndex; i++) {
+            if (!elements.get(i).isVisible()) continue;
+            elementY += elements.get(i).getBottomBound() + spacing;
+        }
+        return elementY + elements.get(elementIndex).getBottomBound();
     }
     public void render(GuiGraphics g) {
         super.render(g);

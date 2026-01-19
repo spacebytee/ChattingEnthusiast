@@ -50,10 +50,8 @@ public class ConfigManager {
                     for (Setting s : c.getSettings()) {
                         String property = c.getIdentifier() + "." + s.getIdentifier();
                         if (!props.containsKey(property)) {
-                            System.out.println("no conmtain" + property);
                             continue;
                         }
-                        System.out.println("value of " + property + ": " + props.getProperty(property));
                         s.loadFromProperties(props, property);
                     }
                 }

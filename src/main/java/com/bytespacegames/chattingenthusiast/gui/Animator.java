@@ -24,8 +24,8 @@ public class Animator {
     }
     public float getValue() {
         if (animationTime <= 0) return targetValue;
-        float animationProgress = Math.min(1,(System.currentTimeMillis() - interpolateStartTime) / 1000f);
-        return interpolateFromValue + (targetValue - interpolateFromValue) * (easing(animationProgress / animationTime));
+        float animationProgress = Math.max(0,Math.min(1,((System.currentTimeMillis() - interpolateStartTime) / 1000f) / animationTime));
+        return interpolateFromValue + (targetValue - interpolateFromValue) * (easing(animationProgress));
     }
     public void setAnimationTime(float animationTime) {
         this.animationTime = animationTime;

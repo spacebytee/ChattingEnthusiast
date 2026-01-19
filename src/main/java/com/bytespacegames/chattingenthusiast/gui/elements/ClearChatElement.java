@@ -2,6 +2,7 @@ package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
@@ -23,12 +24,11 @@ public class ClearChatElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiGraphics graphics) {
-        ChattingComponent c = ChattingEnthusiast.chatting();
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
         int iconColor = baseIconColor;
-        if (isHovering(c.getMouseX(),c.getMouseY())) {
+        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             color = hoveredButtonColor;
             iconColor = hoveredIconColor;
         }

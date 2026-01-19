@@ -29,6 +29,11 @@ public class BasicContainer extends AbstractGuiContainer {
         return elements.get(elementIndex).getY();
     }
 
+    @Override
+    public int getBottomBound() {
+        return height;
+    }
+
     public void render(GuiGraphics g) {
         g.fill(x,y,x + width,y + height,color);
         super.render(g);

@@ -63,6 +63,10 @@ public abstract class AbstractGuiElement {
         setRelativePosition(x,this.relativeY);
     }
 
+    public int getBottomBound() {
+        return getHeight();
+    }
+
     public void setRelativePosition(int x, int y) {
         this.relativeX = x;
         this.relativeY = y;
@@ -87,8 +91,10 @@ public abstract class AbstractGuiElement {
     }
     public abstract void render(GuiGraphics g);
     public abstract void onClick();
-    public abstract void keyPressed(KeyEvent keyEvent);
-    public abstract void charTyped(CharacterEvent characterEvent);
-    public abstract void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e);
-    public abstract void clickOff();
+    public void keyPressed(KeyEvent keyEvent) {}
+    public void charTyped(CharacterEvent characterEvent) {}
+    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {}
+    public void clickOff() {}
+
+    public void mouseReleased(MouseButtonEvent mouseButtonEvent) {}
 }

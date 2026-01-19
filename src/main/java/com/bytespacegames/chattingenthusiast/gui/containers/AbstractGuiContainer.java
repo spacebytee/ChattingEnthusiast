@@ -2,6 +2,7 @@ package com.bytespacegames.chattingenthusiast.gui.containers;
 
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.gui.elements.AbstractGuiElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
@@ -61,8 +62,7 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            ChattingComponent c = ChattingEnthusiast.chatting();
-            if (!e.isHovering(c.getMouseX(),c.getMouseY()) && !(e instanceof AbstractGuiContainer)) {
+            if (!e.isHovering(GuiManager.getMouseX(), GuiManager.getMouseY()) && !(e instanceof AbstractGuiContainer)) {
                 e.clickOff();
                 continue;
             }
@@ -96,6 +96,14 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
             AbstractGuiElement e = elements.get(i);
             if (!e.isVisible()) continue;
             e.mouseDragged(mouseButtonEvent, d, f);
+        }
+    }
+
+    public void mouseReleased(MouseButtonEvent mouseButtonEvent) {
+        for (int i = 0; i < elements.size(); i++) {
+            AbstractGuiElement e = elements.get(i);
+            if (!e.isVisible()) continue;
+            e.mouseReleased(mouseButtonEvent);
         }
     }
 }

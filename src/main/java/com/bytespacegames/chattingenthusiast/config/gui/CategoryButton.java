@@ -1,9 +1,9 @@
 package com.bytespacegames.chattingenthusiast.config.gui;
 
-import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.config.SettingsCategory;
 import com.bytespacegames.chattingenthusiast.gui.Animator;
 import com.bytespacegames.chattingenthusiast.gui.Easings;
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.gui.Interpolator;
 import com.bytespacegames.chattingenthusiast.gui.elements.TextElement;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,7 @@ public class CategoryButton extends TextElement {
             //g.drawString(Minecraft.getInstance().font, getText(), x,y,0xFFB643DA);
             animator.setTarget(1f);
         }
-        else if (isHovering(ChattingEnthusiast.chatting().getMouseX(),ChattingEnthusiast.chatting().getMouseY())) {
+        else if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             animator.setTarget(.5f);
         } else {
             animator.setTarget(0);
@@ -41,6 +41,6 @@ public class CategoryButton extends TextElement {
         g.drawString(Minecraft.getInstance().font, getText(), x,y, color);
     }
     public void onClick() {
-        gui.selectedCategory = category;
+        gui.setSelectedCategory(category);
     }
 }

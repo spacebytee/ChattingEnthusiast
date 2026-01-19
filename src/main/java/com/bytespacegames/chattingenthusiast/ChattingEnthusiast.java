@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast;
 
+import com.bytespacegames.chattingenthusiast.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -33,6 +34,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public void onInitializeClient() {
 		INSTANCE = this;
 		mc = Minecraft.getInstance();
+		new GuiManager();
 		new ChattingSettingsManager();
 		chatting = new ChattingComponent();
 		filter = new ChatFilter();

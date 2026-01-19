@@ -28,6 +28,10 @@ public class BottomRightOriginatingContainer extends AbstractGuiContainer {
     public int getEffectiveY(int elementIndex) {
         return -elements.get(elementIndex).getHeight() + 1;
     }
+    @Override
+    public int getBottomBound() {
+        return 0;
+    }
     public void render(GuiGraphics g) {
         super.render(g);
     }
