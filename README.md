@@ -1,10 +1,10 @@
-# ChattingEnthusiast
-ChattingEnthusiast is a mod that completely revamps Minecraft's chat wide variety of quality-of-life improvements for modern versions, while aiming to maintain a sleek, and unintrusive visual style. It is a faithful recreation of [Chatting](https://modrinth.com/mod/chatting) by Polyfrost, a very similar mod for 1.8.9.
+ChattingEnthusiast is a mod that completely revamps Minecraft's chat with a variety of quality-of-life improvements for modern versions, while aiming to maintain a sleek, and unintrusive visual style. It is a faithful recreation of [Chatting](https://modrinth.com/mod/chatting) by Polyfrost, a very similar mod for 1.8.9.
 
 ## Features
-* Copying messages (Hold control when copying to copy a single line
+* Copying messages (Hold control when copying to copy a single line)
 * Deleting messages, and clearing chat
-* Searching through messages
+* Searching through messages, and jumping to them
+* Chat persisting after disconnecting from a world or server
 * Extended chat history (16,384)
 * Smooth scrolling (and other animations)
 * Shift chat up 10 pixels to avoid overlapping armor bars
