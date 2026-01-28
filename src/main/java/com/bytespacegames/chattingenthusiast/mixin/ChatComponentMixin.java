@@ -6,11 +6,15 @@ import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.config.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
+import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.util.Mth;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -35,6 +39,12 @@ public abstract class ChatComponentMixin {
 	public int getLinesPerPage() {
 		return 0;
 	}
+	@Shadow
+	private void addMessageToDisplayQueue(GuiMessage guiMessage) {}
+	@Shadow
+	private void addMessageToQueue(GuiMessage guiMessage) {}
+	@Shadow
+	private void logChatMessage(GuiMessage guiMessage) {}
 	@Shadow
 	public boolean isChatFocused() { return false; }
 
@@ -82,8 +92,8 @@ public abstract class ChatComponentMixin {
 			at = @At(value = "INVOKE",target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
 	private void onTrimmedMessageAdd(List<GuiMessage.Line> list, Object element) {
 		GuiMessage.Line line = (GuiMessage.Line) element;
-		ChattingEnthusiast.filter().onAddLine(line);
 		list.addFirst(line);
+		ChattingEnthusiast.filter().onAddLine(line);
 	}
 	// end filter mixins
 
@@ -209,6 +219,19 @@ public abstract class ChatComponentMixin {
 	private void mixin$addMessageToDisplayQueue(GuiMessage guiMessage, CallbackInfo ci) {
 		if (isChatFocused() && chatScrollbarPos != 0) return;
 		if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
+		if (!ChattingEnthusiast.filter().unfiltered()) return;
 		ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + getLineHeight());
+	}
+
+	// change order to add the GuiMessage before the Line, to solve an issue regarding filters
+	@Inject(method="addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+		at=@At("HEAD"),
+		cancellable = true)
+	public void mixin$addMessage(Component component, MessageSignature messageSignature, GuiMessageTag guiMessageTag, CallbackInfo ci) {
+		ci.cancel();
+		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.getGuiTicks(), component, messageSignature, guiMessageTag);
+		logChatMessage(guiMessage);
+		addMessageToQueue(guiMessage);
+		addMessageToDisplayQueue(guiMessage);
 	}
 }
