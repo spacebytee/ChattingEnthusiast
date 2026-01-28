@@ -11,6 +11,8 @@ ChattingEnthusiast is a mod that completely revamps Minecraft's chat wide variet
 * Hide message tags
 * Chat Tabs (When on Hypixel, only)
 
+![Chat shown with custom features.](https://cdn.modrinth.com/data/cached_images/aae790dd2ed053dca2b679f75de659ed99705587.png)
+
 ## Settings
 If Fabric API is installed, you can access the configuration gui via `/chatting`, to disable or enable any feature. Alternatively, you can manually configure the mod via the `.minecraft/config/chattingenthusiast.properties` file.
 
