@@ -2,9 +2,9 @@ package com.bytespacegames.gui.containers;
 
 import net.minecraft.client.gui.GuiGraphics;
 
-public class BottomRightOriginatingContainer extends AbstractGuiContainer {
+public class BottomLeftOriginatingContainer extends AbstractGuiContainer {
     protected final int spacing;
-    public BottomRightOriginatingContainer(int x, int y, int spacing, boolean visible) {
+    public BottomLeftOriginatingContainer(int x, int y, int spacing, boolean visible) {
         super(x, y, 0, 0, visible);
         this.spacing = spacing;
     }
@@ -12,12 +12,15 @@ public class BottomRightOriginatingContainer extends AbstractGuiContainer {
     @Override
     public int getEffectiveX(int elementIndex) {
         int elementX = 0;
+        int lWidth = 0;
         for (int i = 0; i <= elementIndex; i++) {
             if (!elements.get(i).isVisible()) continue;
-            elementX -= elements.get(i).getWidth();
-            if (i > 0) elementX -= spacing;
+            lWidth = elements.get(i).getWidth();
+            elementX += lWidth;
+            if (i > 0) elementX += spacing;
         }
-        return elementX + 1;
+        elementX -= lWidth;
+        return elementX;
     }
 
     @Override

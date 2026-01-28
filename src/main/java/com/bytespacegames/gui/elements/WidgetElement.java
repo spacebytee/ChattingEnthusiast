@@ -56,4 +56,10 @@ public class WidgetElement extends AbstractGuiElement {
     public AbstractWidget getWidget() {
         return widget;
     }
+    public void setVisible(boolean visible) {
+        if (!visible) {
+            widget.setFocused(false);
+        }
+        super.setVisible(visible);
+    }
 }

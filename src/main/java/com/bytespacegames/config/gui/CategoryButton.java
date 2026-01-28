@@ -10,9 +10,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class CategoryButton extends TextElement {
-    private SettingsCategory category;
-    private ConfigGui gui;
-    private Animator animator;
+    private final SettingsCategory category;
+    private final ConfigGui gui;
+    private final Animator animator;
     public CategoryButton(ConfigGui config, SettingsCategory category, int x, int y, boolean visible) {
         super(category.getName(), x, y, 0xFFFFFFFF, visible);
         this.gui = config;
@@ -36,7 +36,7 @@ public class CategoryButton extends TextElement {
 
         int color = Interpolator.interpolateColor(getColor(),0xFF00CCFF,animator.getValue() * 2);
         if (animator.getValue() > .5) {
-            color = Interpolator.interpolateColor(0xFF00CCFF,0xFFB643DA,(animator.getValue() - .5f) * 2);;
+            color = Interpolator.interpolateColor(0xFF00CCFF,0xFFB643DA,(animator.getValue() - .5f) * 2);
         }
         g.drawString(Minecraft.getInstance().font, getText(), x,y, color);
     }

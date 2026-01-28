@@ -68,12 +68,9 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
         }
     }
 
-    public void clickOff() {}
-
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        for (int i = 0; i < elements.size(); i++) {
-            AbstractGuiElement e = elements.get(i);
+        for (AbstractGuiElement e : elements) {
             if (!e.isVisible()) continue;
             e.keyPressed(keyEvent);
         }
@@ -81,8 +78,7 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
 
     @Override
     public void charTyped(CharacterEvent characterEvent) {
-        for (int i = 0; i < elements.size(); i++) {
-            AbstractGuiElement e = elements.get(i);
+        for (AbstractGuiElement e : elements) {
             if (!e.isVisible()) continue;
             e.charTyped(characterEvent);
         }
@@ -90,16 +86,14 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
 
     @Override
     public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double f) {
-        for (int i = 0; i < elements.size(); i++) {
-            AbstractGuiElement e = elements.get(i);
+        for (AbstractGuiElement e : elements) {
             if (!e.isVisible()) continue;
             e.mouseDragged(mouseButtonEvent, d, f);
         }
     }
 
     public void mouseReleased(MouseButtonEvent mouseButtonEvent) {
-        for (int i = 0; i < elements.size(); i++) {
-            AbstractGuiElement e = elements.get(i);
+        for (AbstractGuiElement e : elements) {
             if (!e.isVisible()) continue;
             e.mouseReleased(mouseButtonEvent);
         }

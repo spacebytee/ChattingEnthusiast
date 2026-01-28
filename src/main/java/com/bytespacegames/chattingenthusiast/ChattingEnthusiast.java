@@ -9,6 +9,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -25,7 +26,6 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static ChattingEnthusiast INSTANCE;
 	private ChattingComponent chatting;
 	private ChatFilter filter;
-	private ChattingEventListener listener;
 	public boolean shouldOpenGui = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -39,22 +39,37 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		new ChattingSettingsManager();
 		chatting = new ChattingComponent();
 		filter = new ChatFilter();
-		listener = new ChattingEventListener();
+		tryRegisterCommand();
+	}
 
-		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal("chatting")
-					.executes(this::openGui);
-			dispatcher.register(cmd);
-		});
+	public void tryRegisterCommand() {
+		if (!FabricLoader.getInstance().isModLoaded("fabric-api")) {
+			return;
+		}
+		try {
+			ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+				LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal("chatting")
+						.executes(this::openGui);
+				dispatcher.register(cmd);
+			});
+		} catch (Throwable ignored) {
+
+		}
+	}
+
+	private static final String[] HYPIXEL_IPS = { "hypixel.io", "hypixel.net"};
+	public static boolean connectedToHypixel() {
+		if (Minecraft.getInstance().getCurrentServer() == null) return false;
+		String ip = Minecraft.getInstance().getCurrentServer().ip;
+		for (String s : HYPIXEL_IPS) {
+			if (ip.toLowerCase().contains(s)) return true;
+		}
+		return false;
 	}
 
 	public int openGui(CommandContext commandContext) {
 		shouldOpenGui = true;
 		return 1;
-	}
-
-	public ChattingEventListener getListener() {
-		return listener;
 	}
 
 	public int getHoveredMessage(int mouseX, int mouseY) {
@@ -65,8 +80,9 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
 		int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
 		int effectiveWidth = scaleOffset + 8 + 4;
-		// we add the line height * 2, and 2 additional pixels to account for the copy/delete buttons as part of the line
-		if (mouseX > effectiveWidth + 2 + cca.mixin$getLineHeight() * 2) return -1;
+		// we add the line height * 3, and 3 additional pixels to account for the copy/delete/jump buttons as part of the line
+		int buttons = ChattingSettingsManager.INSTANCE.getSettingToggledById("linecontrols") ? (filter.unfiltered() ? 2 : 3) : 0;
+		if (mouseX > effectiveWidth + (1 + cca.mixin$getLineHeight()) * buttons) return -1;
 		int scrollBarOffset = cca.getChatScrollbarPos();
 		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale();
 		// mouse offset is the pixels away from the bottom of the chat your mouse is at

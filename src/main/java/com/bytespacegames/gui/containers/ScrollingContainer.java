@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public class ScrollingContainer extends AbstractGuiContainer {
     private int scrollOffset = 0;
-    private final int scrollBarBackgroundColor = 0xFF242424;
+    private static final int scrollBarBackgroundColor = 0xFF242424;
     private final ScrollBarElement scrollBar;
     public ScrollingContainer(int x, int y, int width, int height, int scrollBarColor, boolean visible) {
         super(x,y,width,height,visible);

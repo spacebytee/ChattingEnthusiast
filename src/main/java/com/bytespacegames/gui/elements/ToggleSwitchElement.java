@@ -8,8 +8,8 @@ import com.bytespacegames.gui.Interpolator;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class ToggleSwitchElement extends AbstractGuiElement {
-    private Animator animator;
-    private Animator hoverAnimator;
+    private final Animator animator;
+    private final Animator hoverAnimator;
     private boolean toggled;
     public ToggleSwitchElement(int x, int y, int width, int height, boolean toggled, boolean visible) {
         super(x, y, width, height, visible);

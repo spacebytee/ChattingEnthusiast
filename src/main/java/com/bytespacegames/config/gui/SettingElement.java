@@ -29,13 +29,13 @@ public class SettingElement extends AbstractGuiContainer {
         }
         int i = 1;
         String[] words = text.split(" ");
-        String built = "";
+        StringBuilder built = new StringBuilder();
         for (String word : words) {
             if (f.width(built + word) > width * .8) {
                 i++;
-                built = "";
+                built = new StringBuilder();
             }
-            built += word + " ";
+            built.append(word).append(" ");
         }
         return i;
     }
@@ -47,16 +47,16 @@ public class SettingElement extends AbstractGuiContainer {
         }
         int i = 0;
         String[] words = text.split(" ");
-        String built = "";
+        StringBuilder built = new StringBuilder();
         for (String word : words) {
             if (f.width(built + word) > getWidth() * .8) {
-                g.drawString(f, built.trim(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
+                g.drawString(f, built.toString().trim(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
                 i++;
-                built = "";
+                built = new StringBuilder();
             }
-            built += word + " ";
+            built.append(word).append(" ");
         }
-        g.drawString(f, built,x,y + i * 11,ConfigGui.SECONDARY_COLOR);
+        g.drawString(f, built.toString(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
     }
     @Override
     public int getEffectiveX(int elementIndex) {

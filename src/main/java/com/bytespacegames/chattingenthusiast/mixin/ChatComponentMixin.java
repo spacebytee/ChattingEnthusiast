@@ -155,7 +155,7 @@ public abstract class ChatComponentMixin {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		final int chatLX = chatBottom + (int) (constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 		int messageHeight = 9;
-		double chatLineSpacing = (Double)minecraft.options.chatLineSpacing().get();
+		double chatLineSpacing = minecraft.options.chatLineSpacing().get();
 		int entryHeight = (int)((double)messageHeight * (chatLineSpacing + 1.0D));
 
 		return forEachLine(alphaCalculator, (line, lineIndex, alphax) -> {
@@ -179,12 +179,19 @@ public abstract class ChatComponentMixin {
 		}
 		ChattingComponent ch = ChattingEnthusiast.chatting();
 		boolean cancel = true;
+		// if this was called from the animation, scroll normally
 		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
 			if (ChattingEnthusiast.chatting().ignoreScroll) {
 				ChattingEnthusiast.chatting().ignoreScroll = false;
 				return;
 			}
 			cancel = false;
+		}
+		// if scroll animation was ignored, scroll normally, + change the desiredScrollbarPos so it doesn't animate away
+		if (ChattingEnthusiast.chatting().ignoreScroll && !(Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL)) {
+			ch.desiredScrollbarPos += i;
+			ChattingEnthusiast.chatting().ignoreScroll = false;
+			return;
 		}
 		if (cancel) ci.cancel();
 		ch.desiredScrollbarPos += i;

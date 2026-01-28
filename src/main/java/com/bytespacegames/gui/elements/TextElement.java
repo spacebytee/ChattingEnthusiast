@@ -37,24 +37,4 @@ public class TextElement extends AbstractGuiElement {
     public void onClick() {
 
     }
-
-    @Override
-    public void keyPressed(KeyEvent keyEvent) {
-
-    }
-
-    @Override
-    public void charTyped(CharacterEvent characterEvent) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-
-    }
-
-    @Override
-    public void clickOff() {
-
-    }
 }

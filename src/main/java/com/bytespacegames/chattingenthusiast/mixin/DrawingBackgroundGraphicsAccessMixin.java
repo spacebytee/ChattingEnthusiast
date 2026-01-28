@@ -1,6 +1,5 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
-import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.gui.components.ChatComponent;

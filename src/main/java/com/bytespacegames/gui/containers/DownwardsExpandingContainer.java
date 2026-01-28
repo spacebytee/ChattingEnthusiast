@@ -2,9 +2,9 @@ package com.bytespacegames.gui.containers;
 
 import net.minecraft.client.gui.GuiGraphics;
 
-public class TopLeftOriginatingContainer extends AbstractGuiContainer {
+public class DownwardsExpandingContainer extends AbstractGuiContainer {
     protected int spacing;
-    public TopLeftOriginatingContainer(int x, int y, int spacing, boolean visible) {
+    public DownwardsExpandingContainer(int x, int y, int spacing, boolean visible) {
         super(x, y, 0, 0, visible);
         this.spacing = spacing;
     }

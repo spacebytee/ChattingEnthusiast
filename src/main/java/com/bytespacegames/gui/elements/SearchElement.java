@@ -46,19 +46,4 @@ public class SearchElement extends AbstractGuiElement {
         ChattingEnthusiast.chatting().search.visible = !ChattingEnthusiast.chatting().search.visible;
         ChattingEnthusiast.chatting().search.setFocused(ChattingEnthusiast.chatting().search.visible);
     }
-
-    public void keyPressed(KeyEvent keyEvent) {
-
-    }
-
-    public void charTyped(CharacterEvent characterEvent) {
-
-    }
-
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-
-    }
-    public void clickOff() {
-
-    }
 }

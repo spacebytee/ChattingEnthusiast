@@ -3,7 +3,7 @@ package com.bytespacegames.gui.containers;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class BasicContainer extends AbstractGuiContainer {
-    public int color;
+    public final int color;
     public BasicContainer(int x, int y, int width, int height, int color, boolean visible) {
         super(x, y, width, height, visible);
         this.color = color;

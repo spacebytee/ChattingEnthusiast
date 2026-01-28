@@ -1,5 +1,7 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
+import com.bytespacegames.chattingenthusiast.ChatFilter;
+import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.config.BooleanSetting;
 import net.minecraft.client.gui.Gui;
@@ -22,5 +24,6 @@ public class GuiMixin {
         if (!((BooleanSetting) ChattingSettingsManager.INSTANCE.getSettingById("clearchat")).getValue()) {
             instance.clearMessages(bl);
         }
+        ChattingEnthusiast.filter().setFilter(ChatFilter.TabFilter.NONE);
     }
 }

@@ -76,8 +76,7 @@ public class ConfigManager {
 
         try (OutputStream out = Files.newOutputStream(path)) {
             props.store(out, name + " Config");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 }

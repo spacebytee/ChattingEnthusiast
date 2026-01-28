@@ -48,19 +48,4 @@ public class ClearChatElement extends AbstractGuiElement {
             ChattingEnthusiast.filter().clear();
         }
     }
-
-    public void keyPressed(KeyEvent keyEvent) {
-
-    }
-
-    public void charTyped(CharacterEvent characterEvent) {
-
-    }
-
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-
-    }
-    public void clickOff() {
-
-    }
 }

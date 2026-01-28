@@ -6,8 +6,7 @@ import com.bytespacegames.config.SettingsCategory;
 
 public class ChattingSettingsManager extends ConfigManager {
     public static ChattingSettingsManager INSTANCE;
-    public final SettingsCategory function;
-    public final SettingsCategory visual;
+    public final SettingsCategory function,visual,chatting;
     public ChattingSettingsManager() {
         super("/config/chattingenthusiast.properites", "ChattingEnthusiast");
         INSTANCE = this;
@@ -20,6 +19,7 @@ public class ChattingSettingsManager extends ConfigManager {
                 "chathistory",
                 "Increases chat history from 100 to 16,384.",
                 true));
+
         visual = new SettingsCategory("Visuals", "visual");
         visual.addSetting(new BooleanSetting("Smooth Scrolling",
                 "smoothscroll",
@@ -41,8 +41,28 @@ public class ChattingSettingsManager extends ConfigManager {
                 "notags",
                 "Skips rendering the message tag to the left of certain messages, such as server messages.",
                 true));
+
+        chatting = new SettingsCategory("Chatting Features", "chatting");
+        chatting.addSetting(new BooleanSetting("Chat Tabs",
+                "chattabs",
+                "Shows tabs for PM, all, party, and guild chat when connected to Hypixel.",
+                true));
+        chatting.addSetting(new BooleanSetting("Line Controls",
+                "linecontrols",
+                "Allows you to copy, delete, and jump to lines (if filtering) when hovering over a message.",
+                true));
+        chatting.addSetting(new BooleanSetting("Chat Controls",
+                "chatcontrols",
+                "Controls in the bottom right that allows you to clear chat or search through chat.",
+                true));
+        chatting.addSetting(new BooleanSetting("Message Hover",
+                "messagehover",
+                "Highlights the background of a hovered message.",
+                true));
+
         addCategory(visual);
         addCategory(function);
+        addCategory(chatting);
         load();
         save();
     }

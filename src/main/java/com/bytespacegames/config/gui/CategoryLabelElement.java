@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class CategoryLabelElement extends AbstractGuiElement {
-    private String text;
+    private final String text;
     public CategoryLabelElement(String text, int x, int y, int width, boolean visible) {
         super(x, y, width, 7, visible);
         this.text = text;

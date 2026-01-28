@@ -10,10 +10,10 @@ import java.util.List;
 
 public class ChatFilter {
 
-    private Minecraft mc;
+    private final Minecraft mc;
     // stuff regarding chat filters
     private volatile List<GuiMessage.Line> effectiveLines;
-    private volatile List<GuiMessage.Line> lineQueue;
+    private final List<GuiMessage.Line> lineQueue;
     private String searchCriteria = "";
     private TabFilter filter = TabFilter.NONE;
     private boolean requiresRefilter = false;
@@ -74,11 +74,9 @@ public class ChatFilter {
         if (!searchCriteria.isEmpty() && !contents.toLowerCase().contains(searchCriteria.toLowerCase())) return false;
         if (filter == TabFilter.GUILD && !contents.startsWith("Guild > ")) return false;
         if (filter == TabFilter.PARTY && !contents.startsWith("Party > ")) return false;
-        if (filter == TabFilter.PM &&
-                !contents.startsWith("From ") &&
-                !contents.startsWith("To ")) return false;
-
-        return true;
+        return filter != TabFilter.PM ||
+                contents.startsWith("From ") ||
+                contents.startsWith("To ");
     }
     public void queueRefilter() {
         if (unfiltered()) {
@@ -134,6 +132,8 @@ public class ChatFilter {
             return;
         }
         effectiveLines.clear();
+        filter = TabFilter.NONE;
+        searchCriteria = "";
         mc.gui.getChat().resetChatScroll();
     }
 
