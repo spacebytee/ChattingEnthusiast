@@ -9,12 +9,12 @@
 		"SpaceByte"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://bytespacegames.com",
+		"sources": "https://github.com/spacebytee/ChattingEnthusiast"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/chattingenthusiast/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"client": [
 			"com.bytespacegames.chattingenthusiast.ChattingEnthusiast"
@@ -25,7 +25,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "1.21.x",
+		"minecraft": "~1.21.11",
 		"java": ">=21"
 	},
 	"suggests": {
