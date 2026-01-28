@@ -15,7 +15,7 @@ public class ChatFilter {
     private volatile List<GuiMessage.Line> effectiveLines;
     private volatile List<GuiMessage.Line> lineQueue;
     private String searchCriteria = "";
-    private ChattingComponent.TabFilter filter = ChattingComponent.TabFilter.NONE;
+    private TabFilter filter = TabFilter.NONE;
     private boolean requiresRefilter = false;
     private volatile boolean refilterInProgress = false;
     private final Object chatTrimLock = new Object();
@@ -28,9 +28,12 @@ public class ChatFilter {
     }
 
     public boolean unfiltered() {
-        return filter == ChattingComponent.TabFilter.NONE && searchCriteria.isEmpty();
+        return filter == TabFilter.NONE && searchCriteria.isEmpty();
     }
     public List<GuiMessage.Line> getEffectiveLines() {
+        if (unfiltered()) {
+            return ((IChatComponentAccessor)mc.gui.getChat()).getTrimmedMessages();
+        }
         return effectiveLines;
     }
 
@@ -40,7 +43,7 @@ public class ChatFilter {
         if (requiresRefilter) queueRefilter();
     }
 
-    public void setFilter(ChattingComponent.TabFilter tab) {
+    public void setFilter(TabFilter tab) {
         if (!tab.equals(filter)) requiresRefilter = true;
         this.filter = tab;
         if (requiresRefilter) queueRefilter();
@@ -69,9 +72,9 @@ public class ChatFilter {
         String contents = msg.content().getString().replaceAll("§.","");
 
         if (!searchCriteria.isEmpty() && !contents.toLowerCase().contains(searchCriteria.toLowerCase())) return false;
-        if (filter == ChattingComponent.TabFilter.GUILD && !contents.startsWith("Guild > ")) return false;
-        if (filter == ChattingComponent.TabFilter.PARTY && !contents.startsWith("Party > ")) return false;
-        if (filter == ChattingComponent.TabFilter.PM &&
+        if (filter == TabFilter.GUILD && !contents.startsWith("Guild > ")) return false;
+        if (filter == TabFilter.PARTY && !contents.startsWith("Party > ")) return false;
+        if (filter == TabFilter.PM &&
                 !contents.startsWith("From ") &&
                 !contents.startsWith("To ")) return false;
 
@@ -79,7 +82,7 @@ public class ChatFilter {
     }
     public void queueRefilter() {
         if (unfiltered()) {
-            effectiveLines.clear();
+            clear();
             return;
         }
         requiresRefilter = false;
@@ -119,7 +122,7 @@ public class ChatFilter {
         mc.gui.getChat().resetChatScroll();
     }
 
-    public ChattingComponent.TabFilter getFilter() {
+    public TabFilter getFilter() {
         return filter;
     }
     public String getSearchCriteria() {
@@ -131,5 +134,10 @@ public class ChatFilter {
             return;
         }
         effectiveLines.clear();
+        mc.gui.getChat().resetChatScroll();
+    }
+
+    public enum TabFilter {
+        NONE,PARTY,GUILD,PM
     }
 }

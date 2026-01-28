@@ -1,9 +1,3 @@
-# Fabric Example Mod
+# ChattingEnthusiast
 
-## Setup
-
-For setup instructions please see the [fabric documentation page](https://docs.fabricmc.net/develop/getting-started/setting-up) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+please note: the project license does not apply to the following packages, any licensing information can be found in their respective LICENSE files: com.bytespacegames.config, com.bytespacegames.gui

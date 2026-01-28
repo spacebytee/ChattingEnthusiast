@@ -1,8 +1,9 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
-import com.bytespacegames.chattingenthusiast.gui.GuiManager;
+import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +15,7 @@ import net.minecraft.util.ARGB;
 
 import java.util.List;
 
-import static com.bytespacegames.chattingenthusiast.gui.GuiUtil.drawRect;
+import static com.bytespacegames.gui.GuiUtil.drawRect;
 
 public class DeleteElement extends AbstractGuiElement {
     public DeleteElement(int x, int y, int width, int height) {

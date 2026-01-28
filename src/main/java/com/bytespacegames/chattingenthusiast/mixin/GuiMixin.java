@@ -1,7 +1,7 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
-import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
+import com.bytespacegames.config.BooleanSetting;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.injection.At;

@@ -1,10 +1,10 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
-import com.bytespacegames.chattingenthusiast.gui.GuiManager;
+import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
-import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.GuiMessage;
@@ -17,7 +17,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.ARGB;
 import org.lwjgl.glfw.GLFW;
 
-import static com.bytespacegames.chattingenthusiast.gui.GuiUtil.drawRect;
+import static com.bytespacegames.gui.GuiUtil.drawRect;
 
 public class CopyElement extends AbstractGuiElement {
     public CopyElement(int x, int y, int width, int height) {

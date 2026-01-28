@@ -1,19 +1,19 @@
 package com.bytespacegames.chattingenthusiast;
 
-import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
-import com.bytespacegames.chattingenthusiast.gui.GuiManager;
-import com.bytespacegames.chattingenthusiast.gui.containers.BasicContainer;
-import com.bytespacegames.chattingenthusiast.gui.containers.BottomRightOriginatingContainer;
+import com.bytespacegames.gui.GuiManager;
+import com.bytespacegames.gui.containers.BasicContainer;
+import com.bytespacegames.gui.containers.BottomRightOriginatingContainer;
 import com.bytespacegames.chattingenthusiast.gui.elements.*;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.mixin.IChatScreenAccessor;
 import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
+import com.bytespacegames.gui.elements.SearchElement;
+import com.bytespacegames.gui.elements.WidgetElement;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
@@ -30,8 +30,6 @@ public class ChattingComponent {
     private double chatOffset = 0;
     public int desiredScrollbarPos;
     public boolean ignoreScroll = false;
-    // when true, apply the inverse of the gui transformations (scale by chat scale, transform 4 pixels) for chat, to offset the desync between hitboxes and the actual render positions
-    private boolean mouseTransformations = false;
 
     private final TimerUtils scrollTimer = new TimerUtils();
     private final TimerUtils animationTimer = new TimerUtils();
@@ -72,38 +70,34 @@ public class ChattingComponent {
         float baseBackgroundOpacity = mc.options.textBackgroundOpacity().get().floatValue();
         // lineIndex is relative to the bottom chat message as scrolled, so we need to account for scroll position
         int hoveredIndex = ChattingEnthusiast.INSTANCE.getHoveredMessage(mouseX,mouseY) - cca.getChatScrollbarPos();
-        int color = lineIndex == hoveredIndex ? 0xFFFFFFFF : 0xFF000000;
-        graphics.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
+
+        // draw message background
+        if (baseBackgroundOpacity > 0) {
+            int color = lineIndex == hoveredIndex ? 0xFFFFFFFF : 0xFF000000;
+            graphics.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
+        }
+
         if (lineIndex != hoveredIndex) return;
         copy.setConfig(x + scaleOffset + 8 + 1, mx, cca.mixin$getLineHeight(), cca.mixin$getLineHeight(), true);
         copy.setMessage(lineIndex);
         delete.setConfig(x + scaleOffset + 8 + 2 + cca.mixin$getLineHeight(), mx, cca.mixin$getLineHeight(), cca.mixin$getLineHeight(), true);
         delete.setMessage(lineIndex);
-        //graphics.fill(x + scaleOffset + 4 + 5, mx, x + scaleOffset + 4 + 5 + cca.mixin$getLineHeight(), mx + cca.mixin$getLineHeight(), ARGB.color(opacity * baseBackgroundOpacity, 0xFF000000));
-        //graphics.fill(x + scaleOffset + 4 + 6 + cca.mixin$getLineHeight(), mx, x + scaleOffset + 4 + 6 + cca.mixin$getLineHeight() * 2, mx + cca.mixin$getLineHeight(), ARGB.color(opacity * baseBackgroundOpacity, 0xFF000000));
 
         int hovered = ChattingEnthusiast.INSTANCE.getHoveredMessage(mouseX,mouseY);
         if (hovered == -1) {
             copy.setVisible(false);
             delete.setVisible(false);
         }
-        mouseTransformations = true;
+        // render lineContainer (per-line controls) with the scaling/offset of the chat line
+        GuiManager.INSTANCE.mouseTransformations = true;
         lineContainer.render(graphics);
-        mouseTransformations = false;
+        GuiManager.INSTANCE.mouseTransformations = false;
     }
     public void updateMouse(int x, int y) {
         this.mouseX = x;
         this.mouseY = y;
         GuiManager.INSTANCE.setMouseX(x);
         GuiManager.INSTANCE.setMouseY(y);
-    }
-    public int getMouseX() {
-        if (!mouseTransformations) return mouseX;
-        return (int) (mouseX / ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale()) - 4;
-    }
-    public int getMouseY() {
-        if (!mouseTransformations) return mouseY;
-        return (int) (mouseY / ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale());
     }
 
     // these methods come from ChatScreen, and therefore only are called when chat is focused
@@ -114,10 +108,11 @@ public class ChattingComponent {
         }
         chatControls.setRelativePosition(mc.getWindow().getGuiScaledWidth() - 3, mc.getWindow().getGuiScaledHeight() - 16);
         // 15 meaning the chat text bar height of 12 + 2 padding from the bottom of the screen + 1 padding from the top of the search bar.
-        // yes im using a magic number here because the original code does that too.
+        // yes im using a magic number here because the original code does that too
         search.setRelativePosition(mc.getWindow().getGuiScaledWidth() - 230, mc.getWindow().getGuiScaledHeight() - 15 - search.getHeight());
         chatContainer.render(g);
-        boolean smoothscroll = ((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("smoothscroll")).getValue();
+        //smooth scrolling
+        boolean smoothscroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true) || !smoothscroll) return;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
@@ -126,10 +121,9 @@ public class ChattingComponent {
     }
 
     public void onClick() {
-        mouseTransformations = true;
+        GuiManager.INSTANCE.mouseTransformations = true;
         lineContainer.onClick();
-        mouseTransformations = false;
-
+        GuiManager.INSTANCE.mouseTransformations = false;
         chatContainer.onClick();
     }
 
@@ -159,15 +153,15 @@ public class ChattingComponent {
             screen.getInput().setCanLoseFocus(false);
             screen.getInput().setFocused(true);
         }
+        String searchInput = ((EditBox) search.getWidget()).getValue();
+        if (!searchInput.equals(ChattingEnthusiast.filter().getSearchCriteria())) {
+            ChattingEnthusiast.filter().setSearch(searchInput);
+        }
     }
     public double getChatOffset() {
         return chatOffset;
     }
     public void setChatOffset(double offset) {
         this.chatOffset = offset;
-    }
-
-    public enum TabFilter {
-        NONE,PARTY,GUILD,PM
     }
 }

@@ -3,7 +3,7 @@ package com.bytespacegames.chattingenthusiast.mixin;
 import com.bytespacegames.chattingenthusiast.ChattingComponent;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
-import com.bytespacegames.chattingenthusiast.config.BooleanSetting;
+import com.bytespacegames.config.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.gui.Font;
@@ -27,10 +27,6 @@ import java.util.List;
 public abstract class ChatComponentMixin {
 	@Unique
 	private GuiGraphics lastGraphics;
-	@Unique
-	private int lastMouseX;
-	@Unique
-	private int lastMouseY;
 	@Shadow
 	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
 	@Shadow
@@ -46,17 +42,67 @@ public abstract class ChatComponentMixin {
 
 	@Shadow private int chatScrollbarPos;
 
+	// filter mixins
+	@Redirect(
+			method = "forEachLine",
+			at = @At(
+					value = "FIELD",
+					target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"
+			)
+	)
+	public List<GuiMessage.Line> replaceTrimmedMessages(ChatComponent instance) {
+		return ChattingEnthusiast.filter().getEffectiveLines();
+	}
+	@ModifyExpressionValue(
+			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Ljava/util/List;size()I"
+			)
+	)
+	private int replaceTrimmedMessagesSize(int original) {
+		return ChattingEnthusiast.filter().getEffectiveLines().size();
+	}
+	@Inject(
+			method="clearMessages(Z)V",
+			at=@At("RETURN")
+	)
+	public void mixin$clearMessages(boolean bl, CallbackInfo ci) {
+		ChattingEnthusiast.filter().queueRefilter();
+	}
+	@Inject(
+			method="refreshTrimmedMessages",
+			at=@At("RETURN")
+	)
+	public void mixin$refreshTrimmedMessages(CallbackInfo ci) {
+		ChattingEnthusiast.filter().queueRefilter();
+	}
+	@Redirect(
+			method = "addMessageToDisplayQueue",
+			at = @At(value = "INVOKE",target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
+	private void onTrimmedMessageAdd(List<GuiMessage.Line> list, Object element) {
+		GuiMessage.Line line = (GuiMessage.Line) element;
+		ChattingEnthusiast.filter().onAddLine(line);
+		list.addFirst(line);
+	}
+	// end filter mixins
+
+	// extends chat history
 	@ModifyExpressionValue(
 			method = {"addMessageToQueue(Lnet/minecraft/client/GuiMessage;)V", "addMessageToDisplayQueue", "addRecentChat"},
 			at = @At(value = "CONSTANT", args = "intValue=100")
 	)
 	private int chatHistoryLength(int i) {
+		if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("chathistory")) {
+			return 100;
+		}
 		return ChattingEnthusiast.MAX_MESSAGES;
 	}
 
 	@ModifyVariable(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("STORE"), ordinal = 4)
 	private int moveChat(int m) {
-		return (int) (m + ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting().getChatOffset());
+		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
+		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 	}
 
 	@Redirect(
@@ -68,7 +114,9 @@ public abstract class ChatComponentMixin {
 			)
 	)
 	private void skipScrollbarFill(ChatComponent.ChatGraphicsAccess graphics, int x1, int y1, int x2, int y2, int color) {
-
+		if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("noscroll")) {
+			graphics.fill(x1,y1,x2,y2,color);
+		}
 	}
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
@@ -79,7 +127,9 @@ public abstract class ChatComponentMixin {
 			)
 	)
 	private void skipScrollbarFill2(ChatComponent.ChatGraphicsAccess graphics, int x1, int y1, int x2, int y2, int color) {
-
+		if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("noscroll")) {
+			graphics.fill(x1,y1,x2,y2,color);
+		}
 	}
 	@Inject(
 			method = "render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Font;IIIZZ)V",
@@ -89,8 +139,6 @@ public abstract class ChatComponentMixin {
 		lastGraphics = graphics;
 		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
-	@Shadow
-	private int getWidth() { return 0; }
 	@Shadow
 	private double getScale() { return 0; }
 	@Redirect(
@@ -104,7 +152,8 @@ public abstract class ChatComponentMixin {
 	private int renderLine(ChatComponent instance, final ChatComponent.AlphaCalculator alphaCalculator, final ChatComponent.LineConsumer lineConsumer) {
 		Minecraft minecraft = Minecraft.getInstance();
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
-		final int chatLX = chatBottom + (int) (ChattingEnthusiast.OFFSET_CHAT_HEIGHT + ChattingEnthusiast.chatting().getChatOffset());
+		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
+		final int chatLX = chatBottom + (int) (constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 		int messageHeight = 9;
 		double chatLineSpacing = (Double)minecraft.options.chatLineSpacing().get();
 		int entryHeight = (int)((double)messageHeight * (chatLineSpacing + 1.0D));
@@ -154,14 +203,5 @@ public abstract class ChatComponentMixin {
 		if (isChatFocused() && chatScrollbarPos != 0) return;
 		if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
 		ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + getLineHeight());
-	}
-
-	@Redirect(
-			method = "addMessageToDisplayQueue",
-			at = @At(value = "INVOKE",target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
-	private void onTrimmedMessageAdd(List<GuiMessage.Line> list, Object element) {
-		GuiMessage.Line line = (GuiMessage.Line) element;
-		ChattingEnthusiast.filter().onAddLine(line);
-		list.addFirst(line);
 	}
 }

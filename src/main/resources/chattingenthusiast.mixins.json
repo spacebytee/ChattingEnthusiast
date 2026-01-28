@@ -13,6 +13,8 @@
   },
   "client": [
     "ChatScreenMixin",
+    "DrawingBackgroundGraphicsAccessMixin",
+    "DrawingFocusedGraphicsAccessMixin",
     "GuiMixin",
     "IChatComponentAccessor",
     "IChatScreenAccessor",

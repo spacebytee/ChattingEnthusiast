@@ -1,6 +1,6 @@
 package com.bytespacegames.chattingenthusiast;
 
-import com.bytespacegames.chattingenthusiast.gui.GuiManager;
+import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,6 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -20,7 +21,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final int MAX_MESSAGES = 16384;
 	public static final int SCROLLING_INTERVAL = 1;
 	public static final int ANIMATION_INTERVAL = 1000/60;
-	public static final int OFFSET_CHAT_HEIGHT = 0;
+	public static final int OFFSET_CHAT_HEIGHT = -10;
 	public static ChattingEnthusiast INSTANCE;
 	private ChattingComponent chatting;
 	private ChatFilter filter;
@@ -41,7 +42,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		listener = new ChattingEventListener();
 
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-			LiteralArgumentBuilder cmd = ClientCommandManager.literal("chatting")
+			LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal("chatting")
 					.executes(this::openGui);
 			dispatcher.register(cmd);
 		});
@@ -69,7 +70,8 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		int scrollBarOffset = cca.getChatScrollbarPos();
 		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale();
 		// mouse offset is the pixels away from the bottom of the chat your mouse is at
-		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 + OFFSET_CHAT_HEIGHT + (int) chatting.getChatOffset();
+		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
+		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 + constantOffset + (int) chatting.getChatOffset();
 		if (mouseOffset < 0) return -1;
 		int index = (int) ((mouseOffset/chatHeight) + scrollBarOffset);
 		if (index >= cca.getTrimmedMessages().size()) return -1;
