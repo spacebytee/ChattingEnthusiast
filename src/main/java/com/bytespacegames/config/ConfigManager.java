@@ -1,5 +1,8 @@
 package com.bytespacegames.config;
 
+import com.bytespacegames.config.settings.BooleanSetting;
+import com.bytespacegames.config.settings.FloatSetting;
+import com.bytespacegames.config.settings.Setting;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
@@ -33,6 +36,14 @@ public class ConfigManager {
         Setting setting = getSettingById(id);
         if (!(setting instanceof BooleanSetting)) return false;
         return ((BooleanSetting) setting).getValue();
+    }
+    public float getFloatValueById(String id) {
+        Setting setting = getSettingById(id);
+        if (setting instanceof BooleanSetting booleanSetting) {
+            return booleanSetting.getValue() ? 1f : 0;
+        }
+        if (!(setting instanceof FloatSetting)) return 0;
+        return ((FloatSetting) setting).getValue();
     }
     public Setting getSettingById(String id) {
         for (SettingsCategory c : categories) {

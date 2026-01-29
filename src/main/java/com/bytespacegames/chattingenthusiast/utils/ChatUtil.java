@@ -1,6 +1,7 @@
 package com.bytespacegames.chattingenthusiast.utils;
 
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
@@ -42,18 +43,29 @@ public class ChatUtil {
         while (found > 0 && msgs.get(found-1).addedTime() == targetAddedTime) {
             found--;
         }
+        String searchingFor = cleanUpMessage(getPlainText(line.content()).trim());
         // move older until you find a matching message
         while (found < msgs.size() && msgs.get(found).addedTime() == targetAddedTime) {
             if (msgs.get(found).tag() != line.tag()) {
                 found++;
                 continue;
             }
-            if (msgs.get(found).content().getString().replaceAll("§.","").contains(getPlainText(line.content()).trim().replaceAll("§.",""))) {
+            String message = cleanUpMessage(msgs.get(found).content().getString());
+            if (message.contains(searchingFor)) {
                 return msgs.get(found);
             }
+            System.out.println(message);
+            System.out.println("Raw: " + msgs.get(found).content().getString());
             found++;
         }
         return null;
+    }
+    public static String cleanUpMessage(String message) {
+        message = message.replaceAll("§.","").replaceAll("￼","");
+        if (FabricLoader.getInstance().isModLoaded("chat_heads")) {
+            message = message.replaceAll("\\[[^]]*\\bhead]", "");
+        }
+        return message;
     }
     public static String getPlainText(FormattedCharSequence seq) {
         StringBuilder sb = new StringBuilder();

@@ -61,11 +61,11 @@ public class CopyElement extends AbstractGuiElement {
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // single line
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
-            setClipboard(ChatUtil.getPlainText(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content()));
+            setClipboard(ChatUtil.cleanUpMessage(ChatUtil.getPlainText(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content())));
             return;
         }
         GuiMessage message = ChatUtil.getMessageFromLine(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()));
         if (message == null) return;
-        setClipboard(message.content().getString());
+        setClipboard(ChatUtil.cleanUpMessage(message.content().getString().replaceAll("￼","")));
     }
 }

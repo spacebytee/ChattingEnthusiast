@@ -2,7 +2,7 @@ package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
-import com.bytespacegames.config.BooleanSetting;
+import com.bytespacegames.config.settings.BooleanSetting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 

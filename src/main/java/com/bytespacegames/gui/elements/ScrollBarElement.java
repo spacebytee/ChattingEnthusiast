@@ -15,7 +15,7 @@ public class ScrollBarElement extends AbstractGuiElement {
         this.scrollBarColor = scrollBarColor;
     }
     public void setScrollBarPosition(float percentage) {
-        scrollBarPosition = (int) percentage * (getHeight() - highlightHeight());
+        scrollBarPosition = (int) (percentage * (float) (getHeight() - highlightHeight()));
     }
     private int highlightHeight() {
         return (int) (height * ((float) parent.getHeight() / ((ScrollingContainer)parent).getContentsBound()));

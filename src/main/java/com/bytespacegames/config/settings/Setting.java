@@ -1,4 +1,4 @@
-package com.bytespacegames.config;
+package com.bytespacegames.config.settings;
 
 import java.util.Properties;
 

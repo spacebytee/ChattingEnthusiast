@@ -1,22 +1,32 @@
 package com.bytespacegames.config.gui;
 
-import com.bytespacegames.config.BooleanSetting;
-import com.bytespacegames.config.Setting;
+import com.bytespacegames.config.settings.BooleanSetting;
+import com.bytespacegames.config.settings.FloatSetting;
+import com.bytespacegames.config.settings.Setting;
 import com.bytespacegames.gui.containers.AbstractGuiContainer;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
+import com.bytespacegames.gui.elements.SliderElement;
 import com.bytespacegames.gui.elements.ToggleSwitchElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 
 public class SettingElement extends AbstractGuiContainer {
     private final Setting setting;
     private AbstractGuiElement settingToggle;
     public SettingElement(Setting setting, int x, int y, int width, boolean visible) {
-        super(x, y, width, 30 + 7 + 5 + getLines(setting.getDescription(), width) * 7 + (getLines(setting.getDescription(), width) - 1) * 4, visible);
+        super(x, y, width,
+                30 + 7 + 5 + getLines(setting.getDescription(),
+                        (int) (width * (setting instanceof BooleanSetting ? .8 : .5))) * 7 + (getLines(setting.getDescription(),
+                        (int) (width * (setting instanceof BooleanSetting ? .8 : .5))) - 1) * 4,
+                visible);
         this.setting = setting;
         if (setting instanceof BooleanSetting) {
             settingToggle = new ToggleSwitchElement(width - 35,height / 2 - 8,30,16,((BooleanSetting) setting).getValue(), true);
+        }
+        if (setting instanceof FloatSetting floatSetting) {
+            settingToggle = new SliderElement(width/2 + 30, height / 2 - 8, width/2 - 5 - 30, 16, (floatSetting.getValue() - floatSetting.getMin())/(floatSetting.getMax()-floatSetting.getMin()), floatSetting.getMin(), floatSetting.getMax(), true);
         }
         if (settingToggle != null) {
             addElement(settingToggle);
@@ -24,14 +34,14 @@ public class SettingElement extends AbstractGuiContainer {
     }
     private static int getLines(String text, int width) {
         Font f = Minecraft.getInstance().font;
-        if (f.width(text) <= width * .8) {
+        if (f.width(text) <= width) {
             return 1;
         }
         int i = 1;
         String[] words = text.split(" ");
         StringBuilder built = new StringBuilder();
         for (String word : words) {
-            if (f.width(built + word) > width * .8) {
+            if (f.width(built + word) > width) {
                 i++;
                 built = new StringBuilder();
             }
@@ -41,7 +51,7 @@ public class SettingElement extends AbstractGuiContainer {
     }
     private void drawLines(GuiGraphics g, String text, int x, int y) {
         Font f = Minecraft.getInstance().font;
-        if (f.width(text) <= getWidth() * .8) {
+        if (f.width(text) <= getWidth() * (setting instanceof BooleanSetting ? .8 : .5)) {
             g.drawString(f, text,x,y,ConfigGui.SECONDARY_COLOR);
             return;
         }
@@ -49,7 +59,7 @@ public class SettingElement extends AbstractGuiContainer {
         String[] words = text.split(" ");
         StringBuilder built = new StringBuilder();
         for (String word : words) {
-            if (f.width(built + word) > getWidth() * .8) {
+            if (f.width(built + word) > getWidth() * (setting instanceof BooleanSetting ? .8 : .5)) {
                 g.drawString(f, built.toString().trim(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
                 i++;
                 built = new StringBuilder();
@@ -85,9 +95,17 @@ public class SettingElement extends AbstractGuiContainer {
     @Override
     public void onClick() {
         super.onClick();
-        if (setting instanceof BooleanSetting) {
+        if (setting instanceof BooleanSetting booleanSetting) {
             ToggleSwitchElement toggle = (ToggleSwitchElement) settingToggle;
-            ((BooleanSetting) setting).setValue(toggle.getValue());
+            booleanSetting.setValue(toggle.getValue());
+        }
+    }
+    @Override
+    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double i, double j) {
+        super.mouseDragged(mouseButtonEvent,i,j);
+        if (setting instanceof FloatSetting floatSetting) {
+            SliderElement toggle = (SliderElement) settingToggle;
+            floatSetting.setValue(toggle.getScaledValue());
         }
     }
 }

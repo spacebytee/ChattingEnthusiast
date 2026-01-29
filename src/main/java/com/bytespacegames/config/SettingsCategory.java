@@ -1,5 +1,7 @@
 package com.bytespacegames.config;
 
+import com.bytespacegames.config.settings.Setting;
+
 import java.util.ArrayList;
 import java.util.List;
 

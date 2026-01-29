@@ -24,7 +24,6 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final int SCROLLING_INTERVAL = 1;
 	public static final int ANIMATION_INTERVAL = 1000/60;
 	public static final int OFFSET_CHAT_HEIGHT = -10;
-	public static final int COMPACT_CHAT_MEMORY_TICKS = 100;
 	public static ChattingEnthusiast INSTANCE;
 	private ChattingGui chatting;
 	private ChatFilter filter;

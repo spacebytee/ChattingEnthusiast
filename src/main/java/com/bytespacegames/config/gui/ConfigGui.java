@@ -1,7 +1,7 @@
 package com.bytespacegames.config.gui;
 
 import com.bytespacegames.config.ConfigManager;
-import com.bytespacegames.config.Setting;
+import com.bytespacegames.config.settings.Setting;
 import com.bytespacegames.config.SettingsCategory;
 import com.bytespacegames.gui.containers.BasicContainer;
 import com.bytespacegames.gui.containers.ScrollingContainer;
@@ -81,9 +81,8 @@ public class ConfigGui extends Screen {
     }
     @Override
     public void onClose() {
-        super.onClose();
-        this.minecraft.setScreen(null);
         config.save();
+        super.onClose();
     }
     public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
         if (mouseButtonEvent.button() == 0) {

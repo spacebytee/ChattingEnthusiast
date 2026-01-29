@@ -3,7 +3,7 @@ package com.bytespacegames.chattingenthusiast.mixin;
 import com.bytespacegames.chattingenthusiast.ChattingGui;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
-import com.bytespacegames.config.BooleanSetting;
+import com.bytespacegames.config.settings.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;

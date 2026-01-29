@@ -1,11 +1,13 @@
 package com.bytespacegames.chattingenthusiast.compactchat;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +20,22 @@ public class CompactChatManager {
     private void clearOld() {
         int latestValid = messages.size();
         for (int i = messages.size() - 1; i >= 0; i--) {
-            if (Minecraft.getInstance().gui.getGuiTicks() - messages.get(i).getMessage().addedTime() > ChattingEnthusiast.COMPACT_CHAT_MEMORY_TICKS) {
+            if (Minecraft.getInstance().gui.getGuiTicks() - messages.get(i).getMessage().addedTime() > ChattingSettingsManager.INSTANCE.getFloatValueById("compactchattime") * 20) {
                 break;
             }
             latestValid = i;
         }
         messages.subList(0,latestValid).clear();
     }
+    public boolean excludeFromCompactChat(Component c) {
+        String msg = c.getString().replaceAll("§.","");
+        return msg.matches("\\s*") || msg.trim().matches("-+");
+    }
     public GuiMessage compactMessage(GuiMessage m) {
         clearOld();
+        if (excludeFromCompactChat(m.content())) {
+            return m;
+        }
         MessageTracker tracker = null;
         for (int i = messages.size() - 1; i >= 0; i--) {
             tracker = messages.get(i);
@@ -44,7 +53,13 @@ public class CompactChatManager {
         GuiMessage oldMessage = tracker.getMessage();
         tracker.incrementOccurances(m.content());
         Component compactTag = Component.literal(" (" + tracker.getOccurrences() + ")")
-                .withStyle(ChatFormatting.GRAY);
+                .withStyle(style -> style
+                        .withColor(ChatFormatting.GRAY)
+                        .withBold(false)
+                        .withItalic(false)
+                        .withObfuscated(false)
+                        .withStrikethrough(false)
+                        .withUnderlined(false));
         Component modifiedComponent = m.content().copy().append(compactTag);
         GuiMessage newMessage = new GuiMessage(m.addedTime(),modifiedComponent,m.signature(),m.tag());
         tracker.setMessage(newMessage);

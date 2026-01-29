@@ -1,8 +1,9 @@
 package com.bytespacegames.chattingenthusiast;
 
-import com.bytespacegames.config.BooleanSetting;
+import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.config.ConfigManager;
 import com.bytespacegames.config.SettingsCategory;
+import com.bytespacegames.config.settings.FloatSetting;
 
 public class ChattingSettingsManager extends ConfigManager {
     public static ChattingSettingsManager INSTANCE;
@@ -63,6 +64,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "compactchat",
                 "Condenses identical repeated messages into one.",
                 true));
+        chatting.addSetting(new FloatSetting("Compact Chat Time",
+                "compactchattime",
+                "The maximum amount of time between identical messages to be compacted.",
+                5f,1f,20f));
 
         addCategory(visual);
         addCategory(function);
