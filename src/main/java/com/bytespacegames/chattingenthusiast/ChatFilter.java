@@ -1,11 +1,11 @@
 package com.bytespacegames.chattingenthusiast;
 
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.bytespacegames.chattingenthusiast.ext.IChatComponentExt;
 import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import com.bytespacegames.config.settings.BooleanSetting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +64,7 @@ public class ChatFilter {
         if (matchesFilter(line)) {
             effectiveLines.addFirst(line);
             if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
+            if (((IChatComponentExt)mc.gui.getChat()).getRefreshing()) return;
             ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + 9);
         }
     }

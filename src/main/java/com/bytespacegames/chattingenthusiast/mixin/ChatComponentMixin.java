@@ -3,6 +3,7 @@ package com.bytespacegames.chattingenthusiast.mixin;
 import com.bytespacegames.chattingenthusiast.ChattingGui;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
+import com.bytespacegames.chattingenthusiast.ext.IChatComponentExt;
 import com.bytespacegames.config.settings.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
@@ -27,11 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatComponent.class)
-public abstract class ChatComponentMixin {
+public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Unique
 	private GuiGraphics lastGraphics;
+
 	@Unique
 	private boolean isRefreshing = false;
+	public boolean getRefreshing() {
+		return isRefreshing;
+	}
 	//region Shadow
 	@Shadow
 	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
