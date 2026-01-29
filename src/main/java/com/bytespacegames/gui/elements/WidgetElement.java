@@ -1,6 +1,6 @@
 package com.bytespacegames.gui.elements;
 
-import com.bytespacegames.chattingenthusiast.ChattingComponent;
+import com.bytespacegames.chattingenthusiast.ChattingGui;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.TimerUtils;
@@ -29,7 +29,7 @@ public class WidgetElement extends AbstractGuiElement {
 
     @Override
     public void onClick() {
-        ChattingComponent c = ChattingEnthusiast.chatting();
+        ChattingGui c = ChattingEnthusiast.chatting();
         widget.setFocused(true);
         widget.setX(x);
         widget.setY(y);

@@ -24,4 +24,6 @@ public interface IChatComponentAccessor {
     int mixin$getLinesPerPage();
     @Invoker("getScale")
     double mixin$getScale();
+    @Invoker("refreshTrimmedMessages")
+    void mixin$refreshTrimmedMessages();
 }

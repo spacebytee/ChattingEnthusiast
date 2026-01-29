@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast;
 
+import com.bytespacegames.chattingenthusiast.compactchat.CompactChatManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -23,9 +24,11 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final int SCROLLING_INTERVAL = 1;
 	public static final int ANIMATION_INTERVAL = 1000/60;
 	public static final int OFFSET_CHAT_HEIGHT = -10;
+	public static final int COMPACT_CHAT_MEMORY_TICKS = 100;
 	public static ChattingEnthusiast INSTANCE;
-	private ChattingComponent chatting;
+	private ChattingGui chatting;
 	private ChatFilter filter;
+	private CompactChatManager compactChat;
 	public boolean shouldOpenGui = false;
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -37,8 +40,10 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		mc = Minecraft.getInstance();
 		new GuiManager();
 		new ChattingSettingsManager();
-		chatting = new ChattingComponent();
+		chatting = new ChattingGui();
 		filter = new ChatFilter();
+		compactChat = new CompactChatManager();
+
 		tryRegisterCommand();
 	}
 
@@ -95,12 +100,15 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		return index;
 	}
 
-	public static ChattingComponent chatting() {
+	public static ChattingGui chatting() {
 		return INSTANCE.chatting;
 	}
 
 	public static ChatFilter filter() {
 		return INSTANCE.filter;
+	}
+	public static CompactChatManager compactChat() {
+		return INSTANCE.compactChat;
 	}
 
 }

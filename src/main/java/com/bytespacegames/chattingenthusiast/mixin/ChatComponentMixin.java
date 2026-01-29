@@ -1,6 +1,6 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
-import com.bytespacegames.chattingenthusiast.ChattingComponent;
+import com.bytespacegames.chattingenthusiast.ChattingGui;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.config.BooleanSetting;
@@ -14,7 +14,6 @@ import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.util.Mth;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,6 +30,7 @@ import java.util.List;
 public abstract class ChatComponentMixin {
 	@Unique
 	private GuiGraphics lastGraphics;
+	//region Shadow
 	@Shadow
 	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
 	@Shadow
@@ -47,12 +47,11 @@ public abstract class ChatComponentMixin {
 	private void logChatMessage(GuiMessage guiMessage) {}
 	@Shadow
 	public boolean isChatFocused() { return false; }
-
 	@Shadow protected abstract int getLineHeight();
-
 	@Shadow private int chatScrollbarPos;
-
-	// filter mixins
+	@Shadow private double getScale() { return 0; }
+	//endregion
+	//region Filter Mixins
 	@Redirect(
 			method = "forEachLine",
 			at = @At(
@@ -95,7 +94,7 @@ public abstract class ChatComponentMixin {
 		list.addFirst(line);
 		ChattingEnthusiast.filter().onAddLine(line);
 	}
-	// end filter mixins
+	//endregion
 
 	// extends chat history
 	@ModifyExpressionValue(
@@ -114,7 +113,7 @@ public abstract class ChatComponentMixin {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 	}
-
+	//region Scrollbar
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At(
@@ -141,6 +140,7 @@ public abstract class ChatComponentMixin {
 			graphics.fill(x1,y1,x2,y2,color);
 		}
 	}
+	//endregion
 	@Inject(
 			method = "render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Font;IIIZZ)V",
 			at = @At("HEAD")
@@ -149,8 +149,6 @@ public abstract class ChatComponentMixin {
 		lastGraphics = graphics;
 		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
-	@Shadow
-	private double getScale() { return 0; }
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At(
@@ -187,7 +185,7 @@ public abstract class ChatComponentMixin {
 		if (!smoothscroll) {
 			return;
 		}
-		ChattingComponent ch = ChattingEnthusiast.chatting();
+		ChattingGui ch = ChattingEnthusiast.chatting();
 		boolean cancel = true;
 		// if this was called from the animation, scroll normally
 		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
@@ -231,7 +229,8 @@ public abstract class ChatComponentMixin {
 		ci.cancel();
 		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.getGuiTicks(), component, messageSignature, guiMessageTag);
 		logChatMessage(guiMessage);
-		addMessageToQueue(guiMessage);
-		addMessageToDisplayQueue(guiMessage);
+		GuiMessage compacted = ChattingSettingsManager.INSTANCE.getSettingToggledById("compactchat") ? ChattingEnthusiast.compactChat().compactMessage(guiMessage) : guiMessage;
+		addMessageToQueue(compacted);
+		addMessageToDisplayQueue(compacted);
 	}
 }

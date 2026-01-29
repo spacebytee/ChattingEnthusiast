@@ -59,6 +59,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "messagehover",
                 "Highlights the background of a hovered message.",
                 true));
+        chatting.addSetting(new BooleanSetting("Compact Chat",
+                "compactchat",
+                "Condenses identical repeated messages into one.",
+                true));
 
         addCategory(visual);
         addCategory(function);

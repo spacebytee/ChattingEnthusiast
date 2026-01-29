@@ -25,7 +25,7 @@ import net.minecraft.util.Mth;
 
 import java.util.List;
 
-public class ChattingComponent {
+public class ChattingGui {
     private int mouseX,mouseY;
     private final Minecraft mc;
     private double chatOffset = 0;
@@ -53,7 +53,7 @@ public class ChattingComponent {
         return ChattingEnthusiast.filter().getEffectiveLines();
     }
 
-    public ChattingComponent() {
+    public ChattingGui() {
         this.mc = Minecraft.getInstance();
         lineContainer = new BasicContainer(0,0,true);
         chatContainer = new BasicContainer(0,0,true);
@@ -175,7 +175,7 @@ public class ChattingComponent {
         if (search.getWidget().isFocused()) {
             screen.getInput().setCanLoseFocus(true);
             screen.getInput().setFocused(false);
-        } else {
+        } else if (!screen.getInput().isFocused()){
             screen.getInput().setCanLoseFocus(false);
             screen.getInput().setFocused(true);
         }
