@@ -30,6 +30,8 @@ import java.util.List;
 public abstract class ChatComponentMixin {
 	@Unique
 	private GuiGraphics lastGraphics;
+	@Unique
+	private boolean isRefreshing = false;
 	//region Shadow
 	@Shadow
 	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
@@ -81,9 +83,17 @@ public abstract class ChatComponentMixin {
 	}
 	@Inject(
 			method="refreshTrimmedMessages",
+			at=@At("HEAD")
+	)
+	public void mixin$startRefreshTrimmedMessages(CallbackInfo ci) {
+		isRefreshing = true;
+	}
+	@Inject(
+			method="refreshTrimmedMessages",
 			at=@At("RETURN")
 	)
 	public void mixin$refreshTrimmedMessages(CallbackInfo ci) {
+		isRefreshing = false;
 		ChattingEnthusiast.filter().queueRefilter();
 	}
 	@Redirect(
@@ -215,6 +225,7 @@ public abstract class ChatComponentMixin {
 	@Inject(method = "addMessageToDisplayQueue",
 			at = @At("HEAD"))
 	private void mixin$addMessageToDisplayQueue(GuiMessage guiMessage, CallbackInfo ci) {
+		if (isRefreshing) return;
 		if (isChatFocused() && chatScrollbarPos != 0) return;
 		if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
 		if (!ChattingEnthusiast.filter().unfiltered()) return;
