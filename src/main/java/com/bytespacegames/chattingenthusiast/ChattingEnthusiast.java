@@ -15,7 +15,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 
 		tryRegisterCommand();
 
-        KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("chattingenthusiast", "chattingenthusiast"));
+        KeyMapping.Category CATEGORY = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("chattingenthusiast", "chattingenthusiast"));
 		chatPeekBind = new KeyMapping(
 				"key.chattingenthusiast.chatpeek",
 				GLFW.GLFW_KEY_Z,

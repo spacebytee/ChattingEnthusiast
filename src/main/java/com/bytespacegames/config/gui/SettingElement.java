@@ -86,7 +86,7 @@ public class SettingElement extends AbstractGuiContainer {
     @Override
     public void render(GuiGraphics g) {
         g.fill(x,y,x+width,y+height, ConfigGui.PRIMARY_COLOR);
-        g.renderOutline(x,y,width,height, ConfigGui.SECONDARY_COLOR);
+        g.submitOutline(x,y,width,height, ConfigGui.SECONDARY_COLOR);
         g.drawString(Minecraft.getInstance().font, setting.getName(), x + 15,y + 15, 0xFFFFFFFF);
         drawLines(g, setting.getDescription(), x + 15,y + 15+12);
         super.render(g);
