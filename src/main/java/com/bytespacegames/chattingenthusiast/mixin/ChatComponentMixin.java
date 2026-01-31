@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,10 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Shadow protected abstract int getLineHeight();
 	@Shadow private int chatScrollbarPos;
 	@Shadow private double getScale() { return 0; }
-
+	@Shadow public static int getHeight(double d) { return 0; }
 	//endregion
+
+	//region ChatPeek
 	@ModifyVariable(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At("HEAD"),
@@ -67,6 +70,15 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	private boolean chatPeek(boolean original) {
 		return original || ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown();
 	}
+	@Inject(
+			method="getHeight()I",
+			at=@At("HEAD"),
+			cancellable = true)
+	public void chatPeekHeight(CallbackInfoReturnable<Integer> cir) {
+		if (ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown())
+			cir.setReturnValue(getHeight(Minecraft.getInstance().options.chatHeightFocused().get()));
+	}
+	//endregion
 	//region Filter Mixins
 	@Redirect(
 			method = "forEachLine",
