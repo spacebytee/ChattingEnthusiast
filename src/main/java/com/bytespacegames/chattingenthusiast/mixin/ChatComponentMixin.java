@@ -23,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ import java.util.List;
 public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Unique
 	private GuiGraphics lastGraphics;
-
 	@Unique
 	private boolean isRefreshing = false;
 	@Unique
@@ -60,7 +58,15 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Shadow protected abstract int getLineHeight();
 	@Shadow private int chatScrollbarPos;
 	@Shadow private double getScale() { return 0; }
+
 	//endregion
+	@ModifyVariable(
+			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			at = @At("HEAD"),
+			ordinal = 0, argsOnly = true)
+	private boolean chatPeek(boolean original) {
+		return original || ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown();
+	}
 	//region Filter Mixins
 	@Redirect(
 			method = "forEachLine",

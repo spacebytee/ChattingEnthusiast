@@ -1,13 +1,15 @@
 package com.bytespacegames.chattingenthusiast;
 
+import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.config.ConfigManager;
 import com.bytespacegames.config.SettingsCategory;
 import com.bytespacegames.config.settings.FloatSetting;
+import net.minecraft.client.Minecraft;
 
 public class ChattingSettingsManager extends ConfigManager {
     public static ChattingSettingsManager INSTANCE;
-    public final SettingsCategory function,visual,chatting;
+    public final SettingsCategory function,visual,chatting,chattabs;
     public ChattingSettingsManager() {
         super("/config/chattingenthusiast.properites", "ChattingEnthusiast");
         INSTANCE = this;
@@ -48,10 +50,6 @@ public class ChattingSettingsManager extends ConfigManager {
                 true));
 
         chatting = new SettingsCategory("Chatting Features", "chatting");
-        chatting.addSetting(new BooleanSetting("Chat Tabs",
-                "chattabs",
-                "Shows tabs for PM, all, party, and guild chat when connected to Hypixel.",
-                true));
         chatting.addSetting(new BooleanSetting("Line Controls",
                 "linecontrols",
                 "Allows you to copy, delete, and jump to lines (if filtering) when hovering over a message.",
@@ -72,11 +70,35 @@ public class ChattingSettingsManager extends ConfigManager {
                 "compactchattime",
                 "The maximum amount of time between identical messages to be compacted.",
                 5f,1f,20f));
-
+        chattabs = new SettingsCategory("Chat Tabs", "chattabs");
+        chattabs.addSetting(new BooleanSetting("Chat Tabs",
+                "chattabs",
+                "Shows tabs for PM, all, party, and guild chat when connected to Hypixel.",
+                true));
+        chattabs.addSetting(new BooleanSetting("Tab Filters",
+                "tabfilters",
+                "Chat tabs will filter the chat to just the messages in that channel.",
+                true));
+        chattabs.addSetting(new BooleanSetting("Switch Chat Channels",
+                "switchchannels",
+                "Switching chat tabs will also switch you to the accompanying Hypixel chat channel.",
+                true));
+        chattabs.addSetting(new BooleanSetting("All Tab Switches Channel",
+                "alltabchannel",
+                "Switching to the all channel will switch you to all chat. Useful to be disabled, since the all tab never filters chat on it's own.",
+                false));
         addCategory(visual);
         addCategory(function);
         addCategory(chatting);
+        addCategory(chattabs);
         load();
         save();
+    }
+    @Override
+    public void save() {
+        super.save();
+        try {
+            ((IChatComponentAccessor)Minecraft.getInstance().gui.getChat()).mixin$refreshTrimmedMessages();
+        } catch (Exception ignored) {}
     }
 }

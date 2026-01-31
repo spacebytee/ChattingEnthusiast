@@ -44,7 +44,7 @@ public class ChatFilter {
         return out.toString();
     }
     public boolean unfiltered() {
-        return filter == TabFilter.NONE && searchCriteria.isEmpty();
+        return (filter == TabFilter.NONE || !ChattingSettingsManager.INSTANCE.getSettingToggledById("tabfilters")) && searchCriteria.isEmpty();
     }
     public List<GuiMessage.Line> getEffectiveLines() {
         if (unfiltered()) {
@@ -61,7 +61,7 @@ public class ChatFilter {
     }
 
     public void setFilter(TabFilter tab) {
-        if (!tab.equals(filter)) requiresRefilter = true;
+        if (!tab.equals(filter) && ChattingSettingsManager.INSTANCE.getSettingToggledById("tabfilters")) requiresRefilter = true;
         this.filter = tab;
         if (requiresRefilter) queueRefilter();
     }
@@ -93,6 +93,7 @@ public class ChatFilter {
         String contents = stripFormatting(msg.content().getString());
 
         if (!searchCriteria.isEmpty() && !contents.toLowerCase().contains(searchCriteriaLower)) return false;
+        if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("tabfilters")) return true;
         if (filter == TabFilter.GUILD && !contents.startsWith("Guild > ")) return false;
         if (filter == TabFilter.PARTY && !contents.startsWith("Party > ")) return false;
         return filter != TabFilter.PM ||

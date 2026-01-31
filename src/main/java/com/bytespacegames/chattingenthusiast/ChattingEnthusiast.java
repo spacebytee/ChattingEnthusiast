@@ -6,15 +6,18 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +36,10 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	Minecraft mc;
 
-	@Override
+	private static KeyMapping chatPeekBind;
+
+
+    @Override
 	public void onInitializeClient() {
 		INSTANCE = this;
 		mc = Minecraft.getInstance();
@@ -44,6 +50,19 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		compactChat = new CompactChatManager();
 
 		tryRegisterCommand();
+
+        KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("chattingenthusiast", "chattingenthusiast"));
+		chatPeekBind = new KeyMapping(
+				"key.chattingenthusiast.chatpeek",
+				GLFW.GLFW_KEY_Z,
+                CATEGORY
+		);
+		if (FabricLoader.getInstance().isModLoaded("fabric-api"))
+			KeyBindingHelper.registerKeyBinding(chatPeekBind);
+	}
+
+	public KeyMapping getChatPeekBind() {
+		return chatPeekBind;
 	}
 
 	public void tryRegisterCommand() {

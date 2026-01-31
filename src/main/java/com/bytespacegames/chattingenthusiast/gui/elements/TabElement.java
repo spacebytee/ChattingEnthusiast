@@ -2,6 +2,7 @@ package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChatFilter;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
@@ -32,10 +33,11 @@ public class TabElement extends AbstractGuiElement {
         ChattingEnthusiast.filter().setFilter(filter);
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-
+        if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("switchchannels")) return;
         switch (filter) {
             case ChatFilter.TabFilter.NONE:
-                mc.player.connection.sendCommand("chat a");
+                if (ChattingSettingsManager.INSTANCE.getSettingToggledById("alltabchannel"))
+                    mc.player.connection.sendCommand("chat a");
                 break;
             case ChatFilter.TabFilter.PARTY:
                 mc.player.connection.sendCommand("chat p");
