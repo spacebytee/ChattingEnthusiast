@@ -54,8 +54,6 @@ public class ChatUtil {
             if (message.contains(searchingFor)) {
                 return msgs.get(found);
             }
-            System.out.println(message);
-            System.out.println("Raw: " + msgs.get(found).content().getString());
             found++;
         }
         return null;

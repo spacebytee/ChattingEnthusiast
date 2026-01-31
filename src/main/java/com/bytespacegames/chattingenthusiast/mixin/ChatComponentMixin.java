@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 
 	@Unique
 	private boolean isRefreshing = false;
+	@Unique
+	private List<GuiMessage.Line> iteratingLines;
 	public boolean getRefreshing() {
 		return isRefreshing;
 	}
@@ -67,7 +70,14 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			)
 	)
 	public List<GuiMessage.Line> replaceTrimmedMessages(ChatComponent instance) {
-		return ChattingEnthusiast.filter().getEffectiveLines();
+		return iteratingLines;
+	}
+	@Inject(
+			method="render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			at=@At("HEAD")
+	)
+	public void mixin$renderHead(ChatComponent.ChatGraphicsAccess chatGraphicsAccess, int i, int j, boolean bl, CallbackInfo ci) {
+		iteratingLines = new ArrayList<>(ChattingEnthusiast.filter().getEffectiveLines());
 	}
 	@ModifyExpressionValue(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
@@ -77,14 +87,14 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			)
 	)
 	private int replaceTrimmedMessagesSize(int original) {
-		return ChattingEnthusiast.filter().getEffectiveLines().size();
+		return iteratingLines.size();
 	}
 	@Inject(
 			method="clearMessages(Z)V",
 			at=@At("RETURN")
 	)
 	public void mixin$clearMessages(boolean bl, CallbackInfo ci) {
-		ChattingEnthusiast.filter().queueRefilter();
+		ChattingEnthusiast.filter().queueRefilter(true);
 	}
 	@Inject(
 			method="refreshTrimmedMessages",
@@ -99,7 +109,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	)
 	public void mixin$refreshTrimmedMessages(CallbackInfo ci) {
 		isRefreshing = false;
-		ChattingEnthusiast.filter().queueRefilter();
+		ChattingEnthusiast.filter().queueRefilter(false);
 	}
 	@Redirect(
 			method = "addMessageToDisplayQueue",
@@ -217,7 +227,13 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			return;
 		}
 		if (cancel) ci.cancel();
-		ch.desiredScrollbarPos += i;
+
+		if ((ch.desiredScrollbarPos > chatScrollbarPos && i < 0) || ch.desiredScrollbarPos < chatScrollbarPos && i > 0) {
+			ch.desiredScrollbarPos = chatScrollbarPos + i;
+		} else {
+			ch.desiredScrollbarPos += i;
+		}
+
 		int j = trimmedMessages.size();
 		if (ch.desiredScrollbarPos > j - this.getLinesPerPage()) {
 			ch.desiredScrollbarPos = j - this.getLinesPerPage();

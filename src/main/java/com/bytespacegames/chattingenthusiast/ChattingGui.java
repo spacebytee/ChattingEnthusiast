@@ -139,7 +139,7 @@ public class ChattingGui {
 
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
-        if (!scrollTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true) || !smoothScroll) return;
+        if (!scrollTimer.hasTimeElapsed((int) (ChattingEnthusiast.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
         ignoreScroll = true;

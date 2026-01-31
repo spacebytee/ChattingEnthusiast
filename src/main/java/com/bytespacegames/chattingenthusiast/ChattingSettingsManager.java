@@ -26,6 +26,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "smoothscroll",
                 "Makes scrolling using the scroll wheel gradual.",
                 true));
+        visual.addSetting(new FloatSetting("Scroll Animation Speed",
+                "scrollspeed",
+                "Mutliplier for the speed of the smooth scrolling animation.",
+                1f,.1f,2.0f));
         visual.addSetting(new BooleanSetting("New Message Animation",
                 "animation",
                 "Shifts the chat up to create a smooth animation for new messages.",
