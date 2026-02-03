@@ -1,17 +1,21 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ChatScreen.class)
+@Mixin(value = ChatScreen.class, priority = 0)
 public class ChatScreenMixin {
     @Inject(
             method = "render",

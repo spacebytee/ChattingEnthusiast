@@ -3,6 +3,7 @@ package com.bytespacegames.config;
 import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.config.settings.FloatSetting;
 import com.bytespacegames.config.settings.Setting;
+import com.bytespacegames.config.settings.StringSetting;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
@@ -12,14 +13,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
 public class ConfigManager {
     private final String path, name;
     private final List<SettingsCategory> categories;
+    protected final HashMap<String, String> oldToNew;
     public ConfigManager(String saveLocation, String name) {
         path = saveLocation;
+        oldToNew = new HashMap<>();
         this.name = name;
         this.categories = new ArrayList<>();
     }
@@ -45,6 +49,13 @@ public class ConfigManager {
         if (!(setting instanceof FloatSetting)) return 0;
         return ((FloatSetting) setting).getValue();
     }
+    public int getSelectedIndexById(String id) {
+        Setting setting = getSettingById(id);
+        if (!(setting instanceof StringSetting stringSetting)) {
+            return 0;
+        }
+        return stringSetting.getIndex();
+    }
     public Setting getSettingById(String id) {
         for (SettingsCategory c : categories) {
             for (Setting s : c.getSettings()) {
@@ -62,6 +73,24 @@ public class ConfigManager {
         if (Files.exists(path)) {
             try (InputStream in = Files.newInputStream(path)) {
                 props.load(in);
+                // load by the map for legacy ids
+                for (String oldId : oldToNew.keySet()) {
+                    String newId = oldToNew.get(oldId);
+                    String category = newId.split("\\.",2)[0];
+                    String setting = newId.split("\\.",2)[1];
+                    boolean set = false;
+                    for (SettingsCategory c : categories) {
+                        if (!c.getIdentifier().equals(category)) continue;
+                        for (Setting s : c.getSettings()) {
+                            if (!s.getIdentifier().equals(setting)) continue;
+                            s.loadFromProperties(props, oldId);
+                            set = true;
+                            break;
+                        }
+                        if (set) break;
+                    }
+                }
+                // load settings
                 for (SettingsCategory c : categories) {
                     for (Setting s : c.getSettings()) {
                         String property = c.getIdentifier() + "." + s.getIdentifier();

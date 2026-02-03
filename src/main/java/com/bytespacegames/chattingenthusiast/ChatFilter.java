@@ -7,6 +7,7 @@ import com.bytespacegames.config.settings.BooleanSetting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatFilter {
@@ -54,6 +55,7 @@ public class ChatFilter {
     }
 
     public void setSearch(String search) {
+        System.out.println("test");
         if (!search.equals(searchCriteria)) requiresRefilter = true;
         this.searchCriteria = search;
         this.searchCriteriaLower = search.toLowerCase();

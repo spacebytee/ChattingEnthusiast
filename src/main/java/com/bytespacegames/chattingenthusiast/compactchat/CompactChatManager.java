@@ -28,8 +28,19 @@ public class CompactChatManager {
         messages.subList(0,latestValid).clear();
     }
     public boolean excludeFromCompactChat(Component c) {
+        if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("exclusions")) return false;
         String msg = c.getString().replaceAll("§.","");
-        return msg.matches("\\s*") || msg.trim().matches("-+");
+        return msg.matches("\\s*") || msg.trim().matches("-+") || msg.trim().matches("▬+");
+    }
+    private String getOpeningBracket() {
+        int index = ChattingSettingsManager.INSTANCE.getSelectedIndexById("compactformat");
+        if (index < 2) return "(";
+        return "[";
+    }
+    private String getClosingBracket() {
+        int index = ChattingSettingsManager.INSTANCE.getSelectedIndexById("compactformat");
+        if (index < 2) return ")";
+        return "]";
     }
     public GuiMessage compactMessage(GuiMessage m) {
         clearOld();
@@ -52,7 +63,8 @@ public class CompactChatManager {
         }
         GuiMessage oldMessage = tracker.getMessage();
         tracker.incrementOccurances(m.content());
-        Component compactTag = Component.literal(" (" + tracker.getOccurrences() + ")")
+        int index = ChattingSettingsManager.INSTANCE.getSelectedIndexById("compactformat");
+        Component compactTag = Component.literal(" " + getOpeningBracket() + (index % 2 == 1 ? "x" : "") + tracker.getOccurrences() + getClosingBracket())
                 .withStyle(style -> style
                         .withColor(ChatFormatting.GRAY)
                         .withBold(false)

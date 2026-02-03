@@ -96,4 +96,6 @@ public abstract class AbstractGuiElement {
     public void clickOff() {}
 
     public void mouseReleased(MouseButtonEvent mouseButtonEvent) {}
+
+    public void mouseScrolled(double d, double e, double f, double g) {}
 }

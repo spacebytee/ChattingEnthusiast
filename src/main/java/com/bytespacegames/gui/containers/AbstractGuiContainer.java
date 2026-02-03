@@ -98,4 +98,10 @@ public abstract class AbstractGuiContainer extends AbstractGuiElement {
             e.mouseReleased(mouseButtonEvent);
         }
     }
+    public void mouseScrolled(double d, double e, double f, double g) {
+        for (AbstractGuiElement e1 : elements) {
+            if (!e1.isVisible()) continue;
+            e1.mouseScrolled(d,e,f,g);
+        }
+    }
 }

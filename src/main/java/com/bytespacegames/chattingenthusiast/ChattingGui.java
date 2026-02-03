@@ -11,6 +11,7 @@ import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import com.bytespacegames.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,6 +27,7 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public class ChattingGui {
+    public boolean allowFocusChange = false;
     private int mouseX,mouseY;
     private final Minecraft mc;
     private double chatOffset = 0;
@@ -108,6 +110,7 @@ public class ChattingGui {
         }
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
         lineContainer.render(graphics);
         GuiManager.INSTANCE.mouseTransformations = false;
     }
@@ -148,6 +151,7 @@ public class ChattingGui {
 
     public void onClick() {
         GuiManager.INSTANCE.mouseTransformations = true;
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
         lineContainer.onClick();
         GuiManager.INSTANCE.mouseTransformations = false;
         chatContainer.onClick();
@@ -163,10 +167,6 @@ public class ChattingGui {
         lineContainer.charTyped(characterEvent);
         chatContainer.charTyped(characterEvent);
     }
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-        lineContainer.mouseDragged(mouseButtonEvent, d, e);
-        chatContainer.mouseDragged(mouseButtonEvent, d, e);
-    }
 
     public void tick() {
         if (search == null) return;
@@ -175,7 +175,7 @@ public class ChattingGui {
         if (search.getWidget().isFocused()) {
             screen.getInput().setCanLoseFocus(true);
             screen.getInput().setFocused(false);
-        } else if (!screen.getInput().isFocused()){
+        } else if (!screen.getInput().isFocused()) {
             screen.getInput().setCanLoseFocus(false);
             screen.getInput().setFocused(true);
         }

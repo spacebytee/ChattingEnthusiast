@@ -5,11 +5,14 @@ import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.config.ConfigManager;
 import com.bytespacegames.config.SettingsCategory;
 import com.bytespacegames.config.settings.FloatSetting;
+import com.bytespacegames.config.settings.StringSetting;
 import net.minecraft.client.Minecraft;
+
+import java.util.HashMap;
 
 public class ChattingSettingsManager extends ConfigManager {
     public static ChattingSettingsManager INSTANCE;
-    public final SettingsCategory function,visual,chatting,chattabs;
+    public final SettingsCategory function,visual,chatting,chattabs,compactchat;
     public ChattingSettingsManager() {
         super("/config/chattingenthusiast.properites", "ChattingEnthusiast");
         INSTANCE = this;
@@ -54,6 +57,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "linecontrols",
                 "Allows you to copy, delete, and jump to lines (if filtering) when hovering over a message.",
                 true));
+        chatting.addSetting(new BooleanSetting("Copy Tooltip",
+                "tooltip",
+                "Shows the tooltip explaining the different options when hovering over the copy button.",
+                true));
         chatting.addSetting(new BooleanSetting("Chat Controls",
                 "chatcontrols",
                 "Controls in the bottom right that allows you to clear chat or search through chat.",
@@ -62,14 +69,23 @@ public class ChattingSettingsManager extends ConfigManager {
                 "messagehover",
                 "Highlights the background of a hovered message.",
                 true));
-        chatting.addSetting(new BooleanSetting("Compact Chat",
+        compactchat = new SettingsCategory("Compact Chat", "compactchat");
+        compactchat.addSetting(new BooleanSetting("Compact Chat",
                 "compactchat",
                 "Condenses identical repeated messages into one.",
                 true));
-        chatting.addSetting(new FloatSetting("Compact Chat Time",
+        compactchat.addSetting(new FloatSetting("Compact Chat Time",
                 "compactchattime",
                 "The maximum amount of time between identical messages to be compacted.",
                 5f,1f,20f));
+        compactchat.addSetting(new BooleanSetting("Don't Compact Dividers",
+                "exclusions",
+                "Messages seemingly intended as dividers, (eg, all white space, all hyphens), are excluded from being compacted.",
+                true));
+        compactchat.addSetting(new StringSetting("Compact Tag Format",
+                "compactformat",
+                "Determines the formatting of the compact chat tag following a compacted message.",
+                "(6)", "(6)", "(x6)", "[6]", "[x6]"));
         chattabs = new SettingsCategory("Chat Tabs", "chattabs");
         chattabs.addSetting(new BooleanSetting("Chat Tabs",
                 "chattabs",
@@ -91,8 +107,14 @@ public class ChattingSettingsManager extends ConfigManager {
         addCategory(function);
         addCategory(chatting);
         addCategory(chattabs);
+        addCategory(compactchat);
+        setupUpdateSubstitutes();
         load();
         save();
+    }
+    public void setupUpdateSubstitutes() {
+        oldToNew.put("chatting.compactchat","compactchat.compactchat");
+        oldToNew.put("chatting.compactchattime","compactchat.compactchattime");
     }
     @Override
     public void save() {

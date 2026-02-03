@@ -28,6 +28,7 @@ public class ConfigGui extends Screen {
     public static final int PRIMARY_COLOR = 0xFF242424;
     public static final int SECONDARY_COLOR = 0xFF5C5C5C;
     public static final int BACKGROUND_COLOR = 0xFF121212;
+    public static final int HIGHLIGHT_COLOR = 0xFFB643DA;
     public ConfigGui(ConfigManager c) {
         super(Component.literal(c.getName()));
         this.config = c;
@@ -108,6 +109,7 @@ public class ConfigGui extends Screen {
         return super.mouseReleased(mouseButtonEvent);
     }
     public boolean mouseScrolled(double d, double e, double f, double g) {
+        container.mouseScrolled(d,e,f,g);
         return super.mouseScrolled(d,e,f,g);
     }
 }
