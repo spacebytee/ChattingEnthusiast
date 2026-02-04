@@ -1,5 +1,6 @@
 package com.bytespacegames.chattingenthusiast;
 
+import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.containers.BasicContainer;
 import com.bytespacegames.gui.containers.BottomLeftOriginatingContainer;
@@ -11,7 +12,6 @@ import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import com.bytespacegames.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,7 +19,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -27,7 +26,7 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public class ChattingGui {
-    public boolean allowFocusChange = false;
+    //public List<GuiMessage.Line> cq;
     private int mouseX,mouseY;
     private final Minecraft mc;
     private double chatOffset = 0;
@@ -90,7 +89,7 @@ public class ChattingGui {
 
         // draw message background
         if (baseBackgroundOpacity > 0) {
-            int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? 0xFFFFFFFF : 0xFF000000;
+            int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? ChattingSettingsManager.INSTANCE.getColorById("hovercolor") : ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor");
             graphics.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
         }
 
@@ -139,7 +138,10 @@ public class ChattingGui {
     public void render(GuiGraphics g) {
         setupCustomElements();
         chatContainer.render(g);
-
+        /*if (cq != null) {
+            ChatUtil.copyImage(cq,g);
+            cq = null;
+        }*/
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (ChattingEnthusiast.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;

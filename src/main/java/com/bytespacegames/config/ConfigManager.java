@@ -1,9 +1,6 @@
 package com.bytespacegames.config;
 
-import com.bytespacegames.config.settings.BooleanSetting;
-import com.bytespacegames.config.settings.FloatSetting;
-import com.bytespacegames.config.settings.Setting;
-import com.bytespacegames.config.settings.StringSetting;
+import com.bytespacegames.config.settings.*;
 import net.minecraft.client.Minecraft;
 
 import java.io.IOException;
@@ -55,6 +52,13 @@ public class ConfigManager {
             return 0;
         }
         return stringSetting.getIndex();
+    }
+    public int getColorById(String id) {
+        Setting setting = getSettingById(id);
+        if (!(setting instanceof ColorSetting colorSetting)) {
+            return 0;
+        }
+        return colorSetting.getValue();
     }
     public Setting getSettingById(String id) {
         for (SettingsCategory c : categories) {

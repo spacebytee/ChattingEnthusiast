@@ -4,5 +4,7 @@
   "chattingenthusiast.tooltip.title": "§e§lCopy To Clipboard",
   "chattingenthusiast.tooltip.copy": "§b§lNORMAL CLICK §r§8- §7Copy Text",
   "chattingenthusiast.tooltip.alt": "§b§lALT CLICK §r§8- §7Copy Single Line",
-  "chattingenthusiast.tooltip.shift": "§b§lSHIFT CLICK §r§8- §7Copy Image"
+  "chattingenthusiast.tooltip.shift": "§b§lSHIFT CLICK §r§8- §7Copy Image",
+  "chattingenthusiast.clear": "§c§lClick again to clear the chat!",
+  "chattingenthusiast.copyerror": "§c§lFailed to copy image!"
 }

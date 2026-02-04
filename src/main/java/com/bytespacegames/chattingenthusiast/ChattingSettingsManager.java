@@ -4,11 +4,10 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.config.ConfigManager;
 import com.bytespacegames.config.SettingsCategory;
+import com.bytespacegames.config.settings.ColorSetting;
 import com.bytespacegames.config.settings.FloatSetting;
 import com.bytespacegames.config.settings.StringSetting;
 import net.minecraft.client.Minecraft;
-
-import java.util.HashMap;
 
 public class ChattingSettingsManager extends ConfigManager {
     public static ChattingSettingsManager INSTANCE;
@@ -27,6 +26,14 @@ public class ChattingSettingsManager extends ConfigManager {
                 true));
 
         visual = new SettingsCategory("Visuals", "visual");
+        visual.addSetting(new ColorSetting("Chat Background Color",
+                "backgroundcolor",
+                "Color of the chat background.",
+                0xFF000000));
+        visual.addSetting(new ColorSetting("Message Hover Color",
+                "hovercolor",
+                "Color of a hovered message highlight.",
+                0xFFFFFFFF));
         visual.addSetting(new BooleanSetting("Smooth Scrolling",
                 "smoothscroll",
                 "Makes scrolling using the scroll wheel gradual.",
@@ -69,6 +76,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "messagehover",
                 "Highlights the background of a hovered message.",
                 true));
+        chatting.addSetting(new BooleanSetting("Save Screenshots",
+                "saveshots",
+                "If enabled, when copying an image of a message or the full chat, it will also be saved to screenshots\\chat\\.",
+                true));
         compactchat = new SettingsCategory("Compact Chat", "compactchat");
         compactchat.addSetting(new BooleanSetting("Compact Chat",
                 "compactchat",
@@ -86,6 +97,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "compactformat",
                 "Determines the formatting of the compact chat tag following a compacted message.",
                 "(6)", "(6)", "(x6)", "[6]", "[x6]"));
+        compactchat.addSetting(new ColorSetting("Compact Tag Color",
+                "tagcolor",
+                "Color of the compact chat tag.",
+                0xFFAAAAAA));
         chattabs = new SettingsCategory("Chat Tabs", "chattabs");
         chattabs.addSetting(new BooleanSetting("Chat Tabs",
                 "chattabs",
@@ -106,8 +121,8 @@ public class ChattingSettingsManager extends ConfigManager {
         addCategory(visual);
         addCategory(function);
         addCategory(chatting);
-        addCategory(chattabs);
         addCategory(compactchat);
+        addCategory(chattabs);
         setupUpdateSubstitutes();
         load();
         save();

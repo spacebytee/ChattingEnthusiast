@@ -9,15 +9,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 
-import java.util.Objects;
-
-public class DropdownElement extends AbstractGuiElement {
+public class DropdownElement extends AbstractExpandableElement {
     private String value;
     private final String[] options;
     private final Animator[] animators;
     Animator generalHoverAnimator;
     Animator expandAnimator;
-    private boolean expanded = false;
     public DropdownElement(int x, int y, int width, int height, boolean visible, String defaultValue, String... options) {
         super(x, y, width, height, visible);
         animators = new Animator[options.length];
@@ -39,27 +36,31 @@ public class DropdownElement extends AbstractGuiElement {
 
     @Override
     public void render(GuiGraphics g) {
-        if (expanded)
-            GuiManager.INSTANCE.disableScissor(g);
-        generalHoverAnimator.setTarget(0);
+        if (GuiManager.INSTANCE.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
+            GuiManager.INSTANCE.queueDelayedRender(this);
+            return;
+        }
         for (Animator animator : animators) {
             animator.setTarget(0);
         }
         int hovered = getHoveredIndex(GuiManager.getMouseX(), GuiManager.getMouseY());
         if (hovered != -1 && hovered < animators.length) {
             animators[hovered].setTarget(1);
-            generalHoverAnimator.setTarget(1);
         }
+        generalHoverAnimator.setTarget(hovered == 0 ? 1 : 0);
         expandAnimator.setTarget(expanded ? 1 : 0);
         // use vanilla scissor to not save state of the temporary scissor. scroll container scissor will be recovered
-        g.enableScissor(x,y,x+width, y + getEffectiveHeight());
+        if (expandAnimator.getValue() >= (1/1000f)) {
+            g.enableScissor(x,y,x+width, y + getEffectiveHeight());
+        }
 
-        g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
-        if (hovered != -1)
+        if (hovered != -1 || generalHoverAnimator.getValue() >= (1/1000f))
             g.fill(x,y + height * hovered,x + width,y + height * (hovered + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[hovered].getValue()));
+        else
+            g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
 
         g.drawString(Minecraft.getInstance().font, value,x + 4,y + (height/2) - 3, ConfigGui.HIGHLIGHT_COLOR);
-        if (expandAnimator.getValue() > 0) {
+        if (expandAnimator.getValue() >= (1/1000f)) {
             int i = 0;
             for (String string : options) {
                 if (string.equals(value)) continue;
@@ -67,7 +68,9 @@ public class DropdownElement extends AbstractGuiElement {
                 g.drawString(Minecraft.getInstance().font, string,x + 4,y + (height/2) - 3 + height * (i), Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF, animators[i].getValue()));
             }
         }
-        GuiManager.INSTANCE.recoverScissor(g);
+        if (expandAnimator.getValue() >= (1/1000f)) {
+            g.disableScissor();
+        }
         //g.renderOutline(x,y,width,getEffectiveHeight(), Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,generalHoverAnimator.getValue()));
     }
     public int getEffectiveHeight() {
@@ -110,11 +113,8 @@ public class DropdownElement extends AbstractGuiElement {
         }
         expanded = !expanded;
     }
-    @Override
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double i, double j) {
-    }
-    @Override
-    public void mouseReleased(MouseButtonEvent mouseButtonEvent) {
+    public void clickOff() {
+        expanded = false;
     }
     public String getValue() {
         return value;

@@ -1,8 +1,6 @@
 package com.bytespacegames.gui.containers;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
-import com.bytespacegames.gui.Animator;
-import com.bytespacegames.gui.Easings;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.TimerUtils;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
@@ -81,6 +79,5 @@ public class ScrollingContainer extends AbstractGuiContainer {
     }
     public void mouseScrolled(double d, double e, double f, double g) {
         setScrollOffset((int) (scrollOffset - g * 100));
-        System.out.println(d + ", " + e + ", " + f + ", " + g);
     }
 }

@@ -1,14 +1,10 @@
 package com.bytespacegames.chattingenthusiast.compactchat;
 
-import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +62,7 @@ public class CompactChatManager {
         int index = ChattingSettingsManager.INSTANCE.getSelectedIndexById("compactformat");
         Component compactTag = Component.literal(" " + getOpeningBracket() + (index % 2 == 1 ? "x" : "") + tracker.getOccurrences() + getClosingBracket())
                 .withStyle(style -> style
-                        .withColor(ChatFormatting.GRAY)
+                        .withColor(ChattingSettingsManager.INSTANCE.getColorById("tagcolor") & 0x00FFFFFF)
                         .withBold(false)
                         .withItalic(false)
                         .withObfuscated(false)

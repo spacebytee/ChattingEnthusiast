@@ -1,6 +1,7 @@
 package com.bytespacegames.gui.containers;
 
 import com.bytespacegames.gui.GuiManager;
+import com.bytespacegames.gui.elements.AbstractExpandableElement;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
@@ -10,7 +11,7 @@ import net.minecraft.client.input.MouseButtonEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractGuiContainer extends AbstractGuiElement {
+public abstract class AbstractGuiContainer extends AbstractExpandableElement {
     protected final List<AbstractGuiElement> elements;
     public AbstractGuiContainer(int x, int y, int width, int height, boolean visible) {
         super(x, y, width, height, visible);
