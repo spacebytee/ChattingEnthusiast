@@ -36,7 +36,8 @@ public class ColorChannelSlider extends AbstractGuiElement {
         int toggleHeight = height;
         int togglePosition = (int) ((width-toggleHeight) * value);
         g.fill(x + togglePosition,y,x + togglePosition + toggleHeight,y + toggleHeight, getColor(getScaledValue()));
-        g.renderOutline(x + togglePosition,y,toggleHeight,toggleHeight,
+
+        GuiManager.INSTANCE.renderOutline(g,x + togglePosition,y,toggleHeight,toggleHeight,
                 Interpolator.interpolateColor(
                         picker.constructColor(picker.r + (127-picker.r) / 2,picker.g + (127-picker.g) / 2,picker.b + (127-picker.b) / 2),
                         0xFFFFFFFF,hoverAnimator.getValue()));
