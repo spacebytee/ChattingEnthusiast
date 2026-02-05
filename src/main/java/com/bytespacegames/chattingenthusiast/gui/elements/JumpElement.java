@@ -31,9 +31,8 @@ public class JumpElement extends AbstractGuiElement {
         }
 
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
-
-        int bx = x + 1;
-        int by = y + 1;
+        int bx = x + 1 + (int) ((width-9)/2f);
+        int by = y + 1 + (int) ((height-9)/2f);
         drawRect(graphics,bx,by + 2,1,1,iconColor);
         drawRect(graphics,bx + 1,by + 3,6,1,iconColor);
         drawRect(graphics,bx + 4,by + 1,1,5,iconColor);

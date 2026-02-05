@@ -5,9 +5,6 @@ import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 
@@ -41,7 +38,7 @@ public class ClearChatElement extends AbstractGuiElement {
     @Override
     public void onClick() {
         if (System.currentTimeMillis() - lastClicked > 3000) {
-            Minecraft.getInstance().gui.getChat().addMessage(Component.literal("§c§lClick again to clear the chat!"));
+            Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("chattingenthusiast.clear"));
             lastClicked = System.currentTimeMillis();
         } else {
             Minecraft.getInstance().gui.getChat().clearMessages(false);

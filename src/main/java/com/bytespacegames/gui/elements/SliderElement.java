@@ -40,14 +40,14 @@ public class SliderElement extends AbstractGuiElement {
         int toggleHeight = height;
         int toggleWidth = (int) (toggleHeight * .75f);
         int togglePosition = (int) ((width-toggleWidth) * value);
-        g.fill(x + togglePosition,y,x + togglePosition + toggleWidth,y + toggleHeight, Interpolator.interpolateColor(0xFFB643DA,0xFFFFFFFF,hoverAnimator.getValue()));
+        g.fill(x + togglePosition,y,x + togglePosition + toggleWidth,y + toggleHeight, Interpolator.interpolateColor(ConfigGui.HIGHLIGHT_COLOR,0xFFFFFFFF,hoverAnimator.getValue()));
     }
 
     public boolean isHovering(int mouseX, int mouseY) {
         int toggleHeight = height;
         int toggleWidth = (int) (toggleHeight * .75f);
         int togglePosition = (int) ((width-toggleWidth) * value);
-        return mouseX >= x + togglePosition && mouseX < x + togglePosition + width && mouseY >= y  && mouseY < y + toggleHeight;
+        return mouseX >= x + togglePosition && mouseX < x + togglePosition + toggleWidth && mouseY >= y  && mouseY < y + toggleHeight;
     }
 
     @Override
@@ -64,7 +64,6 @@ public class SliderElement extends AbstractGuiElement {
         if(!dragging) return;
         int toggleHeight = height;
         int toggleWidth = (int) (toggleHeight * .75f);
-        int togglePosition = (int) ((width-toggleWidth) * value);
         int newPosition = mouseX - dragAnchor;
         value = Math.max(0f,Math.min((newPosition-x)/(float)(width-toggleWidth),1f));
     }

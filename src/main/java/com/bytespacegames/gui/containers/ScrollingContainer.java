@@ -1,22 +1,30 @@
 package com.bytespacegames.gui.containers;
 
+import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.gui.GuiManager;
+import com.bytespacegames.gui.TimerUtils;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.bytespacegames.gui.elements.ScrollBarElement;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class ScrollingContainer extends AbstractGuiContainer {
     private int scrollOffset = 0;
+    private int desiredScrollOffset = 0;
     private static final int scrollBarBackgroundColor = 0xFF242424;
     private final ScrollBarElement scrollBar;
+    private final TimerUtils animationTimer;
     public ScrollingContainer(int x, int y, int width, int height, int scrollBarColor, boolean visible) {
         super(x,y,width,height,visible);
+        this.animationTimer = new TimerUtils();
         addElement(scrollBar = new ScrollBarElement(width, 0, height, scrollBarColor, true));
     }
     public void setScrollOffset(int pos, boolean fromScrollBar) {
         int distance = getContentsBound() - height;
         if (distance == 0) return;
-        pos = Math.min(pos,distance);
-        this.scrollOffset = pos;
+        pos = Math.max(0,Math.min(pos,distance));
+        desiredScrollOffset = pos;
+        if (fromScrollBar)
+            this.scrollOffset = pos;
         if (fromScrollBar) return;
         scrollBar.setScrollBarPosition(pos / (float) distance);
     }
@@ -53,16 +61,23 @@ public class ScrollingContainer extends AbstractGuiContainer {
     public void render(GuiGraphics g) {
         if (!visible) return;
         g.fill(x + width,y,x + width + 3,y + height,scrollBarBackgroundColor);
-        g.enableScissor(x,y,x + width + 3,y + height);
+        if (animationTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true)) {
+            scrollOffset += (int) ((desiredScrollOffset - scrollOffset) * (1 - 1/1.3));
+        }
+        GuiManager.INSTANCE.enableScissor(g, x,y,x + width + 3,y + height);
         for (int i = 0; i < elements.size(); i++) {
             AbstractGuiElement e = elements.get(i);
             if (!e.isVisible()) continue;
-            if (e.getY() >= getBottomBound()) continue;
+            if (getEffectiveY(i) + e.getBottomBound() < 0) continue;
+            if (getEffectiveY(i) >= getBottomBound()) continue;
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
             e.render(g);
         }
-        g.disableScissor();
+        GuiManager.INSTANCE.disableScissor(g);
+    }
+    public void mouseScrolled(double d, double e, double f, double g) {
+        setScrollOffset((int) (scrollOffset - g * 100));
     }
 }

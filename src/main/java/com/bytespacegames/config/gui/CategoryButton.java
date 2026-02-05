@@ -36,7 +36,7 @@ public class CategoryButton extends TextElement {
 
         int color = Interpolator.interpolateColor(getColor(),0xFF00CCFF,animator.getValue() * 2);
         if (animator.getValue() > .5) {
-            color = Interpolator.interpolateColor(0xFF00CCFF,0xFFB643DA,(animator.getValue() - .5f) * 2);
+            color = Interpolator.interpolateColor(0xFF00CCFF,ConfigGui.HIGHLIGHT_COLOR,(animator.getValue() - .5f) * 2);
         }
         g.drawString(Minecraft.getInstance().font, getText(), x,y, color);
     }

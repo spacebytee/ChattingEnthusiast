@@ -174,6 +174,11 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 	}
+	@ModifyVariable(method = "screenToChatY", argsOnly = true, at = @At("HEAD"))
+	private double moveChatHitboxes(double y) {
+		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
+		return y - constantOffset - ChattingEnthusiast.chatting().getChatOffset();
+	}
 	//region Scrollbar
 	@Redirect(
 			method = "render",

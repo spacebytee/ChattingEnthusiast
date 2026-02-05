@@ -34,13 +34,14 @@ public class DeleteElement extends AbstractGuiElement {
         }
 
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
-
-        drawRect(graphics,x+3,y+1,3,1,iconColor);
-        drawRect(graphics,x+1,y+2,7,1,iconColor);
+        int gX = x + (int) ((width-9)/2f);
+        int gY = y + (int) ((height-9)/2f);
+        drawRect(graphics,gX+3,gY+1,3,1,iconColor);
+        drawRect(graphics,gX+1,gY+2,7,1,iconColor);
         for (int i = 0; i < 3; i++) {
-            drawRect(graphics,x+2 + 2*i,y+3,1,4,iconColor);
+            drawRect(graphics,gX+2 + 2*i,gY+3,1,4,iconColor);
         }
-        drawRect(graphics,x+2,y+7,5,1,iconColor);
+        drawRect(graphics,gX+2,gY+7,5,1,iconColor);
     }
 
     @Override

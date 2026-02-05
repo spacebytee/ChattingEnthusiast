@@ -18,7 +18,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
@@ -26,6 +25,7 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public class ChattingGui {
+    //public List<GuiMessage.Line> cq;
     private int mouseX,mouseY;
     private final Minecraft mc;
     private double chatOffset = 0;
@@ -88,7 +88,7 @@ public class ChattingGui {
 
         // draw message background
         if (baseBackgroundOpacity > 0) {
-            int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? 0xFFFFFFFF : 0xFF000000;
+            int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? ChattingSettingsManager.INSTANCE.getColorById("hovercolor") : ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor");
             graphics.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
         }
 
@@ -108,6 +108,7 @@ public class ChattingGui {
         }
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
         lineContainer.render(graphics);
         GuiManager.INSTANCE.mouseTransformations = false;
     }
@@ -136,7 +137,10 @@ public class ChattingGui {
     public void render(GuiGraphics g) {
         setupCustomElements();
         chatContainer.render(g);
-
+        /*if (cq != null) {
+            ChatUtil.copyImage(cq,g);
+            cq = null;
+        }*/
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (ChattingEnthusiast.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
@@ -148,6 +152,7 @@ public class ChattingGui {
 
     public void onClick() {
         GuiManager.INSTANCE.mouseTransformations = true;
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
         lineContainer.onClick();
         GuiManager.INSTANCE.mouseTransformations = false;
         chatContainer.onClick();
@@ -163,10 +168,6 @@ public class ChattingGui {
         lineContainer.charTyped(characterEvent);
         chatContainer.charTyped(characterEvent);
     }
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-        lineContainer.mouseDragged(mouseButtonEvent, d, e);
-        chatContainer.mouseDragged(mouseButtonEvent, d, e);
-    }
 
     public void tick() {
         if (search == null) return;
@@ -175,7 +176,7 @@ public class ChattingGui {
         if (search.getWidget().isFocused()) {
             screen.getInput().setCanLoseFocus(true);
             screen.getInput().setFocused(false);
-        } else if (!screen.getInput().isFocused()){
+        } else if (!screen.getInput().isFocused()) {
             screen.getInput().setCanLoseFocus(false);
             screen.getInput().setFocused(true);
         }

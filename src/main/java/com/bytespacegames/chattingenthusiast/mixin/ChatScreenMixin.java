@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ChatScreen.class)
+@Mixin(value = ChatScreen.class, priority = 0)
 public class ChatScreenMixin {
     @Inject(
             method = "render",

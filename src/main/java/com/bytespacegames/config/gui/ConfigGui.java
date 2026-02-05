@@ -3,9 +3,13 @@ package com.bytespacegames.config.gui;
 import com.bytespacegames.config.ConfigManager;
 import com.bytespacegames.config.settings.Setting;
 import com.bytespacegames.config.SettingsCategory;
+import com.bytespacegames.gui.GuiManager;
+import com.bytespacegames.gui.containers.AbstractGuiContainer;
 import com.bytespacegames.gui.containers.BasicContainer;
 import com.bytespacegames.gui.containers.ScrollingContainer;
 import com.bytespacegames.gui.containers.DownwardsExpandingContainer;
+import com.bytespacegames.gui.elements.AbstractExpandableElement;
+import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.bytespacegames.gui.elements.RectangleElement;
 import com.bytespacegames.gui.elements.TextElement;
 import net.minecraft.client.Minecraft;
@@ -15,6 +19,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -28,6 +33,7 @@ public class ConfigGui extends Screen {
     public static final int PRIMARY_COLOR = 0xFF242424;
     public static final int SECONDARY_COLOR = 0xFF5C5C5C;
     public static final int BACKGROUND_COLOR = 0xFF121212;
+    public static final int HIGHLIGHT_COLOR = 0xFFB643DA;
     public ConfigGui(ConfigManager c) {
         super(Component.literal(c.getName()));
         this.config = c;
@@ -68,46 +74,75 @@ public class ConfigGui extends Screen {
         selectedCategory = c;
         scrollBox.setScrollOffset(Math.min(scrollBox.getContentsBound() - scrollBox.getHeight(), settings.getEffectiveY(settings.getElements().indexOf(categoryLabels.get(c)))));
     }
-    public void render(GuiGraphics g, int i, int j, float f) {
+    public void render(@NotNull GuiGraphics g, int i, int j, float f) {
         int centerY = this.height / 2;
         int centerX = this.width / 2;
         container.setX(centerX - container.getWidth()/2);
         container.setY(centerY - container.getHeight()/2);
         super.render(g, i, j, f);
         container.render(g);
+        GuiManager.INSTANCE.flushDelayedRenders(g);
     }
     public boolean isPauseScreen() {
         return false;
     }
     @Override
     public void onClose() {
+        for (AbstractGuiElement element : settings.getElements()) {
+            if (!(element instanceof SettingElement settingElement)) continue;
+            settingElement.syncChanges();
+        }
         config.save();
         super.onClose();
     }
+    AbstractExpandableElement expandedChild;
+    public boolean anyChildExpanded(AbstractGuiContainer c) {
+        if (expandedChild != null && expandedChild.getExpanded()) return true;
+        for (AbstractGuiElement element : c.getElements()) {
+            if (!element.isVisible())
+                continue;
+            if (element instanceof AbstractExpandableElement && ((AbstractExpandableElement) element).getExpanded()) {
+                expandedChild = (AbstractExpandableElement) element;
+                return true;
+            }
+            if (element instanceof AbstractGuiContainer)
+                if (anyChildExpanded((AbstractGuiContainer) element)) return true;
+        }
+        return false;
+    }
     public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
         if (mouseButtonEvent.button() == 0) {
-            container.onClick();
+            if (anyChildExpanded(container)) {
+                expandedChild.onClick();
+            } else {
+                container.onClick();
+            }
         }
         return super.mouseClicked(mouseButtonEvent, bl);
     }
 
-    public boolean keyPressed(KeyEvent keyEvent) {
+    public boolean keyPressed(@NotNull KeyEvent keyEvent) {
         container.keyPressed(keyEvent);
         return super.keyPressed(keyEvent);
     }
-    public boolean charTyped(CharacterEvent characterEvent) {
+    public boolean charTyped(@NotNull CharacterEvent characterEvent) {
         container.charTyped(characterEvent);
         return super.charTyped(characterEvent);
     }
-    public boolean mouseDragged(MouseButtonEvent mouseButtonEvent, double d, double e) {
-        container.mouseDragged(mouseButtonEvent, d, e);
+    public boolean mouseDragged(@NotNull MouseButtonEvent mouseButtonEvent, double d, double e) {
+        if (anyChildExpanded(container)) {
+            expandedChild.mouseDragged(mouseButtonEvent, d, e);
+        } else {
+            container.mouseDragged(mouseButtonEvent, d, e);
+        }
         return super.mouseDragged(mouseButtonEvent, d, e);
     }
-    public boolean mouseReleased(MouseButtonEvent mouseButtonEvent) {
+    public boolean mouseReleased(@NotNull MouseButtonEvent mouseButtonEvent) {
         container.mouseReleased(mouseButtonEvent);
         return super.mouseReleased(mouseButtonEvent);
     }
     public boolean mouseScrolled(double d, double e, double f, double g) {
+        container.mouseScrolled(d,e,f,g);
         return super.mouseScrolled(d,e,f,g);
     }
 }
