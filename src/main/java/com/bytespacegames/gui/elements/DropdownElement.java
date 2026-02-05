@@ -52,11 +52,12 @@ public class DropdownElement extends AbstractExpandableElement {
         if (expandAnimator.getValue() >= (1/1000f)) {
             g.enableScissor(x,y,x+width, y + getEffectiveHeight());
         }
-
-        if (hovered != -1 || generalHoverAnimator.getValue() >= (1/1000f))
+        g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
+        if (hovered != -1)
             g.fill(x,y + height * hovered,x + width,y + height * (hovered + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[hovered].getValue()));
-        else
-            g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
+        else if (generalHoverAnimator.getValue() >= (1/1000f))
+            g.fill(x,y,x + width,y + getEffectiveHeight(), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,generalHoverAnimator.getValue()));
+
 
         g.drawString(Minecraft.getInstance().font, value,x + 4,y + (height/2) - 3, ConfigGui.HIGHLIGHT_COLOR);
         if (expandAnimator.getValue() >= (1/1000f)) {
