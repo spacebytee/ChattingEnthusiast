@@ -7,7 +7,6 @@ import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.MouseButtonEvent;
 
 public class DropdownElement extends AbstractExpandableElement {
     private String value;

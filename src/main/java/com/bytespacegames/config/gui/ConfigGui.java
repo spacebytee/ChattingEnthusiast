@@ -88,6 +88,10 @@ public class ConfigGui extends Screen {
     }
     @Override
     public void onClose() {
+        for (AbstractGuiElement element : settings.getElements()) {
+            if (!(element instanceof SettingElement settingElement)) continue;
+            settingElement.syncChanges();
+        }
         config.save();
         super.onClose();
     }

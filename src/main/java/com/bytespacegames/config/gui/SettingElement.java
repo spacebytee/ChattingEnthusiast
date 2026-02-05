@@ -102,6 +102,14 @@ public class SettingElement extends AbstractGuiContainer {
     @Override
     public void onClick() {
         super.onClick();
+        syncChanges();
+    }
+    @Override
+    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double i, double j) {
+        super.mouseDragged(mouseButtonEvent,i,j);
+        syncChanges();
+    }
+    public void syncChanges() {
         if (setting instanceof BooleanSetting booleanSetting) {
             ToggleSwitchElement toggle = (ToggleSwitchElement) settingToggle;
             booleanSetting.setValue(toggle.getValue());
@@ -110,10 +118,6 @@ public class SettingElement extends AbstractGuiContainer {
             DropdownElement dropdown = (DropdownElement) settingToggle;
             stringSetting.setValue(dropdown.getValue());
         }
-    }
-    @Override
-    public void mouseDragged(MouseButtonEvent mouseButtonEvent, double i, double j) {
-        super.mouseDragged(mouseButtonEvent,i,j);
         if (setting instanceof FloatSetting floatSetting) {
             SliderElement toggle = (SliderElement) settingToggle;
             floatSetting.setValue(toggle.getScaledValue());

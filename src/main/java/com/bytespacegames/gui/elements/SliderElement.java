@@ -64,7 +64,6 @@ public class SliderElement extends AbstractGuiElement {
         if(!dragging) return;
         int toggleHeight = height;
         int toggleWidth = (int) (toggleHeight * .75f);
-        int togglePosition = (int) ((width-toggleWidth) * value);
         int newPosition = mouseX - dragAnchor;
         value = Math.max(0f,Math.min((newPosition-x)/(float)(width-toggleWidth),1f));
     }

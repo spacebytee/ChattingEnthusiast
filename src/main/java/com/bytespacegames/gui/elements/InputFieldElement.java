@@ -112,8 +112,9 @@ public class InputFieldElement extends AbstractGuiElement {
     }
 
     public void setValue(String value) {
+        if (value.length() == this.value.length())
+            cursorPos = value.length();
         this.value = value;
-        cursorPos = value.length();
     }
     public String getValue() {
         return value;

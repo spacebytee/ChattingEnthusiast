@@ -84,13 +84,13 @@ public class ColorPickerElement extends AbstractGuiContainer {
         g.disableScissor();
     }
     public void updateColor(int color) {
-        inputField.setValue(Integer.toHexString(getColor()).substring(2).toLowerCase());
         r = color >> 16 & 0xFF;
         g = color >> 8 & 0xFF;
         b = color & 0xFF;
         rS.update();
         gS.update();
         bS.update();
+        inputField.setValue(Integer.toHexString(getColor()).substring(2).toLowerCase());
     }
     public int getColor() {
         return 0xFF << 24 | r << 16 | g << 8 | b;
@@ -112,13 +112,15 @@ public class ColorPickerElement extends AbstractGuiContainer {
     @Override
     public void charTyped(CharacterEvent characterEvent) {
         super.charTyped(characterEvent);
-        updateColor(0xFF000000 | Integer.parseInt(inputField.getValue(), 16));
+        if (inputField.getValue().length() == 6)
+            updateColor(0xFF000000 | Integer.parseInt(inputField.getValue(), 16));
     }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         super.keyPressed(keyEvent);
-        updateColor(0xFF000000 | Integer.parseInt(inputField.getValue(), 16));
+        if (inputField.getValue().length() == 6)
+            updateColor(0xFF000000 | Integer.parseInt(inputField.getValue(), 16));
     }
 
     public void clickOff() {
