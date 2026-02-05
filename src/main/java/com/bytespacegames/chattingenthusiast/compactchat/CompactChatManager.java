@@ -14,14 +14,13 @@ public class CompactChatManager {
         messages = new ArrayList<>();
     }
     private void clearOld() {
-        int latestValid = messages.size();
-        for (int i = messages.size() - 1; i >= 0; i--) {
-            if (Minecraft.getInstance().gui.getGuiTicks() - messages.get(i).getMessage().addedTime() > ChattingSettingsManager.INSTANCE.getFloatValueById("compactchattime") * 20) {
-                break;
-            }
-            latestValid = i;
-        }
-        messages.subList(0,latestValid).clear();
+        int now = Minecraft.getInstance().gui.getGuiTicks();
+        int maxAge = (int)(ChattingSettingsManager.INSTANCE
+                .getFloatValueById("compactchattime") * 20);
+
+        messages.removeIf(tracker ->
+                now - tracker.getMessage().addedTime() > maxAge
+        );
     }
     public boolean excludeFromCompactChat(Component c) {
         if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("exclusions")) return false;
