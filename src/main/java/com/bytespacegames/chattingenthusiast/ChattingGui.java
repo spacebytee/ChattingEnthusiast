@@ -1,6 +1,5 @@
 package com.bytespacegames.chattingenthusiast;
 
-import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.containers.BasicContainer;
 import com.bytespacegames.gui.containers.BottomLeftOriginatingContainer;
@@ -10,7 +9,7 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.mixin.IChatScreenAccessor;
 import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
-import com.bytespacegames.gui.elements.SearchElement;
+import com.bytespacegames.chattingenthusiast.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
@@ -80,7 +79,7 @@ public class ChattingGui {
         chatContainer.addElement(chatTabs);
     }
     public void renderCustomLine(GuiGraphics graphics, int x, int mx, int nx, int lineIndex, float opacity) {
-        if (animationTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
+        if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
         float baseBackgroundOpacity = mc.options.textBackgroundOpacity().get().floatValue();
@@ -144,7 +143,7 @@ public class ChattingGui {
         }*/
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
-        if (!scrollTimer.hasTimeElapsed((int) (ChattingEnthusiast.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
+        if (!scrollTimer.hasTimeElapsed((int) (GuiManager.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
         ignoreScroll = true;

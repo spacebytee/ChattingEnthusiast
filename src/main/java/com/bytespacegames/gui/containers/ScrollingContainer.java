@@ -1,6 +1,5 @@
 package com.bytespacegames.gui.containers;
 
-import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.TimerUtils;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
@@ -61,7 +60,7 @@ public class ScrollingContainer extends AbstractGuiContainer {
     public void render(GuiGraphics g) {
         if (!visible) return;
         g.fill(x + width,y,x + width + 3,y + height,scrollBarBackgroundColor);
-        if (animationTimer.hasTimeElapsed(ChattingEnthusiast.ANIMATION_INTERVAL, true)) {
+        if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) {
             scrollOffset += (int) ((desiredScrollOffset - scrollOffset) * (1 - 1/1.3));
         }
         GuiManager.INSTANCE.enableScissor(g, x,y,x + width + 3,y + height);
