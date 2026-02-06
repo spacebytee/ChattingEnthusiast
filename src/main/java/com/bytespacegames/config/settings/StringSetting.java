@@ -34,6 +34,6 @@ public class StringSetting extends Setting {
 
     @Override
     public void loadFromProperties(Properties p, String location) {
-        value = p.getProperty(location, value);
+        setValue(p.getProperty(location, value));
     }
 }
