@@ -25,7 +25,6 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	public static final String MOD_ID = "chattingenthusiast";
 	public static final int MAX_MESSAGES = 16384;
 	public static final int SCROLLING_INTERVAL = 1;
-	public static final int ANIMATION_INTERVAL = 1000/60;
 	public static final int OFFSET_CHAT_HEIGHT = -10;
 	public static ChattingEnthusiast INSTANCE;
 	private ChattingGui chatting;

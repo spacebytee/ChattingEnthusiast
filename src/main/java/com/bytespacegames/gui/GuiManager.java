@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 
 public class GuiManager {
     public static GuiManager INSTANCE;
+    public static final int ANIMATION_INTERVAL = 1000/60;
+
     private int mouseX, mouseY;
     // when true, apply the inverse of the gui transformations (scale by chat scale, transform 4 pixels) for chat, to offset the desync between hitboxes and the actual render positions
     public boolean mouseTransformations = false;

@@ -1,12 +1,10 @@
-package com.bytespacegames.gui.elements;
+package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
+import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.ARGB;
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
@@ -43,7 +41,7 @@ public class SearchElement extends AbstractGuiElement {
     long lastClicked = 0;
     @Override
     public void onClick() {
-        ChattingEnthusiast.chatting().search.visible = !ChattingEnthusiast.chatting().search.visible;
-        ChattingEnthusiast.chatting().search.setFocused(ChattingEnthusiast.chatting().search.visible);
+        ChattingEnthusiast.chatting().search.setVisible(!ChattingEnthusiast.chatting().search.isVisible());
+        ChattingEnthusiast.chatting().search.setFocused(ChattingEnthusiast.chatting().search.isVisible());
     }
 }
