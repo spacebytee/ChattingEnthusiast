@@ -72,6 +72,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "chatcontrols",
                 "Controls in the bottom right that allows you to clear chat or search through chat.",
                 true));
+        chatting.addSetting(new BooleanSetting("Search Clears on Close",
+                "clearsearch",
+                "If enabled, the search filter will automatically clear when you close the chat screen.",
+                true));
         chatting.addSetting(new BooleanSetting("Message Hover",
                 "messagehover",
                 "Highlights the background of a hovered message.",
