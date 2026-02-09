@@ -125,29 +125,4 @@ public class ChatUtil {
 
         return sb.toString();
     }
-    /*public static void copyImage(List<GuiMessage.Line> lines, GuiGraphics g) {
-        Minecraft mc = Minecraft.getInstance();
-        int width = 0;
-        for (GuiMessage.Line line : lines) {
-            FormattedCharSequence content = line.content();
-            width = Math.max(width, mc.font.width(content));
-        }
-        int height = lines.size() * 9;
-
-        g.fill(0,0,width,height,0xFFFF00FE);
-        int y = 0;
-        for (GuiMessage.Line line : lines) {
-            g.drawString(mc.font, line.content(), 0, y, 0xFFFFFFFF, true);
-            y+=9;
-        }
-    }
-    private static String getScreenshotFilename(File directory) {
-        String string = Util.getFilenameFormattedDateTime();
-        int i = 1;
-        File file;
-        while ((file = new File(directory, string + (i == 1 ? "" : "_" + i) + ".png")).exists()) {
-            ++i;
-        }
-        return "/chat/" + string + (i == 1 ? "" : "_" + i) + ".png";
-    }*/
 }

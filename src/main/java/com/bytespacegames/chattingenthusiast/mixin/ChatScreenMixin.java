@@ -1,7 +1,9 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -35,5 +37,14 @@ public class ChatScreenMixin {
     )
     public void keyPressed(KeyEvent keyEvent, CallbackInfoReturnable<Boolean> cir) {
         ChattingEnthusiast.chatting().keyPressed(keyEvent);
+    }
+    @Inject(
+            method="onClose",
+            at=@At("HEAD")
+    )
+    public void onClose(CallbackInfo ci) {
+        if (ChattingSettingsManager.INSTANCE.getSettingToggledById("clearsearch")) {
+            ((EditBox)ChattingEnthusiast.chatting().search.getWidget()).setValue("");
+        }
     }
 }

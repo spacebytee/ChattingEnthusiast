@@ -72,13 +72,13 @@ public class ChattingSettingsManager extends ConfigManager {
                 "chatcontrols",
                 "Controls in the bottom right that allows you to clear chat or search through chat.",
                 true));
+        chatting.addSetting(new BooleanSetting("Search Clears on Close",
+                "clearsearch",
+                "If enabled, the search filter will automatically clear when you close the chat screen.",
+                true));
         chatting.addSetting(new BooleanSetting("Message Hover",
                 "messagehover",
                 "Highlights the background of a hovered message.",
-                true));
-        chatting.addSetting(new BooleanSetting("Save Screenshots",
-                "saveshots",
-                "If enabled, when copying an image of a message or the full chat, it will also be saved to screenshots\\chat\\.",
                 true));
         compactchat = new SettingsCategory("Compact Chat", "compactchat");
         compactchat.addSetting(new BooleanSetting("Compact Chat",

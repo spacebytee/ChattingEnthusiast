@@ -8,6 +8,8 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
+import dev.dediamondpro.chatshot.util.ChatCopyUtil;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -59,25 +61,24 @@ public class CopyElement extends AbstractGuiElement {
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.title"));
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.copy"));
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.alt"));
-            //tooltip.add(Component.translatable("chattingenthusiast.tooltip.shift"));
+            if (FabricLoader.getInstance().isModLoaded("chatshot")) tooltip.add(Component.translatable("chattingenthusiast.tooltip.shift"));
             graphics.setTooltipForNextFrame(Minecraft.getInstance().font,tooltip,Optional.empty(),GuiManager.getMouseX(),GuiManager.getMouseY());
         }
     }
     public void setClipboard(String s) {
         Minecraft.getInstance().keyboardHandler.setClipboard(s.replaceAll("§.",""));
     }
-    private List<GuiMessage.Line> cq;
     @Override
     public void onClick() {
         Window window = Minecraft.getInstance().getWindow();
         ChatComponent cc = Minecraft.getInstance().gui.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // image
-        /*if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT)) {
+        if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {
             GuiMessage.Line line = ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos());
-            ChattingEnthusiast.chatting().cq = ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line));
+            ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
             return;
-        }*/
+        }
         // single line
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
             setClipboard(ChatUtil.cleanUpMessage(ChatUtil.getPlainText(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content())));

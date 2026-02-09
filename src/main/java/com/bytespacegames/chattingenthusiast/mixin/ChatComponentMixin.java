@@ -9,14 +9,12 @@ import com.bytespacegames.gui.GuiManager;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.util.ARGB;
-import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -244,10 +241,21 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			}
 		});
 	}
+	// region Scrolling
 	@Inject(method = "resetChatScroll",
 			at = @At("HEAD"))
 	public void mixin$resetChatScroll(CallbackInfo ci) {
 		ChattingEnthusiast.chatting().desiredScrollbarPos = 0;
+	}
+	@ModifyExpressionValue(
+			method = "scrollChat",
+			at = @At(
+					value = "INVOKE",
+					target = "Ljava/util/List;size()I"
+			)
+	)
+	private int scrollWithFilter(int original) {
+		return ChattingEnthusiast.filter().getEffectiveLines().size();
 	}
 	@Inject(method = "scrollChat",
 			at = @At("HEAD"),
@@ -281,7 +289,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			ch.desiredScrollbarPos += i;
 		}
 
-		int j = trimmedMessages.size();
+		int j = ChattingEnthusiast.filter().getEffectiveLines().size();
 		if (ch.desiredScrollbarPos > j - this.getLinesPerPage()) {
 			ch.desiredScrollbarPos = j - this.getLinesPerPage();
 		}
@@ -289,6 +297,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			ch.desiredScrollbarPos = 0;
 		}
 	}
+	//endregion
 
 	@Inject(method = "addMessageToDisplayQueue",
 			at = @At("HEAD"))

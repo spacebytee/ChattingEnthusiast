@@ -17,7 +17,6 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 }
-
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -26,7 +25,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+	modImplementation files("$buildDir/libs/chatshot.jar")
 }
 
 processResources {
@@ -80,3 +79,12 @@ publishing {
 		// retrieving dependencies.
 	}
 }
+tasks.register("downloadJarToLibs") {
+	doLast {
+		def f = new File("$buildDir/libs/chatshot.jar")
+		if (!f.exists()) {
+			new URL('https://cdn.modrinth.com/data/X2Zy7Oi6/versions/IBuxrF0R/ChatShot%20%281.21.10-fabric%29-1.0.7.jar').withInputStream { i -> f.withOutputStream { it << i } }
+		}
+	}
+}
+build.dependsOn("downloadJarToLibs")

@@ -2,6 +2,7 @@ package com.bytespacegames.chattingenthusiast.compactchat;
 
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -72,7 +73,7 @@ public class CompactChatManager {
         tracker.setMessage(newMessage);
         // remove the old message that shares the contents of the new one
         ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).getAllMessages().remove(oldMessage);
-        ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$refreshTrimmedMessages();
+        ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).getTrimmedMessages().removeAll(ChatUtil.getLinesFromMessage(oldMessage));
         return newMessage;
     }
 }
