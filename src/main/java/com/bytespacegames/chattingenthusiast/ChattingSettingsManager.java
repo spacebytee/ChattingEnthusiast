@@ -80,6 +80,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "messagehover",
                 "Highlights the background of a hovered message.",
                 true));
+        chatting.addSetting(new BooleanSetting("Command Tooltips",
+                "tooltipcommands",
+                "Shows the command ran by clickable command components/messages in the tooltip.",
+                false));
         compactchat = new SettingsCategory("Compact Chat", "compactchat");
         compactchat.addSetting(new BooleanSetting("Compact Chat",
                 "compactchat",

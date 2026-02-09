@@ -15,6 +15,7 @@
   "client": [
     "ChatScreenCompatMixin",
     "ChatScreenMixin",
+    "GuiGraphicsMixin",
     "GuiMixin",
     "IChatComponentAccessor",
     "IChatScreenAccessor",
