@@ -12,7 +12,6 @@ public class DropdownElement extends AbstractExpandableElement {
     private String value;
     private final String[] options;
     private final Animator[] animators;
-    Animator generalHoverAnimator;
     Animator expandAnimator;
     public DropdownElement(int x, int y, int width, int height, boolean visible, String defaultValue, String... options) {
         super(x, y, width, height, visible);
@@ -23,9 +22,6 @@ public class DropdownElement extends AbstractExpandableElement {
             hoverAnimator.setEasingFunction(Easings.QUINT);
             animators[i] = hoverAnimator;
         }
-        generalHoverAnimator = new Animator(0);
-        generalHoverAnimator.setAnimationTime(.5f);
-        generalHoverAnimator.setEasingFunction(Easings.QUINT);
         expandAnimator = new Animator(0);
         expandAnimator.setAnimationTime(.5f);
         expandAnimator.setEasingFunction(Easings.QUINT);
@@ -46,7 +42,6 @@ public class DropdownElement extends AbstractExpandableElement {
         if (hovered != -1 && hovered < animators.length) {
             animators[hovered].setTarget(1);
         }
-        generalHoverAnimator.setTarget(hovered == 0 ? 1 : 0);
         expandAnimator.setTarget(expanded ? 1 : 0);
         // use vanilla scissor to not save state of the temporary scissor. scroll container scissor will be recovered
         if (expandAnimator.getValue() >= (1/1000f)) {
@@ -54,11 +49,11 @@ public class DropdownElement extends AbstractExpandableElement {
         }
 
         g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
-        if (hovered != -1)
-            g.fill(x,y + height * hovered,x + width,y + height * (hovered + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[hovered].getValue()));
-        else if (generalHoverAnimator.getValue() >= (1/1000f))
-            g.fill(x,y,x + width,y + getEffectiveHeight(), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,generalHoverAnimator.getValue()));
 
+        for (int i = 0; i < animators.length; i++) {
+            if (animators[i].getValue() <= 1/256f) continue;
+            g.fill(x,y + height * i,x + width,y + height * (i + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[i].getValue()));
+        }
 
         g.drawString(Minecraft.getInstance().font, value,x + 4,y + (height/2) - 3, ConfigGui.HIGHLIGHT_COLOR);
         if (expandAnimator.getValue() >= (1/1000f)) {
