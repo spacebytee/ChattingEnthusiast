@@ -49,6 +49,7 @@ public class ChatScreenMixin {
     public void onClose(CallbackInfo ci) {
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("clearsearch")) {
             ((EditBox)ChattingEnthusiast.chatting().search.getWidget()).setValue("");
+            ChattingEnthusiast.filter().setSearch("");
         }
     }
 }

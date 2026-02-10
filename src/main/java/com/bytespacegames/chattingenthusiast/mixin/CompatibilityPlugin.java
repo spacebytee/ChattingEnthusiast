@@ -11,7 +11,7 @@ import java.util.Set;
 public class CompatibilityPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return true;
+        return !mixinClassName.contains("Compat") || FabricLoader.getInstance().isModLoaded("chatshot");
     }
 
     @Override

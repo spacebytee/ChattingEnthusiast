@@ -79,6 +79,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			cir.setReturnValue(getHeight(Minecraft.getInstance().options.chatHeightFocused().get()));
 	}
 	//endregion
+
 	//region Filter Mixins
 	@Redirect(
 			method = "forEachLine",
@@ -156,7 +157,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
 	}
-	//region Scrollbar
+	//region Scrollbar Rendering
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At(
@@ -215,10 +216,21 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			ChattingEnthusiast.chatting().renderCustomLine(lastGraphics, -4, entryTop, entryBottom, lineIndex, alphax);
 		});
 	}
+	//region Scrolling
 	@Inject(method = "resetChatScroll",
 			at = @At("HEAD"))
 	public void mixin$resetChatScroll(CallbackInfo ci) {
 		ChattingEnthusiast.chatting().desiredScrollbarPos = 0;
+	}
+	@ModifyExpressionValue(
+			method = "scrollChat",
+			at = @At(
+					value = "INVOKE",
+					target = "Ljava/util/List;size()I"
+			)
+	)
+	private int scrollWithFilter(int original) {
+		return ChattingEnthusiast.filter().getEffectiveLines().size();
 	}
 	@Inject(method = "scrollChat",
 			at = @At("HEAD"),
@@ -252,7 +264,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			ch.desiredScrollbarPos += i;
 		}
 
-		int j = trimmedMessages.size();
+		int j = ChattingEnthusiast.filter().getEffectiveLines().size();
 		if (ch.desiredScrollbarPos > j - this.getLinesPerPage()) {
 			ch.desiredScrollbarPos = j - this.getLinesPerPage();
 		}
@@ -260,6 +272,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			ch.desiredScrollbarPos = 0;
 		}
 	}
+	//endregion
 
 	@Inject(method = "addMessageToDisplayQueue",
 			at = @At("HEAD"))

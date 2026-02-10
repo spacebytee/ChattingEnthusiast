@@ -11,6 +11,7 @@ import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import com.bytespacegames.chattingenthusiast.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -68,6 +69,7 @@ public class ChattingGui {
         chatControls = new BottomRightOriginatingContainer(0,0,1,true);
         chatControls.addElement(new SearchElement(0,0,13,13, true));
         chatControls.addElement(new ClearChatElement(0,0,13,13, true));
+        chatControls.addElement(new ScreenshotChatElement(0,0,13,13, FabricLoader.getInstance().isModLoaded("chatshot")));
 
         chatTabs = new BottomLeftOriginatingContainer(0,0,2,false);
         chatTabs.addElement(new TabElement("ALL", ChatFilter.TabFilter.NONE, 0,0,true));

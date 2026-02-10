@@ -80,10 +80,6 @@ public class ChattingSettingsManager extends ConfigManager {
                 "messagehover",
                 "Highlights the background of a hovered message.",
                 true));
-        chatting.addSetting(new BooleanSetting("Save Screenshots",
-                "saveshots",
-                "If enabled, when copying an image of a message or the full chat, it will also be saved to screenshots\\chat\\.",
-                true));
         compactchat = new SettingsCategory("Compact Chat", "compactchat");
         compactchat.addSetting(new BooleanSetting("Compact Chat",
                 "compactchat",
