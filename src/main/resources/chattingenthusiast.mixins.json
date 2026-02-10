@@ -17,6 +17,7 @@
     "ChatScreenMixin",
     "DrawingBackgroundGraphicsAccessMixin",
     "DrawingFocusedGraphicsAccessMixin",
+    "GuiGraphicsMixin",
     "GuiMixin",
     "IChatComponentAccessor",
     "IChatScreenAccessor",
