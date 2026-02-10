@@ -7,7 +7,6 @@ import com.bytespacegames.config.settings.BooleanSetting;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ChatFilter {

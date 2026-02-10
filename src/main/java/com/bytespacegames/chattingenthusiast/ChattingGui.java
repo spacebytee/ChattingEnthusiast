@@ -26,7 +26,6 @@ import net.minecraft.util.Mth;
 import java.util.List;
 
 public class ChattingGui {
-    //public List<GuiMessage.Line> cq;
     private int mouseX,mouseY;
     private final Minecraft mc;
     private double chatOffset = 0;

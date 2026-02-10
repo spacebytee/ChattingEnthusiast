@@ -51,7 +51,7 @@ public class ChatUtil {
             found++;
         }
         String message = cleanUpMessage(msg.content().getString());
-        List<GuiMessage.Line> matching = new ArrayList<GuiMessage.Line>();
+        List<GuiMessage.Line> matching = new ArrayList<>();
         // move newer to find all matching messages
         while (found >= 0 && msgs.get(found).addedTime() == targetAddedTime) {
             if (msgs.get(found).tag() != msg.tag()) {

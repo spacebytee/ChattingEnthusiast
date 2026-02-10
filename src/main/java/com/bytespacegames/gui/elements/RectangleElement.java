@@ -1,9 +1,6 @@
 package com.bytespacegames.gui.elements;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 
 public class RectangleElement extends AbstractGuiElement {
     private int color;
