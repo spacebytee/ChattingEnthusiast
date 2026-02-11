@@ -47,7 +47,9 @@ public class GuiGraphicsMixin {
         Style style = hoveredTextStyle;
         if (style == null) style = clickableTextStyle;
         if (style != null && style.getClickEvent() != null && style.getHoverEvent() == null && style.getClickEvent() instanceof ClickEvent.RunCommand run) {
-            setTooltipForNextFrame(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + run.command()),mouseX,mouseY);
+            String command = run.command();
+            if (command.startsWith("/")) command = command.substring(1);
+            setTooltipForNextFrame(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + command),mouseX,mouseY);
         }
     }
     @Inject(
@@ -72,7 +74,9 @@ public class GuiGraphicsMixin {
     private List<ClientTooltipComponent> replaceTooltipList(List<ClientTooltipComponent> originalList) {
         if (hoveredCommand == null || !ChattingSettingsManager.INSTANCE.getSettingToggledById("tooltipcommands")) return originalList;
         List<ClientTooltipComponent> newList = new ArrayList<>(originalList);
-        newList.add(ClientTooltipComponent.create(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + hoveredCommand.command()).getVisualOrderText()));
+        String command = hoveredCommand.command();
+        if (command.startsWith("/")) command = command.substring(1);
+        newList.add(ClientTooltipComponent.create(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + command).getVisualOrderText()));
         hoveredCommand = null;
         return newList;
     }
