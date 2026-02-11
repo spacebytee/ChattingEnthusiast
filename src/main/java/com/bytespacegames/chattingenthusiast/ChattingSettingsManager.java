@@ -38,6 +38,10 @@ public class ChattingSettingsManager extends ConfigManager {
                 "smoothscroll",
                 "Makes scrolling using the scroll wheel gradual.",
                 true));
+        visual.addSetting(new BooleanSetting("Smooth Scroll Timeout",
+                "scrolltimeout",
+                "If you are not actively moving the scroll wheel, stop the smooth scroll animation early.",
+                true));
         visual.addSetting(new FloatSetting("Scroll Animation Speed",
                 "scrollspeed",
                 "Mutliplier for the speed of the smooth scrolling animation.",

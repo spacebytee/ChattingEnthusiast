@@ -41,8 +41,6 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	}
 	//region Shadow
 	@Shadow
-	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
-	@Shadow
 	private int forEachLine(ChatComponent.AlphaCalculator alphaCalculator, ChatComponent.LineConsumer lineConsumer) {return 0;}
 	@Shadow
 	public int getLinesPerPage() {
@@ -242,7 +240,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		}
 		ChattingGui ch = ChattingEnthusiast.chatting();
 		boolean cancel = true;
-		// if this was called from the animation, scroll normally
+		// if this was called from the animation, or shifted, scroll normally
 		if (Math.abs(i) <= ChattingEnthusiast.SCROLLING_INTERVAL) {
 			if (ChattingEnthusiast.chatting().ignoreScroll) {
 				ChattingEnthusiast.chatting().ignoreScroll = false;
@@ -257,6 +255,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			return;
 		}
 		if (cancel) ci.cancel();
+		ch.onScroll();
 
 		if ((ch.desiredScrollbarPos > chatScrollbarPos && i < 0) || ch.desiredScrollbarPos < chatScrollbarPos && i > 0) {
 			ch.desiredScrollbarPos = chatScrollbarPos + i;

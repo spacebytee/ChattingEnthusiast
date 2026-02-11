@@ -133,22 +133,25 @@ public class ChattingGui {
         chatTabs.setRelativePosition(2,mc.getWindow().getGuiScaledHeight() - 15);
         chatTabs.setVisible(ChattingSettingsManager.INSTANCE.getSettingToggledById("chattabs") && ChattingEnthusiast.connectedToHypixel());
     }
-
+    private long lastScroll;
     // these methods come from ChatScreen, and therefore only are called when chat is focused
     public void render(GuiGraphics g) {
         setupCustomElements();
         chatContainer.render(g);
-        /*if (cq != null) {
-            ChatUtil.copyImage(cq,g);
-            cq = null;
-        }*/
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (GuiManager.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+        if (System.currentTimeMillis() - lastScroll > 500 && ChattingSettingsManager.INSTANCE.getSettingToggledById("scrolltimeout")) {
+            desiredScrollbarPos = cca.getChatScrollbarPos();
+            return;
+        }
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
         ignoreScroll = true;
         mc.gui.getChat().scrollChat(scrollDelta);
+    }
+    public void onScroll() {
+        lastScroll = System.currentTimeMillis();
     }
 
     public void onClick() {
