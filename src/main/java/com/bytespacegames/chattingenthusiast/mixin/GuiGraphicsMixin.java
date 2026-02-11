@@ -4,12 +4,10 @@ import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -48,7 +46,9 @@ public class GuiGraphicsMixin {
         if (style.getClickEvent() != null && style.getHoverEvent() == null) {
             ClickEvent.RunCommand tempCommand = hoveredCommand;
             hoveredCommand = null;
-            setTooltipForNextFrame(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + tempCommand.command()),i,j);
+            String command = tempCommand.command();
+            if (command.startsWith("/")) command = command.substring(1);
+            setTooltipForNextFrame(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + command),i,j);
         }
     }
     @ModifyVariable(
@@ -59,7 +59,9 @@ public class GuiGraphicsMixin {
     private List<ClientTooltipComponent> replaceTooltipList(List<ClientTooltipComponent> originalList) {
         if (hoveredCommand == null || !ChattingSettingsManager.INSTANCE.getSettingToggledById("tooltipcommands")) return originalList;
         List<ClientTooltipComponent> newList = new ArrayList<>(originalList);
-        newList.add(ClientTooltipComponent.create(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + hoveredCommand.command()).getVisualOrderText()));
+        String command = hoveredCommand.command();
+        if (command.startsWith("/")) command = command.substring(1);
+        newList.add(ClientTooltipComponent.create(Component.literal(I18n.get("chattingenthusiast.tooltip.command") + command).getVisualOrderText()));
         hoveredCommand = null;
         return newList;
     }
