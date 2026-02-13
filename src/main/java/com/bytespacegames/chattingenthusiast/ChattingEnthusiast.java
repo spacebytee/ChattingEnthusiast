@@ -6,10 +6,10 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -57,7 +57,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
                 CATEGORY
 		);
 		if (FabricLoader.getInstance().isModLoaded("fabric-api"))
-			KeyBindingHelper.registerKeyBinding(chatPeekBind);
+			KeyMappingHelper.registerKeyMapping(chatPeekBind);
 	}
 
 	public KeyMapping getChatPeekBind() {
@@ -70,7 +70,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		}
 		try {
 			ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
-				LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommandManager.literal("chatting")
+				LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal("chatting")
 						.executes(this::openGui);
 				dispatcher.register(cmd);
 			});

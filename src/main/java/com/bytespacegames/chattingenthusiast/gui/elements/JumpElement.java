@@ -3,12 +3,11 @@ package com.bytespacegames.chattingenthusiast.gui.elements;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.util.ARGB;
-
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
 public class JumpElement extends AbstractGuiElement {

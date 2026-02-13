@@ -12,7 +12,7 @@ import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import com.bytespacegames.chattingenthusiast.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
