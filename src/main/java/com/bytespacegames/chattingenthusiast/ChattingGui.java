@@ -165,7 +165,7 @@ public class ChattingGui {
     public void keyPressed(KeyEvent keyEvent) {
         lineContainer.keyPressed(keyEvent);
         chatContainer.keyPressed(keyEvent);
-        CharacterEvent ce = new CharacterEvent(CharacterUtils.scancodeToCodepoint(keyEvent.scancode(), keyEvent.modifiers() > 0), keyEvent.modifiers());
+        CharacterEvent ce = new CharacterEvent(CharacterUtils.scancodeToCodepoint(keyEvent.scancode(), keyEvent.modifiers() > 0));
         charTyped(ce);
     }
     public void charTyped(CharacterEvent characterEvent) {
