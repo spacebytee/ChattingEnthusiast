@@ -60,7 +60,7 @@ public class CopyElement extends AbstractGuiElement {
             List<Component> tooltip = new ArrayList<>();
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.title"));
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.copy"));
-            tooltip.add(Component.translatable("chattingenthusiast.tooltip.alt"));
+            tooltip.add(Component.translatable("chattingenthusiast.tooltip.ctrl"));
             if (FabricLoader.getInstance().isModLoaded("chatshot")) tooltip.add(Component.translatable("chattingenthusiast.tooltip.shift"));
             graphics.setTooltipForNextFrame(Minecraft.getInstance().font,tooltip,Optional.empty(),GuiManager.getMouseX(),GuiManager.getMouseY());
         }
@@ -68,7 +68,6 @@ public class CopyElement extends AbstractGuiElement {
     public void setClipboard(String s) {
         Minecraft.getInstance().keyboardHandler.setClipboard(s.replaceAll("§.",""));
     }
-    private List<GuiMessage.Line> cq;
     @Override
     public void onClick() {
         Window window = Minecraft.getInstance().getWindow();
