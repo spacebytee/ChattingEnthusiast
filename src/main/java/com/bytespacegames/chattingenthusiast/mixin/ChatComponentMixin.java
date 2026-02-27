@@ -40,8 +40,6 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	}
 	//region Shadow
 	@Shadow
-	private final List<GuiMessage.Line> trimmedMessages = new ArrayList<>();
-	@Shadow
 	private int forEachLine(int i, int j, boolean bl, int k, ChatComponent.LineConsumer lineConsumer) {return 0;}
 	@Shadow
 	public int getLinesPerPage() {
@@ -57,7 +55,6 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	public boolean isChatFocused() { return false; }
 	@Shadow protected abstract int getLineHeight();
 	@Shadow private int chatScrollbarPos;
-	@Shadow private double getScale() { return 0; }
 	@Shadow public static int getHeight(double d) { return 0; }
 	@Shadow private int getMessageEndIndexAt(double d, double e) { return 0;}
 	@Shadow private static double getTimeFactor(int i) { return 0; }
@@ -169,7 +166,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	@ModifyVariable(method = "render", at = @At("STORE"), ordinal = 6)
 	private int moveChat(int m) {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
-		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
+		return m + constantOffset + (int) (Math.round(ChattingEnthusiast.chatting().getChatOffset()));
 	}
 	@ModifyVariable(method = "screenToChatY", argsOnly = true, at = @At("HEAD"))
 	private double moveChatHitboxes(double y) {
