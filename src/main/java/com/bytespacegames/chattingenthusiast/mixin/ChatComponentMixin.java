@@ -157,7 +157,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	@ModifyVariable(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V", at = @At("STORE"), ordinal = 4)
 	private int moveChat(int m) {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
-		return (int) (m + constantOffset + ChattingEnthusiast.chatting().getChatOffset());
+		return m + constantOffset + (int) (Math.round(ChattingEnthusiast.chatting().getChatOffset()));
 	}
 	//region Scrollbar Rendering
 	@Redirect(
@@ -207,7 +207,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		Minecraft minecraft = Minecraft.getInstance();
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
-		final int chatLX = chatBottom + (int) (constantOffset + ChattingEnthusiast.chatting().getChatOffset());
+		final int chatLX = chatBottom + constantOffset + (int) (Math.round(ChattingEnthusiast.chatting().getChatOffset()));
 		int messageHeight = 9;
 		double chatLineSpacing = minecraft.options.chatLineSpacing().get();
 		int entryHeight = (int)((double)messageHeight * (chatLineSpacing + 1.0D));
