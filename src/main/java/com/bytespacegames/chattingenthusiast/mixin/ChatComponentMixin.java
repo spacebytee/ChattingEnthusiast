@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(ChatComponent.class)
+@Mixin(value = ChatComponent.class, priority=1500)
 public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Unique
 	private GuiGraphics lastGraphics;
