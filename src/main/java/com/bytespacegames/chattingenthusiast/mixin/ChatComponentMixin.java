@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(ChatComponent.class)
+@Mixin(value = ChatComponent.class, priority=1500)
 public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Unique
 	private GuiGraphics lastGraphics;
@@ -82,6 +82,13 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	)
 	private float chatPeek(float original) {
 		return ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown() ? 1.0f : original;
+	}
+	@ModifyVariable(
+			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			at = @At("HEAD"),
+			ordinal = 0, argsOnly = true)
+	private boolean chatPeek(boolean original) {
+		return original || ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown();
 	}
 	@Inject(
 			method="getHeight()I",
