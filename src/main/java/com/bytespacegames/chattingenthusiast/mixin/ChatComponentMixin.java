@@ -62,11 +62,11 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 
 	//region ChatPeek
 	@ModifyVariable(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
-			at = @At("HEAD"),
-			ordinal = 0, argsOnly = true)
-	private boolean chatPeek(boolean original) {
-		return original || ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown();
+			method = "forEachLine",
+			at = @At("STORE"),
+			ordinal = 0)
+	private float chatPeek(float original) {
+		return ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown() ? 1.0f : original;
 	}
 	@Inject(
 			method="getHeight()I",
