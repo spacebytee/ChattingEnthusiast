@@ -84,7 +84,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return ChattingEnthusiast.INSTANCE.getChatPeekBind().isDown() ? 1.0f : original;
 	}
 	@ModifyVariable(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method = "render",
 			at = @At("HEAD"),
 			ordinal = 0, argsOnly = true)
 	private boolean chatPeek(boolean original) {
