@@ -14,7 +14,6 @@ import com.bytespacegames.gui.elements.WidgetElement;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.CharacterEvent;
@@ -79,7 +78,8 @@ public class ChattingGui {
         chatContainer.addElement(chatControls);
         chatContainer.addElement(chatTabs);
     }
-    public void renderCustomLine(GuiGraphics graphics, int x, int mx, int nx, int lineIndex, float opacity) {
+    public void renderCustomLine(int x, int mx, int nx, int lineIndex, float opacity) {
+        GuiManager gui = GuiManager.INSTANCE;
         if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
@@ -90,7 +90,7 @@ public class ChattingGui {
         // draw message background
         if (baseBackgroundOpacity > 0) {
             int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? ChattingSettingsManager.INSTANCE.getColorById("hovercolor") : ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor");
-            graphics.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
+            gui.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
         }
 
         if (lineIndex != hoveredIndex) return;
@@ -110,7 +110,7 @@ public class ChattingGui {
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
         GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
-        lineContainer.render(graphics);
+        lineContainer.render();
         GuiManager.INSTANCE.mouseTransformations = false;
     }
     public void updateMouse(int x, int y) {
@@ -135,9 +135,9 @@ public class ChattingGui {
     }
     private long lastScroll;
     // these methods come from ChatScreen, and therefore only are called when chat is focused
-    public void render(GuiGraphics g) {
+    public void render() {
         setupCustomElements();
-        chatContainer.render(g);
+        chatContainer.render();
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (GuiManager.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;

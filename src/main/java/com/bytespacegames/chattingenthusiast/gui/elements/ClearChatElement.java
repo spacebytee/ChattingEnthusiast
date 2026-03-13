@@ -4,7 +4,6 @@ import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 
@@ -15,7 +14,7 @@ public class ClearChatElement extends AbstractGuiElement {
         super(x, y, width, height, visible);
     }
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render() {
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -25,14 +24,14 @@ public class ClearChatElement extends AbstractGuiElement {
             iconColor = hoveredIconColor;
         }
 
-        graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        GuiManager.INSTANCE.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
 
-        drawRect(graphics,x+4,y+2,5,1,iconColor);
-        drawRect(graphics,x+2,y+3,9,1,iconColor);
+        drawRect(x+4,y+2,5,1,iconColor);
+        drawRect(x+2,y+3,9,1,iconColor);
         for (int i = 0; i < 4; i++) {
-            drawRect(graphics,x+3 + 2*i,y+4,1,7,iconColor);
+            drawRect(x+3 + 2*i,y+4,1,7,iconColor);
         }
-        drawRect(graphics,x+3,y+10,7,1,iconColor);
+        drawRect(x+3,y+10,7,1,iconColor);
     }
     long lastClicked = 0;
     @Override

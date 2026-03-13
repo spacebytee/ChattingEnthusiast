@@ -7,7 +7,6 @@ import com.bytespacegames.gui.elements.*;
 import com.bytespacegames.gui.elements.colorpicker.ColorPickerElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 
 public class SettingElement extends AbstractGuiContainer {
@@ -56,10 +55,11 @@ public class SettingElement extends AbstractGuiContainer {
         }
         return i;
     }
-    private void drawLines(GuiGraphics g, String text, int x, int y) {
+    private void drawLines(String text, int x, int y) {
+        GuiManager gui = GuiManager.INSTANCE;
         Font f = Minecraft.getInstance().font;
         if (f.width(text) <= getWidth() * getSpacingBySetting(setting) - 15) {
-            g.drawString(f, text,x,y,ConfigGui.SECONDARY_COLOR);
+            gui.drawString(f, text,x,y,ConfigGui.SECONDARY_COLOR);
             return;
         }
         int i = 0;
@@ -67,13 +67,13 @@ public class SettingElement extends AbstractGuiContainer {
         StringBuilder built = new StringBuilder();
         for (String word : words) {
             if (f.width(built + word) > getWidth() * getSpacingBySetting(setting) - 15) {
-                g.drawString(f, built.toString().trim(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
+                gui.drawString(f, built.toString().trim(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
                 i++;
                 built = new StringBuilder();
             }
             built.append(word).append(" ");
         }
-        g.drawString(f, built.toString(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
+        gui.drawString(f, built.toString(),x,y + i * 11,ConfigGui.SECONDARY_COLOR);
     }
     @Override
     public int getEffectiveX(int elementIndex) {
@@ -91,12 +91,13 @@ public class SettingElement extends AbstractGuiContainer {
     }
 
     @Override
-    public void render(GuiGraphics g) {
-        g.fill(x,y,x+width,y+height, ConfigGui.PRIMARY_COLOR);
-        GuiManager.INSTANCE.renderOutline(g,x,y,width,height, ConfigGui.SECONDARY_COLOR);
-        g.drawString(Minecraft.getInstance().font, setting.getName(), x + 15,y + 15, 0xFFFFFFFF);
-        drawLines(g, setting.getDescription(), x + 15,y + 15+12);
-        super.render(g);
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
+        gui.fill(x,y,x+width,y+height, ConfigGui.PRIMARY_COLOR);
+        GuiManager.INSTANCE.renderOutline(x,y,width,height, ConfigGui.SECONDARY_COLOR);
+        gui.drawString(Minecraft.getInstance().font, setting.getName(), x + 15,y + 15, 0xFFFFFFFF);
+        drawLines(setting.getDescription(), x + 15,y + 15+12);
+        super.render();
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
 
 public class TabElement extends AbstractGuiElement {
@@ -19,7 +18,8 @@ public class TabElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager g = GuiManager.INSTANCE;
         if (width == 0) setWidth(Minecraft.getInstance().font.width(text) + 4);
         float opacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
         int color = isHovering(GuiManager.getMouseX(),GuiManager.getMouseY()) ? ARGB.colorFromFloat(opacity, 1f, 1f, 1f) : ARGB.colorFromFloat(opacity, 0f,0f,0f);

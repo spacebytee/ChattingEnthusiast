@@ -2,7 +2,7 @@ package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.ClickEvent;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(GuiGraphics.class)
+@Mixin(GuiGraphicsExtractor.class)
 public class GuiGraphicsMixin {
     @Unique
     ClickEvent.RunCommand hoveredCommand;
@@ -36,12 +36,12 @@ public class GuiGraphicsMixin {
     @Shadow
     public void setTooltipForNextFrame(Component component, int i, int j) {}
     @Inject(
-            method="renderDeferredElements",
+            method="extractDeferredElements",
             at = @At(
                     value = "HEAD"
             )
     )
-    public void mixin$renderDeferredElements(CallbackInfo ci) {
+    public void mixin$renderDeferredElements(final int mX, final int mY, final float f, CallbackInfo ci) {
         if (!ChattingSettingsManager.INSTANCE.getSettingToggledById("tooltipcommands")) return;
 
         Style style = hoveredTextStyle;
@@ -53,7 +53,7 @@ public class GuiGraphicsMixin {
         }
     }
     @Inject(
-            method="renderComponentHoverEffect",
+            method="componentHoverEffect",
             at = @At("HEAD")
     )
     public void mixin$renderComponentHoverEffect(Font font, Style style, int i, int j, CallbackInfo ci) {

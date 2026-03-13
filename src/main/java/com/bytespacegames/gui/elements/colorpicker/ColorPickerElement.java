@@ -8,7 +8,6 @@ import com.bytespacegames.gui.Interpolator;
 import com.bytespacegames.gui.containers.AbstractGuiContainer;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.bytespacegames.gui.elements.InputFieldElement;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 
@@ -55,7 +54,8 @@ public class ColorPickerElement extends AbstractGuiContainer {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         if (GuiManager.INSTANCE.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
             GuiManager.INSTANCE.queueDelayedRender(this);
             return;
@@ -68,20 +68,20 @@ public class ColorPickerElement extends AbstractGuiContainer {
             hoverAnimator.setTarget(1);
         }
 
-        g.fill(x,y,x+width,y+height, getColor());
-        GuiManager.INSTANCE.renderOutline(g,x,y,width,height, Interpolator.interpolateColor(constructColor(r + (127-r) / 2,this.g + (127-this.g) / 2,b + (127-b) / 2),0xFFFFFFFF,hoverAnimator.getValue()));
+        gui.fill(x,y,x+width,y+height, getColor());
+        gui.renderOutline(x,y,width,height, Interpolator.interpolateColor(constructColor(r + (127-r) / 2,this.g + (127-this.g) / 2,b + (127-b) / 2),0xFFFFFFFF,hoverAnimator.getValue()));
         expandAnimator.setTarget(expanded ? 1 : 0);
         if (!expanded && expandAnimator.getValue() < (1/1000f)) {
-            super.render(g);
+            super.render();
             return;
         }
         rS.setVisible(true);
         gS.setVisible(true);
         bS.setVisible(true);
-        g.enableScissor((int) (x + width - (expandedWidth * expandAnimator.getValue()) + .5),y,x + width, (int) (y + expandedHeight * expandAnimator.getValue() + .5));
-        g.fill(x + width - expandedWidth,y,x + width, y + expandedHeight,ConfigGui.BACKGROUND_COLOR);
-        super.render(g);
-        g.disableScissor();
+        gui.enableScissor((int) (x + width - (expandedWidth * expandAnimator.getValue()) + .5),y,x + width, (int) (y + expandedHeight * expandAnimator.getValue() + .5));
+        gui.fill(x + width - expandedWidth,y,x + width, y + expandedHeight,ConfigGui.BACKGROUND_COLOR);
+        super.render();
+        gui.disableScissor();
     }
     public void updateColor(int color) {
         r = color >> 16 & 0xFF;

@@ -2,7 +2,6 @@ package com.bytespacegames.gui.elements;
 
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.containers.ScrollingContainer;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 
 public class ScrollBarElement extends AbstractGuiElement {
@@ -28,12 +27,13 @@ public class ScrollBarElement extends AbstractGuiElement {
         container.setScrollOffset(offset, true);
     }
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
-            g.fill(x,y+scrollBarPosition,x + 3, y + scrollBarPosition + highlightHeight(), 0xFFFFFFFF);
+            gui.fill(x,y+scrollBarPosition,x + 3, y + scrollBarPosition + highlightHeight(), 0xFFFFFFFF);
             return;
         }
-        g.fill(x,y+scrollBarPosition,x + 3, y + scrollBarPosition + highlightHeight(), scrollBarColor);
+        gui.fill(x,y+scrollBarPosition,x + 3, y + scrollBarPosition + highlightHeight(), scrollBarColor);
     }
     @Override
     public boolean isHovering(int mouseX, int mouseY) {

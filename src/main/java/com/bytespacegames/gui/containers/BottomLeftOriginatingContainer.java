@@ -1,7 +1,5 @@
 package com.bytespacegames.gui.containers;
 
-import net.minecraft.client.gui.GuiGraphics;
-
 public class BottomLeftOriginatingContainer extends AbstractGuiContainer {
     protected final int spacing;
     public BottomLeftOriginatingContainer(int x, int y, int spacing, boolean visible) {
@@ -31,7 +29,7 @@ public class BottomLeftOriginatingContainer extends AbstractGuiContainer {
     public int getBottomBound() {
         return 0;
     }
-    public void render(GuiGraphics g) {
-        super.render(g);
+    public void render() {
+        super.render();
     }
 }

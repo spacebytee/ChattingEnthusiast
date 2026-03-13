@@ -1,10 +1,7 @@
 package com.bytespacegames.gui.elements;
 
+import com.bytespacegames.gui.GuiManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
 
 public class TextElement extends AbstractGuiElement {
     private String text;
@@ -29,8 +26,8 @@ public class TextElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
-        g.drawString(Minecraft.getInstance().font, text, x,y,color);
+    public void render() {
+        GuiManager.INSTANCE.drawString(Minecraft.getInstance().font, text, x,y,color);
     }
 
     @Override

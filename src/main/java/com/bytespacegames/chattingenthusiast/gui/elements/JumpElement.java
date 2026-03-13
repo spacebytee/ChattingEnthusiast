@@ -5,7 +5,6 @@ import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.util.ARGB;
 import static com.bytespacegames.gui.GuiUtil.drawRect;
@@ -19,7 +18,8 @@ public class JumpElement extends AbstractGuiElement {
         messageIndex = index;
     }
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render() {
+        GuiManager graphics = GuiManager.INSTANCE;
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -32,10 +32,10 @@ public class JumpElement extends AbstractGuiElement {
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
         int bx = x + 1 + (int) ((width-9)/2f);
         int by = y + 1 + (int) ((height-9)/2f);
-        drawRect(graphics,bx,by + 2,1,1,iconColor);
-        drawRect(graphics,bx + 1,by + 3,6,1,iconColor);
-        drawRect(graphics,bx + 4,by + 1,1,5,iconColor);
-        drawRect(graphics,bx + 5,by + 2,1,3,iconColor);
+        drawRect(bx,by + 2,1,1,iconColor);
+        drawRect(bx + 1,by + 3,6,1,iconColor);
+        drawRect(bx + 4,by + 1,1,5,iconColor);
+        drawRect(bx + 5,by + 2,1,3,iconColor);
     }
 
     @Override

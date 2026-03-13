@@ -2,7 +2,6 @@ package com.bytespacegames.gui.elements;
 
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.TimerUtils;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
@@ -19,10 +18,10 @@ public class WidgetElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
         widget.setX(x);
         widget.setY(y);
-        widget.render(g, GuiManager.getMouseX(),GuiManager.getMouseY(), 0);
+        widget.extractRenderState(GuiManager.INSTANCE.getGuiGraphics(), GuiManager.getMouseX(),GuiManager.getMouseY(), 0);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class WidgetElement extends AbstractGuiElement {
     }
     public void setFocused(boolean focused) {
         focusTimer.reset();
-        widget.setFocused(true);
+        widget.setFocused(focused);
     }
     public void keyPressed(KeyEvent e) {
         widget.keyPressed(e);

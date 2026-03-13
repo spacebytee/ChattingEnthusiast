@@ -1,6 +1,6 @@
 package com.bytespacegames.gui.containers;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.bytespacegames.gui.GuiManager;
 
 public class BasicContainer extends AbstractGuiContainer {
     public final int color;
@@ -31,8 +31,8 @@ public class BasicContainer extends AbstractGuiContainer {
         return height;
     }
 
-    public void render(GuiGraphics g) {
-        g.fill(x,y,x + width,y + height,color);
-        super.render(g);
+    public void render() {
+        GuiManager.INSTANCE.fill(x,y,x + width,y + height,color);
+        super.render();
     }
 }

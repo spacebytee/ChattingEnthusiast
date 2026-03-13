@@ -5,7 +5,6 @@ import com.bytespacegames.gui.Animator;
 import com.bytespacegames.gui.Easings;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class ToggleSwitchElement extends AbstractGuiElement {
     private final Animator animator;
@@ -23,17 +22,18 @@ public class ToggleSwitchElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         hoverAnimator.setTarget(0);
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             hoverAnimator.setTarget(1);
         }
-        g.fill(x,y,x+width,y+height, Interpolator.interpolateColor(0x00B643DA,ConfigGui.HIGHLIGHT_COLOR, animator.getValue()));
-        GuiManager.INSTANCE.renderOutline(g,x,y,width,height, Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,hoverAnimator.getValue()));
+        gui.fill(x,y,x+width,y+height, Interpolator.interpolateColor(0x00B643DA,ConfigGui.HIGHLIGHT_COLOR, animator.getValue()));
+        gui.renderOutline(x,y,width,height, Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,hoverAnimator.getValue()));
         int toggleHeight = height - 4;
         int toggleWidth = (int) (toggleHeight * .75f);
         int toggleOffset = (int) ((width - 4 - toggleWidth) * animator.getValue() + .5f);
-        g.fill(x + 2 + toggleOffset,y + 2,x + 2 + toggleWidth + toggleOffset,y + 2 + toggleHeight, Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,animator.getValue()));
+        gui.fill(x + 2 + toggleOffset,y + 2,x + 2 + toggleWidth + toggleOffset,y + 2 + toggleHeight, Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,animator.getValue()));
     }
 
     @Override
