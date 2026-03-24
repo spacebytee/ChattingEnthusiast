@@ -8,11 +8,9 @@ import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
-import dev.dediamondpro.chatshot.util.ChatCopyUtil;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
@@ -33,8 +31,10 @@ public class CopyElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render() {
+        GuiManager graphics = GuiManager.INSTANCE;
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
+        
         int color = 0xFF000000;
         int iconColor = 0xFF7F7F7F;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
@@ -45,16 +45,16 @@ public class CopyElement extends AbstractGuiElement {
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
         int gx = x + 1 + (int) ((width-9)/2f);
         int gy = y + 1 + (int) ((height-9)/2f);
-        drawRect(graphics, gx,gy,5,1,iconColor);
-        drawRect(graphics, gx,gy,1,5,iconColor);
-        drawRect(graphics, gx,gy + 4,2,1,iconColor);
-        drawRect(graphics, gx + 4,gy,1,2,iconColor);
+        drawRect(gx,gy,5,1,iconColor);
+        drawRect(gx,gy,1,5,iconColor);
+        drawRect(gx,gy + 4,2,1,iconColor);
+        drawRect( gx + 4,gy,1,2,iconColor);
         gx = x + 3 + (int) ((width-9)/2f);
         gy = y + 3 + (int) ((height-9)/2f);
-        drawRect(graphics, gx,gy,5,1,iconColor);
-        drawRect(graphics, gx,gy,1,5,iconColor);
-        drawRect(graphics, gx,gy + 4,5,1,iconColor);
-        drawRect(graphics, gx + 4,gy,1,5,iconColor);
+        drawRect(gx,gy,5,1,iconColor);
+        drawRect(gx,gy,1,5,iconColor);
+        drawRect(gx,gy + 4,5,1,iconColor);
+        drawRect(gx + 4,gy,1,5,iconColor);
 
         if (hovering && ChattingSettingsManager.INSTANCE.getSettingToggledById("tooltip")) {
             List<Component> tooltip = new ArrayList<>();
@@ -62,7 +62,7 @@ public class CopyElement extends AbstractGuiElement {
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.copy"));
             tooltip.add(Component.translatable("chattingenthusiast.tooltip.ctrl"));
             if (FabricLoader.getInstance().isModLoaded("chatshot")) tooltip.add(Component.translatable("chattingenthusiast.tooltip.shift"));
-            graphics.setTooltipForNextFrame(Minecraft.getInstance().font,tooltip,Optional.empty(),GuiManager.getMouseX(),GuiManager.getMouseY());
+            graphics.getGuiGraphics().setTooltipForNextFrame(Minecraft.getInstance().font,tooltip,Optional.empty(),GuiManager.getMouseX(),GuiManager.getMouseY());
         }
     }
     public void setClipboard(String s) {
@@ -76,7 +76,7 @@ public class CopyElement extends AbstractGuiElement {
         // image
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {
             GuiMessage.Line line = ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos());
-            ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
+            //ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
             return;
         }
         // single line

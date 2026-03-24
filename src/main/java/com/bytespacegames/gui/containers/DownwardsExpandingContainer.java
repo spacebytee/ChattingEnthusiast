@@ -1,7 +1,5 @@
 package com.bytespacegames.gui.containers;
 
-import net.minecraft.client.gui.GuiGraphics;
-
 public class DownwardsExpandingContainer extends AbstractGuiContainer {
     protected int spacing;
     public DownwardsExpandingContainer(int x, int y, int spacing, boolean visible) {
@@ -33,7 +31,7 @@ public class DownwardsExpandingContainer extends AbstractGuiContainer {
         }
         return elementY + elements.get(elementIndex).getBottomBound();
     }
-    public void render(GuiGraphics g) {
-        super.render(g);
+    public void render() {
+        super.render();
     }
 }

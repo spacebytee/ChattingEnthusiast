@@ -4,12 +4,10 @@ import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.util.ARGB;
-
 import java.util.List;
 
 import static com.bytespacegames.gui.GuiUtil.drawRect;
@@ -23,7 +21,8 @@ public class DeleteElement extends AbstractGuiElement {
         messageIndex = index;
     }
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render() {
+        GuiManager graphics = GuiManager.INSTANCE;
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -36,12 +35,12 @@ public class DeleteElement extends AbstractGuiElement {
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
         int gX = x + (int) ((width-9)/2f);
         int gY = y + (int) ((height-9)/2f);
-        drawRect(graphics,gX+3,gY+1,3,1,iconColor);
-        drawRect(graphics,gX+1,gY+2,7,1,iconColor);
+        drawRect(gX+3,gY+1,3,1,iconColor);
+        drawRect(gX+1,gY+2,7,1,iconColor);
         for (int i = 0; i < 3; i++) {
-            drawRect(graphics,gX+2 + 2*i,gY+3,1,4,iconColor);
+            drawRect(gX+2 + 2*i,gY+3,1,4,iconColor);
         }
-        drawRect(graphics,gX+2,gY+7,5,1,iconColor);
+        drawRect(gX+2,gY+7,5,1,iconColor);
     }
 
     @Override

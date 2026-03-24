@@ -2,7 +2,7 @@ package com.bytespacegames.chattingenthusiast.utils;
 
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.util.FormattedCharSequence;

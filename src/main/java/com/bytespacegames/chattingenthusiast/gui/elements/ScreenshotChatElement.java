@@ -4,10 +4,8 @@ import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import dev.dediamondpro.chatshot.util.ChatCopyUtil;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.ARGB;
 
 import java.util.ArrayList;
@@ -20,7 +18,8 @@ public class ScreenshotChatElement extends AbstractGuiElement {
         super(x, y, width, height, visible);
     }
     @Override
-    public void render(GuiGraphics graphics) {
+    public void render() {
+        GuiManager graphics = GuiManager.INSTANCE;
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -33,14 +32,14 @@ public class ScreenshotChatElement extends AbstractGuiElement {
         int rY = y + (height - 7)/2;
         graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
 
-        drawRect(graphics,rX,rY,2,1,iconColor);
-        drawRect(graphics,rX,rY,1,2,iconColor);
-        drawRect(graphics,rX + 5,rY,2,1,iconColor);
-        drawRect(graphics,rX + 6,rY,1,2,iconColor);
-        drawRect(graphics,rX,rY + 6,2,1,iconColor);
-        drawRect(graphics,rX,rY + 5,1,2,iconColor);
-        drawRect(graphics,rX + 5,rY + 6,3,1,iconColor);
-        drawRect(graphics,rX + 6,rY + 5,1,3,iconColor);
+        drawRect(rX,rY,2,1,iconColor);
+        drawRect(rX,rY,1,2,iconColor);
+        drawRect(rX + 5,rY,2,1,iconColor);
+        drawRect(rX + 6,rY,1,2,iconColor);
+        drawRect(rX,rY + 6,2,1,iconColor);
+        drawRect(rX,rY + 5,1,2,iconColor);
+        drawRect(rX + 5,rY + 6,3,1,iconColor);
+        drawRect(rX + 6,rY + 5,1,3,iconColor);
     }
     @Override
     public void onClick() {
@@ -52,6 +51,6 @@ public class ScreenshotChatElement extends AbstractGuiElement {
              i++) {
             lines.addFirst(effectiveLines.get(i));
         }
-        ChatCopyUtil.copyImage(lines, Minecraft.getInstance());
+        //ChatCopyUtil.copyImage(lines, Minecraft.getInstance());
     }
 }

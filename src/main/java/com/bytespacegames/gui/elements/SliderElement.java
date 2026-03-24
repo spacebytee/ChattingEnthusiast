@@ -6,7 +6,6 @@ import com.bytespacegames.gui.Easings;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 
 public class SliderElement extends AbstractGuiElement {
@@ -27,7 +26,8 @@ public class SliderElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         hoverAnimator.setTarget(0);
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             hoverAnimator.setTarget(1);
@@ -35,12 +35,12 @@ public class SliderElement extends AbstractGuiElement {
         float displayValue = (float) Math.round(getScaledValue() * 10) / 10;
         String val = String.valueOf(displayValue);
         val = val.substring(0,Math.min(4,val.length()));
-        g.drawString(Minecraft.getInstance().font,val,x - Minecraft.getInstance().font.width(val) - 2,(int) ((y + (float)height / 2) - 3.5f), 0xFFFFFFFF);
-        g.fill(x,y + (height / 2),x+width,y + (height / 2) + 1, ConfigGui.SECONDARY_COLOR);
+        gui.drawString(Minecraft.getInstance().font,val,x - Minecraft.getInstance().font.width(val) - 2,(int) ((y + (float)height / 2) - 3.5f), 0xFFFFFFFF);
+        gui.fill(x,y + (height / 2),x+width,y + (height / 2) + 1, ConfigGui.SECONDARY_COLOR);
         int toggleHeight = height;
         int toggleWidth = (int) (toggleHeight * .75f);
         int togglePosition = (int) ((width-toggleWidth) * value);
-        g.fill(x + togglePosition,y,x + togglePosition + toggleWidth,y + toggleHeight, Interpolator.interpolateColor(ConfigGui.HIGHLIGHT_COLOR,0xFFFFFFFF,hoverAnimator.getValue()));
+        gui.fill(x + togglePosition,y,x + togglePosition + toggleWidth,y + toggleHeight, Interpolator.interpolateColor(ConfigGui.HIGHLIGHT_COLOR,0xFFFFFFFF,hoverAnimator.getValue()));
     }
 
     public boolean isHovering(int mouseX, int mouseY) {

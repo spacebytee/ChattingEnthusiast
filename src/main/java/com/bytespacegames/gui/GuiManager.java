@@ -1,7 +1,8 @@
 package com.bytespacegames.gui;
 
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import org.joml.Matrix3x2f;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,9 @@ public class GuiManager {
     private int mouseX, mouseY;
     // when true, apply the inverse of the gui transformations (scale by chat scale, transform 4 pixels) for chat, to offset the desync between hitboxes and the actual render positions
     public boolean mouseTransformations = false;
-    private boolean isScissoring = false;
     public double scale = 1;
     private boolean standardRenderCycle = true;
+    private GuiGraphicsExtractor graphics;
     private final List<AbstractGuiElement> delayedRender = new ArrayList<>();
     public GuiManager() {
         INSTANCE = this;
@@ -37,19 +38,19 @@ public class GuiManager {
         if (!INSTANCE.mouseTransformations) return INSTANCE.mouseY;
         return (int) (INSTANCE.mouseY / INSTANCE.scale);
     }
-    public void disableScissor(GuiGraphics g) {
-        if (isScissoring)
-            g.disableScissor();
-        isScissoring = false;
+    public void disableScissor() {
+        graphics.disableScissor();
     }
-    public void enableScissor(GuiGraphics g, int x1, int y1, int x2, int y2) {
-        isScissoring = true;
-        g.enableScissor(x1,y1,x2,y2);
+    public void enableScissor(int x1, int y1, int x2, int y2) {
+        graphics.enableScissor(x1,y1,x2,y2);
     }
-    public void flushDelayedRenders(GuiGraphics g) {
+    public void updateGuiGraphics(GuiGraphicsExtractor g) {
+        this.graphics = g;
+    }
+    public void flushDelayedRenders() {
         standardRenderCycle = false;
         for (AbstractGuiElement e : delayedRender) {
-            e.render(g);
+            e.render();
         }
         delayedRender.clear();
         standardRenderCycle = true;
@@ -63,7 +64,6 @@ public class GuiManager {
         delayedRender.add(element);
     }
     public void drawGradientRectangle(
-            GuiGraphics g,
             int x1, int y1,
             int x2, int y2,
             int leftColor,
@@ -72,28 +72,44 @@ public class GuiManager {
         int width  = x2 - x1;
         int height = y2 - y1;
 
-        g.pose().pushMatrix();
+        graphics.pose().pushMatrix();
 
-        updatePose(g, matrix -> {
+        updatePose(matrix -> {
             matrix.translate(x1, y1);
             matrix.rotate((float) -Math.PI / 2f);
             matrix.translate(-height, 0);
         });
 
-        g.fillGradient(
+        graphics.fillGradient(
                 0, 0,
                 height, width,
                 leftColor,
                 rightColor
         );
 
-        g.pose().popMatrix();
+        graphics.pose().popMatrix();
     }
-    public void updatePose(GuiGraphics g, Consumer<Matrix3x2f> consumer) {
-        consumer.accept(g.pose());
+    public void updatePose(Consumer<Matrix3x2f> consumer) {
+        consumer.accept(graphics.pose());
     }
 
-    public void renderOutline(GuiGraphics g, int x, int y, int width, int height, int color) {
-        g.renderOutline(x,y,width,height,color);
+    public void renderOutline(int x, int y, int width, int height, int color) {
+        graphics.outline(x,y,width,height,color);
+    }
+
+    public void drawString(Font f, String string, int x, int y, int color) {
+        graphics.text(f,string,x,y,color);
+    }
+
+    public void fill(int x, int y, int x2, int y2, int color) {
+        graphics.fill(x,y,x2,y2,color);
+    }
+
+    public void drawCenteredString(Font font, String text, int x, int y, int color) {
+        drawString(font,text,x-font.width(text)/2,y,color);
+    }
+
+    public GuiGraphicsExtractor getGuiGraphics() {
+        return graphics;
     }
 }

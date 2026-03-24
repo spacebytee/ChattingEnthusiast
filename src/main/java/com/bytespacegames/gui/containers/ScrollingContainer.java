@@ -4,7 +4,6 @@ import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.TimerUtils;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.bytespacegames.gui.elements.ScrollBarElement;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class ScrollingContainer extends AbstractGuiContainer {
     private int scrollOffset = 0;
@@ -57,13 +56,14 @@ public class ScrollingContainer extends AbstractGuiContainer {
         }
         return Math.max(highest,height);
     }
-    public void render(GuiGraphics g) {
+    public void render() {
         if (!visible) return;
-        g.fill(x + width,y,x + width + 3,y + height,scrollBarBackgroundColor);
+        GuiManager gui = GuiManager.INSTANCE;
+        gui.fill(x + width,y,x + width + 3,y + height,scrollBarBackgroundColor);
         if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) {
             scrollOffset += (int) ((desiredScrollOffset - scrollOffset) * (1 - 1/1.3));
         }
-        GuiManager.INSTANCE.enableScissor(g, x,y,x + width + 3,y + height);
+        gui.enableScissor(x,y,x + width + 3,y + height);
         for (int i = 0; i < elements.size(); i++) {
             AbstractGuiElement e = elements.get(i);
             if (!e.isVisible()) continue;
@@ -72,9 +72,9 @@ public class ScrollingContainer extends AbstractGuiContainer {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            e.render(g);
+            e.render();
         }
-        GuiManager.INSTANCE.disableScissor(g);
+        gui.disableScissor();
     }
     public void mouseScrolled(double d, double e, double f, double g) {
         setScrollOffset((int) (scrollOffset - g * 100));

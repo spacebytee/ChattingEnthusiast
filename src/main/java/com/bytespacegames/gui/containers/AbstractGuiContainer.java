@@ -3,7 +3,6 @@ package com.bytespacegames.gui.containers;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractExpandableElement;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -40,7 +39,7 @@ public abstract class AbstractGuiContainer extends AbstractExpandableElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
         if (!visible) return;
         for (int i = 0; i < elements.size(); i++) {
             AbstractGuiElement e = elements.get(i);
@@ -48,7 +47,7 @@ public abstract class AbstractGuiContainer extends AbstractExpandableElement {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            e.render(g);
+            e.render();
         }
     }
 

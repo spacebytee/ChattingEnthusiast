@@ -5,11 +5,13 @@ import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.ext.IChatComponentExt;
 import com.bytespacegames.config.settings.BooleanSetting;
+import com.bytespacegames.gui.GuiManager;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.client.GuiMessage;
-import net.minecraft.client.GuiMessageTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
+import net.minecraft.client.multiplayer.chat.GuiMessageTag;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
@@ -27,11 +29,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Mixin(value = ChatComponent.class, priority=1500)
 public abstract class ChatComponentMixin implements IChatComponentExt {
-	@Unique
-	private GuiGraphics lastGraphics;
 	@Unique
 	private boolean isRefreshing = false;
 	@Unique
@@ -58,6 +59,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	@Shadow private int chatScrollbarPos;
 	@Shadow private double getScale() { return 0; }
 	@Shadow public static int getHeight(double d) { return 0; }
+	@Shadow private Predicate<GuiMessage> visibleMessageFilter;
 	//endregion
 
 	//region ChatPeek
@@ -90,14 +92,14 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return iteratingLines;
 	}
 	@Inject(
-			method="render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method="extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at=@At("HEAD")
 	)
-	public void mixin$renderHead(ChatComponent.ChatGraphicsAccess chatGraphicsAccess, int i, int j, boolean bl, CallbackInfo ci) {
+	public void mixin$renderHead(ChatComponent.ChatGraphicsAccess chatGraphicsAccess, int i, int j, ChatComponent.DisplayMode d, CallbackInfo ci) {
 		iteratingLines = new ArrayList<>(ChattingEnthusiast.filter().getEffectiveLines());
 	}
 	@ModifyExpressionValue(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at = @At(
 					value = "INVOKE",
 					target = "Ljava/util/List;size()I"
@@ -150,14 +152,14 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return ChattingEnthusiast.MAX_MESSAGES;
 	}
 
-	@ModifyVariable(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("STORE"), ordinal = 4)
+	@ModifyVariable(method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V", at = @At("STORE"), ordinal = 4)
 	private int moveChat(int m) {
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		return m + constantOffset + (int) (Math.round(ChattingEnthusiast.chatting().getChatOffset()));
 	}
 	//region Scrollbar Rendering
 	@Redirect(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
@@ -170,7 +172,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		}
 	}
 	@Redirect(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
@@ -182,17 +184,17 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			graphics.fill(x1,y1,x2,y2,color);
 		}
 	}
-	//endregion
+	//endregion final GuiGraphicsExtractor graphics, final Font font, final int ticks, final int mouseX, final int mouseY, final DisplayMode displayMode, final boolean changeCursorOnInsertions
 	@Inject(
-			method = "render(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/gui/Font;IIIZZ)V",
+			method = "extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/gui/Font;IIILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;Z)V",
 			at = @At("HEAD")
 	)
-	private void captureGraphics(final GuiGraphics graphics, final Font font, final int ticks, final int mouseX, final int mouseY, final boolean isChatting, final boolean changeCursorOnInsertions, CallbackInfo ci) {
-		lastGraphics = graphics;
+	private void captureGraphics(final GuiGraphicsExtractor graphics, final Font font, final int ticks, final int mouseX, final int mouseY, final ChatComponent.DisplayMode displayMode, final boolean changeCursorOnInsertions, CallbackInfo ci) {
+		GuiManager.INSTANCE.updateGuiGraphics(graphics);
 		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
 	@Redirect(
-			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
+			method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/components/ChatComponent;forEachLine(Lnet/minecraft/client/gui/components/ChatComponent$AlphaCalculator;Lnet/minecraft/client/gui/components/ChatComponent$LineConsumer;)I",
@@ -211,7 +213,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return forEachLine(alphaCalculator, (line, lineIndex, alphax) -> {
 			int entryBottom = chatLX - lineIndex * entryHeight;
 			int entryTop = entryBottom - entryHeight;
-			ChattingEnthusiast.chatting().renderCustomLine(lastGraphics, -4, entryTop, entryBottom, lineIndex, alphax);
+			ChattingEnthusiast.chatting().renderCustomLine(-4, entryTop, entryBottom, lineIndex, alphax);
 		});
 	}
 	//region Scrolling
@@ -284,15 +286,18 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	}
 
 	// change order to add the GuiMessage before the Line, to solve an issue regarding filters
-	@Inject(method="addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V",
+	@Inject(method="addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/multiplayer/chat/GuiMessageSource;Lnet/minecraft/client/multiplayer/chat/GuiMessageTag;)V",
 		at=@At("HEAD"),
 		cancellable = true)
-	public void mixin$addMessage(Component component, MessageSignature messageSignature, GuiMessageTag guiMessageTag, CallbackInfo ci) {
+	public void mixin$addMessage(Component component, MessageSignature messageSignature, final GuiMessageSource source, GuiMessageTag guiMessageTag, CallbackInfo ci) {
 		ci.cancel();
-		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.getGuiTicks(), component, messageSignature, guiMessageTag);
+		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.getGuiTicks(), component, messageSignature, source, guiMessageTag);
+		// intentionally log these hidden messages. vanilla does not do this.
 		logChatMessage(guiMessage);
-		GuiMessage compacted = ChattingSettingsManager.INSTANCE.getSettingToggledById("compactchat") ? ChattingEnthusiast.compactChat().compactMessage(guiMessage) : guiMessage;
-		addMessageToQueue(compacted);
-		addMessageToDisplayQueue(compacted);
+		if (visibleMessageFilter.test(guiMessage)) {
+			GuiMessage compacted = ChattingSettingsManager.INSTANCE.getSettingToggledById("compactchat") ? ChattingEnthusiast.compactChat().compactMessage(guiMessage) : guiMessage;
+			addMessageToQueue(compacted);
+			addMessageToDisplayQueue(compacted);
+		}
 	}
 }

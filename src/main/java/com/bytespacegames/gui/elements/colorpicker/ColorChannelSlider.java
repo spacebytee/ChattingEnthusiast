@@ -5,7 +5,6 @@ import com.bytespacegames.gui.Easings;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.MouseButtonEvent;
 
 public class ColorChannelSlider extends AbstractGuiElement {
@@ -26,18 +25,19 @@ public class ColorChannelSlider extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         hoverAnimator.setTarget(0);
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             hoverAnimator.setTarget(1);
         }
         //g.drawString(Minecraft.getInstance().font,val,x - Minecraft.getInstance().font.width(val) - 2,(int) ((y + (float)height / 2) - 3.5f), 0xFFFFFFFF);
-        GuiManager.INSTANCE.drawGradientRectangle(g,x,y,x+width,y + height, getColor(0), getColor(255));
+        gui.drawGradientRectangle(x,y,x+width,y + height, getColor(0), getColor(255));
         int toggleHeight = height;
         int togglePosition = (int) ((width-toggleHeight) * value);
-        g.fill(x + togglePosition,y,x + togglePosition + toggleHeight,y + toggleHeight, getColor(getScaledValue()));
+        gui.fill(x + togglePosition,y,x + togglePosition + toggleHeight,y + toggleHeight, getColor(getScaledValue()));
 
-        GuiManager.INSTANCE.renderOutline(g,x + togglePosition,y,toggleHeight,toggleHeight,
+        gui.renderOutline(x + togglePosition,y,toggleHeight,toggleHeight,
                 Interpolator.interpolateColor(
                         picker.constructColor(picker.r + (127-picker.r) / 2,picker.g + (127-picker.g) / 2,picker.b + (127-picker.b) / 2),
                         0xFFFFFFFF,hoverAnimator.getValue()));

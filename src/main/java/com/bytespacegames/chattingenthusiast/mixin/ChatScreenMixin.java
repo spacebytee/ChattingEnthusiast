@@ -2,7 +2,8 @@ package com.bytespacegames.chattingenthusiast.mixin;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
-import net.minecraft.client.gui.GuiGraphics;
+import com.bytespacegames.gui.GuiManager;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -16,11 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ChatScreen.class, priority = 0)
 public class ChatScreenMixin {
     @Inject(
-            method = "render",
+            method = "extractRenderState",
             at = @At("HEAD")
     )
-    public void render(GuiGraphics guiGraphics, int i, int j, float f, CallbackInfo ci) {
-        ChattingEnthusiast.chatting().render(guiGraphics);
+    public void render(GuiGraphicsExtractor graphicsExtractor, int i, int j, float f, CallbackInfo ci) {
+        GuiManager.INSTANCE.updateGuiGraphics(graphicsExtractor);
+        ChattingEnthusiast.chatting().render();
     }
     @Inject(
             method = "mouseClicked",

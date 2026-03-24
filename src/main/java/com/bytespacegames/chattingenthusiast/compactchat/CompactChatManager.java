@@ -3,7 +3,7 @@ package com.bytespacegames.chattingenthusiast.compactchat;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.utils.ChatUtil;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class CompactChatManager {
                         .withStrikethrough(false)
                         .withUnderlined(false));
         Component modifiedComponent = m.content().copy().append(compactTag);
-        GuiMessage newMessage = new GuiMessage(m.addedTime(),modifiedComponent,m.signature(),m.tag());
+        GuiMessage newMessage = new GuiMessage(m.addedTime(),modifiedComponent,m.signature(),m.source(),m.tag());
         tracker.setMessage(newMessage);
         // remove the old message that shares the contents of the new one
         ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).getAllMessages().remove(oldMessage);

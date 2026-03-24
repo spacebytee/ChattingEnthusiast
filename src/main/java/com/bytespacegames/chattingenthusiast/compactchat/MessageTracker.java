@@ -1,6 +1,6 @@
 package com.bytespacegames.chattingenthusiast.compactchat;
 
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.network.chat.Component;
 
 public class MessageTracker {

@@ -1,7 +1,6 @@
 package com.bytespacegames.gui.elements;
 
 import com.bytespacegames.gui.containers.AbstractGuiContainer;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -88,7 +87,7 @@ public abstract class AbstractGuiElement {
     public boolean isHovering(int mouseX, int mouseY) {
         return mouseX >= x && mouseX < x + width && mouseY >= y  && mouseY < y + height;
     }
-    public abstract void render(GuiGraphics g);
+    public abstract void render();
     public abstract void onClick();
     public void keyPressed(KeyEvent keyEvent) {}
     public void charTyped(CharacterEvent characterEvent) {}

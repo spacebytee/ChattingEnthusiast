@@ -1,6 +1,6 @@
 package com.bytespacegames.gui.elements;
 
-import net.minecraft.client.gui.GuiGraphics;
+import com.bytespacegames.gui.GuiManager;
 
 public class RectangleElement extends AbstractGuiElement {
     private int color;
@@ -15,8 +15,8 @@ public class RectangleElement extends AbstractGuiElement {
         return color;
     }
     @Override
-    public void render(GuiGraphics g) {
-        g.fill(x,y,x+width,y+height,color);
+    public void render() {
+        GuiManager.INSTANCE.fill(x,y,x+width,y+height,color);
     }
 
     @Override

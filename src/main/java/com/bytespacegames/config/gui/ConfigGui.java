@@ -13,14 +13,13 @@ import com.bytespacegames.gui.elements.AbstractGuiElement;
 import com.bytespacegames.gui.elements.RectangleElement;
 import com.bytespacegames.gui.elements.TextElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 
 public class ConfigGui extends Screen {
@@ -74,14 +73,15 @@ public class ConfigGui extends Screen {
         selectedCategory = c;
         scrollBox.setScrollOffset(Math.min(scrollBox.getContentsBound() - scrollBox.getHeight(), settings.getEffectiveY(settings.getElements().indexOf(categoryLabels.get(c)))));
     }
-    public void render(@NotNull GuiGraphics g, int i, int j, float f) {
+    public void extractRenderState(@NotNull GuiGraphicsExtractor g, int i, int j, float f) {
+        GuiManager.INSTANCE.updateGuiGraphics(g);
         int centerY = this.height / 2;
         int centerX = this.width / 2;
         container.setX(centerX - container.getWidth()/2);
         container.setY(centerY - container.getHeight()/2);
-        super.render(g, i, j, f);
-        container.render(g);
-        GuiManager.INSTANCE.flushDelayedRenders(g);
+        super.extractRenderState(g, i, j, f);
+        container.render();
+        GuiManager.INSTANCE.flushDelayedRenders();
     }
     public boolean isPauseScreen() {
         return false;

@@ -6,7 +6,6 @@ import com.bytespacegames.gui.Easings;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class DropdownElement extends AbstractExpandableElement {
     private String value;
@@ -30,7 +29,8 @@ public class DropdownElement extends AbstractExpandableElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
         if (GuiManager.INSTANCE.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
             GuiManager.INSTANCE.queueDelayedRender(this);
             return;
@@ -45,26 +45,26 @@ public class DropdownElement extends AbstractExpandableElement {
         expandAnimator.setTarget(expanded ? 1 : 0);
         // use vanilla scissor to not save state of the temporary scissor. scroll container scissor will be recovered
         if (expandAnimator.getValue() >= (1/1000f)) {
-            g.enableScissor(x,y,x+width, y + getEffectiveHeight());
+            gui.enableScissor(x,y,x+width, y + getEffectiveHeight());
         }
 
-        g.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
+        gui.fill(x,y,x + width,y + getEffectiveHeight(), ConfigGui.BACKGROUND_COLOR);
         for (int i = 0; i < animators.length; i++) {
             if (animators[i].getValue() <= 1/256f) continue;
-            g.fill(x,y + height * i,x + width,y + height * (i + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[i].getValue()));
+            gui.fill(x,y + height * i,x + width,y + height * (i + 1), Interpolator.interpolateColor(ConfigGui.BACKGROUND_COLOR,ConfigGui.SECONDARY_COLOR,animators[i].getValue()));
         }
 
-        g.drawString(Minecraft.getInstance().font, value,x + 4,y + (height/2) - 3, ConfigGui.HIGHLIGHT_COLOR);
+        gui.drawString(Minecraft.getInstance().font, value,x + 4,y + (height/2) - 3, ConfigGui.HIGHLIGHT_COLOR);
         if (expandAnimator.getValue() >= (1/1000f)) {
             int i = 0;
             for (String string : options) {
                 if (string.equals(value)) continue;
                 i++;
-                g.drawString(Minecraft.getInstance().font, string,x + 4,y + (height/2) - 3 + height * (i), Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF, animators[i].getValue()));
+                gui.drawString(Minecraft.getInstance().font, string,x + 4,y + (height/2) - 3 + height * (i), Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF, animators[i].getValue()));
             }
         }
         if (expandAnimator.getValue() >= (1/1000f)) {
-            g.disableScissor();
+            gui.disableScissor();
         }
         //g.renderOutline(x,y,width,getEffectiveHeight(), Interpolator.interpolateColor(ConfigGui.SECONDARY_COLOR,0xFFFFFFFF,generalHoverAnimator.getValue()));
     }

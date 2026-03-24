@@ -7,7 +7,6 @@ import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.Interpolator;
 import com.bytespacegames.gui.elements.TextElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class CategoryButton extends TextElement {
     private final SettingsCategory category;
@@ -23,7 +22,7 @@ public class CategoryButton extends TextElement {
         animator.setEasingFunction(Easings.QUINT);
     }
 
-    public void render(GuiGraphics g) {
+    public void render() {
         if (category == gui.selectedCategory) {
             //g.drawString(Minecraft.getInstance().font, getText(), x,y,0xFFB643DA);
             animator.setTarget(1f);
@@ -38,7 +37,7 @@ public class CategoryButton extends TextElement {
         if (animator.getValue() > .5) {
             color = Interpolator.interpolateColor(0xFF00CCFF,ConfigGui.HIGHLIGHT_COLOR,(animator.getValue() - .5f) * 2);
         }
-        g.drawString(Minecraft.getInstance().font, getText(), x,y, color);
+        GuiManager.INSTANCE.drawString(Minecraft.getInstance().font, getText(), x,y, color);
     }
     public void onClick() {
         gui.setSelectedCategory(category);

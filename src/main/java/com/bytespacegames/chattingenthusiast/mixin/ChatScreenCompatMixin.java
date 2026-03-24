@@ -1,6 +1,6 @@
 package com.bytespacegames.chattingenthusiast.mixin;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.ChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +15,7 @@ public class ChatScreenCompatMixin {
             remap=false,
             cancellable = true
     )
-    public void mixin$drawLineButton(GuiGraphics context, int mouseX, int mouseY, CallbackInfo ci) {
+    public void mixin$drawLineButton(GuiGraphicsExtractor context, int mouseX, int mouseY, CallbackInfo ci) {
         ci.cancel();
     }
     @Inject(
@@ -24,7 +24,7 @@ public class ChatScreenCompatMixin {
             remap=false,
             cancellable = true
     )
-    public void mixin$drawScreenshotButton(GuiGraphics context, int mouseX, int mouseY, CallbackInfo ci) {
+    public void mixin$drawScreenshotButton(GuiGraphicsExtractor context, int mouseX, int mouseY, CallbackInfo ci) {
         ci.cancel();
     }
 }

@@ -1,8 +1,8 @@
 package com.bytespacegames.gui.elements;
 
 import com.bytespacegames.config.gui.ConfigGui;
+import com.bytespacegames.gui.GuiManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 
@@ -24,12 +24,13 @@ public class InputFieldElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render(GuiGraphics g) {
-        g.fill(x, y, x + width, y + height, ConfigGui.PRIMARY_COLOR);
-        g.enableScissor(x, y, x + width, y + height);
+    public void render() {
+        GuiManager gui = GuiManager.INSTANCE;
+        gui.fill(x, y, x + width, y + height, ConfigGui.PRIMARY_COLOR);
+        gui.enableScissor(x, y, x + width, y + height);
         if (value.isEmpty()) {
-            g.drawString(Minecraft.getInstance().font, placeholder, x + 4, (int) (y + (height/2f) - 3.5f), ConfigGui.SECONDARY_COLOR);
-            g.disableScissor();
+            gui.drawString(Minecraft.getInstance().font, placeholder, x + 4, (int) (y + (height/2f) - 3.5f), ConfigGui.SECONDARY_COLOR);
+            gui.disableScissor();
             return;
         }
         cursorPos = Math.max(0,Math.min(cursorPos,value.length()));
@@ -39,10 +40,10 @@ public class InputFieldElement extends AbstractGuiElement {
             displayText += "_";
         } else if (System.currentTimeMillis() % 1000 < 500 && focused) {
             int cursorX = Minecraft.getInstance().font.width(prefix) + Minecraft.getInstance().font.width(value.substring(0,cursorPos));
-            g.fill(x + 4 + cursorX, (int) (y + (height/2f) - 4.5f), x + 5 + cursorX, (int) (y + (height/2f) + 4.5f), 0xFFFFFFFF);
+            gui.fill(x + 4 + cursorX, (int) (y + (height/2f) - 4.5f), x + 5 + cursorX, (int) (y + (height/2f) + 4.5f), 0xFFFFFFFF);
         }
-        g.drawString(Minecraft.getInstance().font, displayText, x + 4, (int) (y + (height/2f) - 3.5f), 0xFFFFFFFF);
-        g.disableScissor();
+        gui.drawString(Minecraft.getInstance().font, displayText, x + 4, (int) (y + (height/2f) - 3.5f), 0xFFFFFFFF);
+        gui.disableScissor();
     }
 
     @Override
