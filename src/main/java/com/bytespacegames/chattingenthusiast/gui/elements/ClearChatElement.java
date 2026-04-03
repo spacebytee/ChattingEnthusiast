@@ -1,11 +1,11 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ARGB;
 
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
@@ -15,16 +15,17 @@ public class ClearChatElement extends AbstractGuiElement {
     }
     @Override
     public void render() {
-        float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
-
         int color = baseButtonColor;
         int iconColor = baseIconColor;
-        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
+        boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
+        if (hovering) {
             color = hoveredButtonColor;
             iconColor = hoveredIconColor;
         }
 
-        GuiManager.INSTANCE.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
+            GuiManager.INSTANCE.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+        }
 
         drawRect(x+4,y+2,5,1,iconColor);
         drawRect(x+2,y+3,9,1,iconColor);

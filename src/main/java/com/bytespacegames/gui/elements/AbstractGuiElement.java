@@ -4,6 +4,7 @@ import com.bytespacegames.gui.containers.AbstractGuiContainer;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.util.ARGB;
 
 public abstract class AbstractGuiElement {
     protected int x,y,relativeX,relativeY;
@@ -15,6 +16,8 @@ public abstract class AbstractGuiElement {
     public static final int baseIconColor = 0xFF7F7F7F;
     public static final int hoveredButtonColor = 0xFFFFFFFF;
     public static final int hoveredIconColor = 0xFFFFFFFF;
+    protected static final float buttonBackgroundOpacity = 0.22f;
+    protected static final float hoveredButtonBackgroundOpacity = 0.35f;
     // note: x & y internally refer to the absolute positioning on the screen, so in render functions it is more concise to use those variables,
     // relative positions are the stored positions used to manipulate elements, and are what x & y refer to externally
     public AbstractGuiElement(int x, int y, int width, int height, boolean visible) {
@@ -86,6 +89,9 @@ public abstract class AbstractGuiElement {
 
     public boolean isHovering(int mouseX, int mouseY) {
         return mouseX >= x && mouseX < x + width && mouseY >= y  && mouseY < y + height;
+    }
+    protected int getButtonFillColor(boolean hovering, int color) {
+        return ARGB.color(hovering ? hoveredButtonBackgroundOpacity : buttonBackgroundOpacity, color);
     }
     public abstract void render();
     public abstract void onClick();

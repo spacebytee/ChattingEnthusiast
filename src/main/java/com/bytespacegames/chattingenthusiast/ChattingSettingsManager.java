@@ -34,6 +34,14 @@ public class ChattingSettingsManager extends ConfigManager {
                 "hovercolor",
                 "Color of a hovered message highlight.",
                 0xFFFFFFFF));
+        visual.addSetting(new FloatSetting("Message Hover Opacity",
+                "hoveropacity",
+                "Opacity of the hovered message highlight.",
+                0.3f,0f,1f));
+        visual.addSetting(new BooleanSetting("Button Backgrounds",
+                "buttonbackgrounds",
+                "Shows backgrounds behind chat action buttons and line controls.",
+                true));
         visual.addSetting(new BooleanSetting("Smooth Scrolling",
                 "smoothscroll",
                 "Makes scrolling using the scroll wheel gradual.",
@@ -67,6 +75,14 @@ public class ChattingSettingsManager extends ConfigManager {
         chatting.addSetting(new BooleanSetting("Line Controls",
                 "linecontrols",
                 "Allows you to copy, delete, and jump to lines (if filtering) when hovering over a message.",
+                true));
+        chatting.addSetting(new BooleanSetting("Show Copy Button",
+                "showcopybutton",
+                "Shows the copy button in the line controls when hovering over a message.",
+                true));
+        chatting.addSetting(new BooleanSetting("Show Delete Button",
+                "showdeletebutton",
+                "Shows the delete button in the line controls when hovering over a message.",
                 true));
         chatting.addSetting(new BooleanSetting("Copy Tooltip",
                 "tooltip",

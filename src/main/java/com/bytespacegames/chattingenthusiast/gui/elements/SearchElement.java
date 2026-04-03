@@ -1,10 +1,10 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ARGB;
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
 public class SearchElement extends AbstractGuiElement {
@@ -14,16 +14,17 @@ public class SearchElement extends AbstractGuiElement {
     @Override
     public void render() {
         GuiManager graphics = GuiManager.INSTANCE;
-        float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
-
         int color = baseButtonColor;
         int iconColor = baseIconColor;
-        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
+        boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
+        if (hovering) {
             color = hoveredButtonColor;
             iconColor = hoveredIconColor;
         }
 
-        graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+        }
 
         drawRect(x+4,y+2,3,1,iconColor);
         drawRect(x+4,y+8,3,1,iconColor);
