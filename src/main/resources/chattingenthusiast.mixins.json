@@ -21,6 +21,7 @@
     "GuiMixin",
     "IChatComponentAccessor",
     "IChatScreenAccessor",
+    "KeyboardHandlerMixin",
     "MinecraftMixin",
     "ScreenMixin"
   ]

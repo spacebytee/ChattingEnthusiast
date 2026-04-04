@@ -39,7 +39,7 @@ public class WidgetElement extends AbstractGuiElement {
     }
     public void setFocused(boolean focused) {
         focusTimer.reset();
-        widget.setFocused(true);
+        widget.setFocused(focused);
     }
     public void keyPressed(KeyEvent e) {
         widget.keyPressed(e);
