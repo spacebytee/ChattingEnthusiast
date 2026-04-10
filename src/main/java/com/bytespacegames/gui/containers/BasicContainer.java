@@ -31,8 +31,8 @@ public class BasicContainer extends AbstractGuiContainer {
         return height;
     }
 
-    public void render() {
+    public void render(GuiManager gui) {
         GuiManager.INSTANCE.fill(x,y,x + width,y + height,color);
-        super.render();
+        super.render(gui);
     }
 }

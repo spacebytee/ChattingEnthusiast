@@ -12,8 +12,7 @@ public class CategoryLabelElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
+    public void render(GuiManager gui) {
         Minecraft mc = Minecraft.getInstance();
         gui.drawCenteredString(mc.font,text, x + (width/2), y, 0xFFFFFFFF);
         int stringWidth = mc.font.width(text);

@@ -18,10 +18,10 @@ public class WidgetElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
+    public void render(GuiManager gui) {
         widget.setX(x);
         widget.setY(y);
-        widget.extractRenderState(GuiManager.INSTANCE.getGuiGraphics(), GuiManager.getMouseX(),GuiManager.getMouseY(), 0);
+        widget.extractRenderState(gui.getGuiGraphics(), GuiManager.getMouseX(),GuiManager.getMouseY(), 0);
     }
 
     @Override

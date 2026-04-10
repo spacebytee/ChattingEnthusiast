@@ -18,8 +18,7 @@ public class TabElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager g = GuiManager.INSTANCE;
+    public void render(GuiManager g) {
         if (width == 0) setWidth(Minecraft.getInstance().font.width(text) + 4);
         float opacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
         int color = isHovering(GuiManager.getMouseX(),GuiManager.getMouseY()) ? ARGB.colorFromFloat(opacity, 1f, 1f, 1f) : ARGB.colorFromFloat(opacity, 0f,0f,0f);

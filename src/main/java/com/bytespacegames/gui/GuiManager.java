@@ -50,7 +50,7 @@ public class GuiManager {
     public void flushDelayedRenders() {
         standardRenderCycle = false;
         for (AbstractGuiElement e : delayedRender) {
-            e.render();
+            e.render(this);
         }
         delayedRender.clear();
         standardRenderCycle = true;

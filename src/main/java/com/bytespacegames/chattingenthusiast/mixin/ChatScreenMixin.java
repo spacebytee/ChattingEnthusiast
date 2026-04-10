@@ -22,7 +22,7 @@ public class ChatScreenMixin {
     )
     public void render(GuiGraphicsExtractor graphicsExtractor, int i, int j, float f, CallbackInfo ci) {
         GuiManager.INSTANCE.updateGuiGraphics(graphicsExtractor);
-        ChattingEnthusiast.chatting().render();
+        ChattingEnthusiast.chatting().render(GuiManager.INSTANCE);
     }
     @Inject(
             method = "mouseClicked",

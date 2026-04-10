@@ -163,7 +163,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
-					ordinal=1
+					ordinal=2
 			)
 	)
 	private void skipScrollbarFill(ChatComponent.ChatGraphicsAccess graphics, int x1, int y1, int x2, int y2, int color) {
@@ -176,7 +176,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			at = @At(
 					value = "INVOKE",
 					target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V",
-					ordinal=2
+					ordinal=3
 			)
 	)
 	private void skipScrollbarFill2(ChatComponent.ChatGraphicsAccess graphics, int x1, int y1, int x2, int y2, int color) {
@@ -213,7 +213,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return forEachLine(alphaCalculator, (line, lineIndex, alphax) -> {
 			int entryBottom = chatLX - lineIndex * entryHeight;
 			int entryTop = entryBottom - entryHeight;
-			ChattingEnthusiast.chatting().renderCustomLine(-4, entryTop, entryBottom, lineIndex, alphax);
+			ChattingEnthusiast.chatting().renderCustomLine(GuiManager.INSTANCE,-4, entryTop, entryBottom, lineIndex, alphax);
 		});
 	}
 	//region Scrolling

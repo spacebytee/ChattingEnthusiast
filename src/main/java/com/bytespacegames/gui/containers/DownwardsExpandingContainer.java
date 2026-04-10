@@ -1,5 +1,7 @@
 package com.bytespacegames.gui.containers;
 
+import com.bytespacegames.gui.GuiManager;
+
 public class DownwardsExpandingContainer extends AbstractGuiContainer {
     protected int spacing;
     public DownwardsExpandingContainer(int x, int y, int spacing, boolean visible) {
@@ -31,7 +33,7 @@ public class DownwardsExpandingContainer extends AbstractGuiContainer {
         }
         return elementY + elements.get(elementIndex).getBottomBound();
     }
-    public void render() {
-        super.render();
+    public void render(GuiManager gui) {
+        super.render(gui);
     }
 }

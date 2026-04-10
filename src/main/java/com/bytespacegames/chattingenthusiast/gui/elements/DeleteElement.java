@@ -21,8 +21,7 @@ public class DeleteElement extends AbstractGuiElement {
         messageIndex = index;
     }
     @Override
-    public void render() {
-        GuiManager graphics = GuiManager.INSTANCE;
+    public void render(GuiManager graphics) {
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;

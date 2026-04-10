@@ -22,7 +22,7 @@ public class CategoryButton extends TextElement {
         animator.setEasingFunction(Easings.QUINT);
     }
 
-    public void render() {
+    public void render(GuiManager guiM) {
         if (category == gui.selectedCategory) {
             //g.drawString(Minecraft.getInstance().font, getText(), x,y,0xFFB643DA);
             animator.setTarget(1f);
@@ -37,7 +37,7 @@ public class CategoryButton extends TextElement {
         if (animator.getValue() > .5) {
             color = Interpolator.interpolateColor(0xFF00CCFF,ConfigGui.HIGHLIGHT_COLOR,(animator.getValue() - .5f) * 2);
         }
-        GuiManager.INSTANCE.drawString(Minecraft.getInstance().font, getText(), x,y, color);
+        guiM.drawString(Minecraft.getInstance().font, getText(), x,y, color);
     }
     public void onClick() {
         gui.setSelectedCategory(category);

@@ -15,8 +15,8 @@ public class RectangleElement extends AbstractGuiElement {
         return color;
     }
     @Override
-    public void render() {
-        GuiManager.INSTANCE.fill(x,y,x+width,y+height,color);
+    public void render(GuiManager gui) {
+        gui.fill(x,y,x+width,y+height,color);
     }
 
     @Override

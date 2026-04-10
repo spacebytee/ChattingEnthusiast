@@ -14,7 +14,7 @@ public class ClearChatElement extends AbstractGuiElement {
         super(x, y, width, height, visible);
     }
     @Override
-    public void render() {
+    public void render(GuiManager gui) {
         float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
 
         int color = baseButtonColor;
@@ -24,7 +24,7 @@ public class ClearChatElement extends AbstractGuiElement {
             iconColor = hoveredIconColor;
         }
 
-        GuiManager.INSTANCE.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        gui.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
 
         drawRect(x+4,y+2,5,1,iconColor);
         drawRect(x+2,y+3,9,1,iconColor);
