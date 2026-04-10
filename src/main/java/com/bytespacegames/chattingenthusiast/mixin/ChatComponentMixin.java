@@ -8,6 +8,7 @@ import com.bytespacegames.config.settings.BooleanSetting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.Minecraft;
@@ -36,6 +37,9 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	private boolean isRefreshing = false;
 	@Unique
 	private List<GuiMessage.Line> iteratingLines;
+	@Unique
+	private boolean skipRender = false;
+
 	public boolean getRefreshing() {
 		return isRefreshing;
 	}
@@ -191,6 +195,11 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		lastGraphics = graphics;
 		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
+
+	@Inject(method="captureClickableText", at=@At("HEAD"))
+	public void mixin$captureClickableText(ActiveTextCollector activeTextCollector, int i, int j, boolean bl, CallbackInfo ci) {
+		skipRender = true;
+	}
 	@Redirect(
 			method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V",
 			at = @At(
@@ -200,6 +209,11 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			)
 	)
 	private int renderLine(ChatComponent instance, final ChatComponent.AlphaCalculator alphaCalculator, final ChatComponent.LineConsumer lineConsumer) {
+		// dont render the chat again if its just from "captureClickableText"
+		if (skipRender) {
+			skipRender = false;
+			return 0;
+		}
 		Minecraft minecraft = Minecraft.getInstance();
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
