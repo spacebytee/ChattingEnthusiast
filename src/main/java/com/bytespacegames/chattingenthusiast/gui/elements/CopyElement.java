@@ -13,7 +13,6 @@ import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.ARGB;
 import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +31,16 @@ public class CopyElement extends AbstractGuiElement {
 
     @Override
     public void render(GuiManager graphics) {
-        float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
-        
-        int color = 0xFF000000;
-        int iconColor = 0xFF7F7F7F;
+        int color = 0xFFFFFFFF;
+        int iconColor = 0xFFFFFFFF;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
         if (hovering) {
-            color = 0xFFFFFFFF;
-            iconColor = 0xFFFFFFFF;
+            color = 0xFFFFFF00;
+            iconColor = 0xFFFFFF00;
         }
-        graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+        }
         int gx = x + 1 + (int) ((width-9)/2f);
         int gy = y + 1 + (int) ((height-9)/2f);
         drawRect(gx,gy,5,1,iconColor);

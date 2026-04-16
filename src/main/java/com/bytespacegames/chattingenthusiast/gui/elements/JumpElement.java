@@ -1,12 +1,12 @@
 package com.bytespacegames.chattingenthusiast.gui.elements;
 
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
+import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.util.ARGB;
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
 public class JumpElement extends AbstractGuiElement {
@@ -19,16 +19,17 @@ public class JumpElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiManager graphics) {
-        float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
-
         int color = baseButtonColor;
         int iconColor = baseIconColor;
-        if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
+        boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
+        if (hovering) {
             color = hoveredButtonColor;
             iconColor = hoveredIconColor;
         }
 
-        graphics.fill(x,y,x+width,y+width, ARGB.color(baseBackgroundOpacity, color));
+        if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+        }
         int bx = x + 1 + (int) ((width-9)/2f);
         int by = y + 1 + (int) ((height-9)/2f);
         drawRect(bx,by + 2,1,1,iconColor);

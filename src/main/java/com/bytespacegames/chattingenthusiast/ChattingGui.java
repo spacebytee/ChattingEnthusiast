@@ -82,28 +82,57 @@ public class ChattingGui {
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
         float baseBackgroundOpacity = mc.options.textBackgroundOpacity().get().floatValue();
+        boolean messageHoverEnabled = ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover");
+        float hoverOpacity = ChattingSettingsManager.INSTANCE.getFloatValueById("hoveropacity");
         // lineIndex is relative to the bottom chat message as scrolled, so we need to account for scroll position
         int hoveredIndex = ChattingEnthusiast.INSTANCE.getHoveredMessage(mouseX,mouseY) - cca.getChatScrollbarPos();
+        boolean hoveredMessage = lineIndex == hoveredIndex && messageHoverEnabled;
 
         // draw message background
         if (baseBackgroundOpacity > 0) {
-            int color = lineIndex == hoveredIndex && ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover") ? ChattingSettingsManager.INSTANCE.getColorById("hovercolor") : ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor");
-            gui.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx, ARGB.color(opacity * baseBackgroundOpacity, color));
+            gui.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx,
+                    ARGB.color(opacity * baseBackgroundOpacity, ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor")));
+        }
+        if (hoveredMessage && hoverOpacity > 0) {
+            gui.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx,
+                    ARGB.color(opacity * hoverOpacity, ChattingSettingsManager.INSTANCE.getColorById("hovercolor")));
         }
 
         if (lineIndex != hoveredIndex) return;
-        lineContainer.setVisible(ChattingSettingsManager.INSTANCE.getSettingToggledById("linecontrols"));
-        copy.setConfig(x + scaleOffset + 8 + 1, mx, cca.mixin$getLineHeight(), cca.mixin$getLineHeight(), true);
-        copy.setMessage(lineIndex);
-        delete.setConfig(x + scaleOffset + 8 + 2 + cca.mixin$getLineHeight(), mx, cca.mixin$getLineHeight(), cca.mixin$getLineHeight(), true);
-        delete.setMessage(lineIndex);
-        jump.setConfig(x + scaleOffset + 8 + 3 + (cca.mixin$getLineHeight() * 2), mx, cca.mixin$getLineHeight(), cca.mixin$getLineHeight(), !ChattingEnthusiast.filter().unfiltered());
-        jump.setMessage(lineIndex);
+        boolean lineControlsEnabled = ChattingSettingsManager.INSTANCE.getSettingToggledById("linecontrols");
+        boolean showCopyButton = lineControlsEnabled && ChattingSettingsManager.INSTANCE.getSettingToggledById("showcopybutton");
+        boolean showDeleteButton = lineControlsEnabled && ChattingSettingsManager.INSTANCE.getSettingToggledById("showdeletebutton");
+        boolean showJumpButton = lineControlsEnabled && !ChattingEnthusiast.filter().unfiltered();
+        lineContainer.setVisible(showCopyButton || showDeleteButton || showJumpButton);
+
+        int buttonX = x + scaleOffset + 8 + 1;
+        int buttonSize = cca.mixin$getLineHeight();
+        if (showCopyButton) {
+            copy.setConfig(buttonX, mx, buttonSize, buttonSize, true);
+            copy.setMessage(lineIndex);
+            buttonX += buttonSize + 1;
+        } else {
+            copy.setVisible(false);
+        }
+        if (showDeleteButton) {
+            delete.setConfig(buttonX, mx, buttonSize, buttonSize, true);
+            delete.setMessage(lineIndex);
+            buttonX += buttonSize + 1;
+        } else {
+            delete.setVisible(false);
+        }
+        if (showJumpButton) {
+            jump.setConfig(buttonX, mx, buttonSize, buttonSize, true);
+            jump.setMessage(lineIndex);
+        } else {
+            jump.setVisible(false);
+        }
 
         int hovered = ChattingEnthusiast.INSTANCE.getHoveredMessage(mouseX,mouseY);
         if (hovered == -1) {
             copy.setVisible(false);
             delete.setVisible(false);
+            jump.setVisible(false);
         }
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
