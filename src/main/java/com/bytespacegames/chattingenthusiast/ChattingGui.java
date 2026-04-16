@@ -89,7 +89,7 @@ public class ChattingGui {
         boolean hoveredMessage = lineIndex == hoveredIndex && messageHoverEnabled;
 
         // draw message background
-        if (baseBackgroundOpacity > 0) {
+        if (baseBackgroundOpacity > 0 && !hoveredMessage) {
             gui.fill(x - 4, mx, x + scaleOffset + 4 + 4, nx,
                     ARGB.color(opacity * baseBackgroundOpacity, ChattingSettingsManager.INSTANCE.getColorById("backgroundcolor")));
         }
@@ -99,6 +99,7 @@ public class ChattingGui {
         }
 
         if (lineIndex != hoveredIndex) return;
+
         boolean lineControlsEnabled = ChattingSettingsManager.INSTANCE.getSettingToggledById("linecontrols");
         boolean showCopyButton = lineControlsEnabled && ChattingSettingsManager.INSTANCE.getSettingToggledById("showcopybutton");
         boolean showDeleteButton = lineControlsEnabled && ChattingSettingsManager.INSTANCE.getSettingToggledById("showdeletebutton");

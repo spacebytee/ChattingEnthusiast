@@ -28,7 +28,7 @@ public class JumpElement extends AbstractGuiElement {
         }
 
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
-            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(color));
         }
         int bx = x + 1 + (int) ((width-9)/2f);
         int by = y + 1 + (int) ((height-9)/2f);

@@ -54,7 +54,6 @@ public class ChatFilter {
     }
 
     public void setSearch(String search) {
-        System.out.println("test");
         if (!search.equals(searchCriteria)) requiresRefilter = true;
         this.searchCriteria = search;
         this.searchCriteriaLower = search.toLowerCase();
@@ -90,7 +89,9 @@ public class ChatFilter {
         IChatComponentAccessor cca = (IChatComponentAccessor) mc.gui.getChat();
         GuiMessage msg = ChatUtil.getMessageFromLine(line, cca.getAllMessages());
         if (msg == null) return false;
-
+        return matchesFilter(msg);
+    }
+    public boolean matchesFilter(GuiMessage msg) {
         String contents = stripFormatting(msg.content().getString());
 
         if (!searchCriteria.isEmpty() && !contents.toLowerCase().contains(searchCriteriaLower)) return false;

@@ -13,7 +13,6 @@ public class SearchElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiManager graphics) {
-        GuiManager graphics = GuiManager.INSTANCE;
         int color = baseButtonColor;
         int iconColor = baseIconColor;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
@@ -23,7 +22,7 @@ public class SearchElement extends AbstractGuiElement {
         }
 
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
-            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(color));
         }
 
         drawRect(x+4,y+2,3,1,iconColor);

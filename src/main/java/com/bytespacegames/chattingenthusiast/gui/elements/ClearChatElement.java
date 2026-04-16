@@ -26,7 +26,7 @@ public class ClearChatElement extends AbstractGuiElement {
         }
 
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
-            GuiManager.INSTANCE.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+            GuiManager.INSTANCE.fill(x,y,x+width,y+width, getButtonFillColor(color));
         }
 
         drawRect(x+4,y+2,5,1,iconColor);

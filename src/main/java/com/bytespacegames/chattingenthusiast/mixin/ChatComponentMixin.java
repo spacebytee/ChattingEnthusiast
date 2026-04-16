@@ -7,6 +7,7 @@ import com.bytespacegames.chattingenthusiast.ext.IChatComponentExt;
 import com.bytespacegames.config.settings.BooleanSetting;
 import com.bytespacegames.gui.GuiManager;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.minecraft.client.gui.ActiveTextCollector;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.multiplayer.chat.GuiMessageSource;
@@ -37,6 +38,8 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 	private boolean isRefreshing = false;
 	@Unique
 	private List<GuiMessage.Line> iteratingLines;
+	@Unique
+	private boolean skipRender = false;
 	public boolean getRefreshing() {
 		return isRefreshing;
 	}
@@ -193,6 +196,10 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		GuiManager.INSTANCE.updateGuiGraphics(graphics);
 		ChattingEnthusiast.chatting().updateMouse(mouseX,mouseY);
 	}
+	@Inject(method="captureClickableText", at=@At("HEAD"))
+	public void mixin$captureClickableText(ActiveTextCollector activeTextCollector, int i, int j, ChatComponent.DisplayMode displayMode, CallbackInfo ci) {
+		skipRender = true;
+	}
 	@Redirect(
 			method = "extractRenderState(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IILnet/minecraft/client/gui/components/ChatComponent$DisplayMode;)V",
 			at = @At(
@@ -202,6 +209,11 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			)
 	)
 	private int renderLine(ChatComponent instance, final ChatComponent.AlphaCalculator alphaCalculator, final ChatComponent.LineConsumer lineConsumer) {
+		// dont render the chat again if its just from "captureClickableText"
+		if (skipRender) {
+			skipRender = false;
+			return 0;
+		}
 		Minecraft minecraft = Minecraft.getInstance();
 		int chatBottom = Mth.floor((float)(minecraft.getWindow().getGuiScaledHeight() - 40) / getScale());
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
@@ -272,6 +284,13 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		if (ch.desiredScrollbarPos <= 0) {
 			ch.desiredScrollbarPos = 0;
 		}
+	}
+	@Redirect(
+			method = "addMessageToDisplayQueue",
+			at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/components/ChatComponent;scrollChat(I)V"))
+	private void filteredScrollFix(ChatComponent instance, int dir, GuiMessage msg) {
+		if (ChattingEnthusiast.filter().unfiltered() || ChattingEnthusiast.filter().matchesFilter(msg))
+			Minecraft.getInstance().gui.getChat().scrollChat(dir);
 	}
 	//endregion
 

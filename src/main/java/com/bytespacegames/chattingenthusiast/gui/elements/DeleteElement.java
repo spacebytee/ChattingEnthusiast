@@ -22,17 +22,16 @@ public class DeleteElement extends AbstractGuiElement {
     }
     @Override
     public void render(GuiManager graphics) {
-        GuiManager graphics = GuiManager.INSTANCE;
-        int color = 0xFFFFFFFF;
-        int iconColor = 0xFFFFFFFF;
+        int color = baseButtonColor;
+        int iconColor = baseIconColor;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
         if (hovering) {
-            color = 0xFFFFFF00;
-            iconColor = 0xFFFFFF00;
+            color = hoveredButtonColor;
+            iconColor = hoveredIconColor;
         }
 
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
-            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(color));
         }
         int gX = x + (int) ((width-9)/2f);
         int gY = y + (int) ((height-9)/2f);

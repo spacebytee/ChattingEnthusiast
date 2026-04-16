@@ -19,7 +19,6 @@ public class ScreenshotChatElement extends AbstractGuiElement {
     }
     @Override
    public void render(GuiManager graphics) {
-        GuiManager graphics = GuiManager.INSTANCE;
         int color = baseButtonColor;
         int iconColor = baseIconColor;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());
@@ -30,7 +29,7 @@ public class ScreenshotChatElement extends AbstractGuiElement {
         int rX = x + (width - 7)/2;
         int rY = y + (height - 7)/2;
         if (ChattingSettingsManager.INSTANCE.getSettingToggledById("buttonbackgrounds")) {
-            graphics.fill(x,y,x+width,y+width, getButtonFillColor(hovering, color));
+            graphics.fill(x,y,x+width,y+width, getButtonFillColor(color));
         }
 
         drawRect(rX,rY,2,1,iconColor);
