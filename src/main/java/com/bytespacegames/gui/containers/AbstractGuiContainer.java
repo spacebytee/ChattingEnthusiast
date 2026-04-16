@@ -39,7 +39,7 @@ public abstract class AbstractGuiContainer extends AbstractExpandableElement {
     }
 
     @Override
-    public void render() {
+    public void render(GuiManager gui) {
         if (!visible) return;
         for (int i = 0; i < elements.size(); i++) {
             AbstractGuiElement e = elements.get(i);
@@ -47,7 +47,7 @@ public abstract class AbstractGuiContainer extends AbstractExpandableElement {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            e.render();
+            e.render(gui);
         }
     }
 

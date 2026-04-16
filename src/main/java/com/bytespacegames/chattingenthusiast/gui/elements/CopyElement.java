@@ -30,8 +30,7 @@ public class CopyElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager graphics = GuiManager.INSTANCE;
+    public void render(GuiManager graphics) {
         int color = 0xFFFFFFFF;
         int iconColor = 0xFFFFFFFF;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());

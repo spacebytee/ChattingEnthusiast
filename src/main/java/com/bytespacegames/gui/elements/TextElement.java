@@ -26,8 +26,8 @@ public class TextElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager.INSTANCE.drawString(Minecraft.getInstance().font, text, x,y,color);
+    public void render(GuiManager gui) {
+        gui.drawString(Minecraft.getInstance().font, text, x,y,color);
     }
 
     @Override

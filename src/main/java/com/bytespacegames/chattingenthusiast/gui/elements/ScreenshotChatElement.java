@@ -18,7 +18,7 @@ public class ScreenshotChatElement extends AbstractGuiElement {
         super(x, y, width, height, visible);
     }
     @Override
-    public void render() {
+   public void render(GuiManager graphics) {
         GuiManager graphics = GuiManager.INSTANCE;
         int color = baseButtonColor;
         int iconColor = baseIconColor;

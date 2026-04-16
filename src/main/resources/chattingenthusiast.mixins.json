@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "plugin": "com.bytespacegames.chattingenthusiast.mixin.CompatibilityPlugin",
   "mixins": [
-    "ChatComponentMixin"
+    "ChatComponentMixin",
+    "KeyboardHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -27,8 +27,7 @@ public class ScrollBarElement extends AbstractGuiElement {
         container.setScrollOffset(offset, true);
     }
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
+    public void render(GuiManager gui) {
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             gui.fill(x,y+scrollBarPosition,x + 3, y + scrollBarPosition + highlightHeight(), 0xFFFFFFFF);
             return;

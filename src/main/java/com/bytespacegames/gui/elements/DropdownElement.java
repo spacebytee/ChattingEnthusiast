@@ -29,10 +29,9 @@ public class DropdownElement extends AbstractExpandableElement {
     }
 
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
-        if (GuiManager.INSTANCE.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
-            GuiManager.INSTANCE.queueDelayedRender(this);
+    public void render(GuiManager gui) {
+        if (gui.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
+            gui.queueDelayedRender(this);
             return;
         }
         for (Animator animator : animators) {

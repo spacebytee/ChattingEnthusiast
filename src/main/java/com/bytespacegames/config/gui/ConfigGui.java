@@ -80,7 +80,7 @@ public class ConfigGui extends Screen {
         container.setX(centerX - container.getWidth()/2);
         container.setY(centerY - container.getHeight()/2);
         super.extractRenderState(g, i, j, f);
-        container.render();
+        container.render(GuiManager.INSTANCE);
         GuiManager.INSTANCE.flushDelayedRenders();
     }
     public boolean isPauseScreen() {

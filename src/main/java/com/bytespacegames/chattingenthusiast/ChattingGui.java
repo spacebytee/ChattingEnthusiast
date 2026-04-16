@@ -7,7 +7,6 @@ import com.bytespacegames.gui.containers.BottomRightOriginatingContainer;
 import com.bytespacegames.chattingenthusiast.gui.elements.*;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.chattingenthusiast.mixin.IChatScreenAccessor;
-import com.bytespacegames.chattingenthusiast.utils.CharacterUtils;
 import com.bytespacegames.chattingenthusiast.utils.TimerUtils;
 import com.bytespacegames.chattingenthusiast.gui.elements.SearchElement;
 import com.bytespacegames.gui.elements.WidgetElement;
@@ -78,8 +77,7 @@ public class ChattingGui {
         chatContainer.addElement(chatControls);
         chatContainer.addElement(chatTabs);
     }
-    public void renderCustomLine(int x, int mx, int nx, int lineIndex, float opacity) {
-        GuiManager gui = GuiManager.INSTANCE;
+    public void renderCustomLine(GuiManager gui, int x, int mx, int nx, int lineIndex, float opacity) {
         if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
@@ -139,7 +137,7 @@ public class ChattingGui {
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
         GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
-        lineContainer.render();
+        lineContainer.render(gui);
         GuiManager.INSTANCE.mouseTransformations = false;
     }
     public void updateMouse(int x, int y) {
@@ -164,9 +162,9 @@ public class ChattingGui {
     }
     private long lastScroll;
     // these methods come from ChatScreen, and therefore only are called when chat is focused
-    public void render() {
+    public void render(GuiManager gui) {
         setupCustomElements();
-        chatContainer.render();
+        chatContainer.render(gui);
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (GuiManager.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
@@ -194,8 +192,6 @@ public class ChattingGui {
     public void keyPressed(KeyEvent keyEvent) {
         lineContainer.keyPressed(keyEvent);
         chatContainer.keyPressed(keyEvent);
-        CharacterEvent ce = new CharacterEvent(CharacterUtils.scancodeToCodepoint(keyEvent.scancode(), keyEvent.modifiers() > 0));
-        charTyped(ce);
     }
     public void charTyped(CharacterEvent characterEvent) {
         lineContainer.charTyped(characterEvent);

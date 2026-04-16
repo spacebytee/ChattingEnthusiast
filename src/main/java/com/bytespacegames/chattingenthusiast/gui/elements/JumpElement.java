@@ -18,8 +18,7 @@ public class JumpElement extends AbstractGuiElement {
         messageIndex = index;
     }
     @Override
-    public void render() {
-        GuiManager graphics = GuiManager.INSTANCE;
+    public void render(GuiManager graphics) {
         int color = baseButtonColor;
         int iconColor = baseIconColor;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());

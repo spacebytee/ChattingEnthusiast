@@ -9,12 +9,12 @@ public class CloseButton extends RectangleElement {
         super(x, y, 16, 16, 0xFFFF0055, visible);
     }
 
-    public void render() {
+    public void render(GuiManager gui) {
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
-            GuiManager.INSTANCE.fill(x,y,x+width,y+height,0xFFFF568E);
+            gui.fill(x,y,x+width,y+height,0xFFFF568E);
             return;
         }
-        super.render();
+        super.render(gui);
     }
 
     public void onClick() {

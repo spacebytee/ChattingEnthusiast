@@ -54,10 +54,9 @@ public class ColorPickerElement extends AbstractGuiContainer {
     }
 
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
-        if (GuiManager.INSTANCE.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
-            GuiManager.INSTANCE.queueDelayedRender(this);
+    public void render(GuiManager gui) {
+        if (gui.getStandardRenderCycle() && expandAnimator.getValue() >= (1/1000f)) {
+            gui.queueDelayedRender(this);
             return;
         }
         hoverAnimator.setTarget(0);
@@ -72,7 +71,7 @@ public class ColorPickerElement extends AbstractGuiContainer {
         gui.renderOutline(x,y,width,height, Interpolator.interpolateColor(constructColor(r + (127-r) / 2,this.g + (127-this.g) / 2,b + (127-b) / 2),0xFFFFFFFF,hoverAnimator.getValue()));
         expandAnimator.setTarget(expanded ? 1 : 0);
         if (!expanded && expandAnimator.getValue() < (1/1000f)) {
-            super.render();
+            super.render(gui);
             return;
         }
         rS.setVisible(true);
@@ -80,7 +79,7 @@ public class ColorPickerElement extends AbstractGuiContainer {
         bS.setVisible(true);
         gui.enableScissor((int) (x + width - (expandedWidth * expandAnimator.getValue()) + .5),y,x + width, (int) (y + expandedHeight * expandAnimator.getValue() + .5));
         gui.fill(x + width - expandedWidth,y,x + width, y + expandedHeight,ConfigGui.BACKGROUND_COLOR);
-        super.render();
+        super.render(gui);
         gui.disableScissor();
     }
     public void updateColor(int color) {

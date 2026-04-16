@@ -213,7 +213,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		return forEachLine(alphaCalculator, (line, lineIndex, alphax) -> {
 			int entryBottom = chatLX - lineIndex * entryHeight;
 			int entryTop = entryBottom - entryHeight;
-			ChattingEnthusiast.chatting().renderCustomLine(-4, entryTop, entryBottom, lineIndex, alphax);
+			ChattingEnthusiast.chatting().renderCustomLine(GuiManager.INSTANCE,-4, entryTop, entryBottom, lineIndex, alphax);
 		});
 	}
 	//region Scrolling

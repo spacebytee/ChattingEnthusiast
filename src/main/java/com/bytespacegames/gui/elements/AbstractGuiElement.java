@@ -1,5 +1,6 @@
 package com.bytespacegames.gui.elements;
 
+import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.containers.AbstractGuiContainer;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
@@ -93,7 +94,7 @@ public abstract class AbstractGuiElement {
     protected int getButtonFillColor(boolean hovering, int color) {
         return ARGB.color(hovering ? hoveredButtonBackgroundOpacity : buttonBackgroundOpacity, color);
     }
-    public abstract void render();
+    public abstract void render(GuiManager gui);
     public abstract void onClick();
     public void keyPressed(KeyEvent keyEvent) {}
     public void charTyped(CharacterEvent characterEvent) {}

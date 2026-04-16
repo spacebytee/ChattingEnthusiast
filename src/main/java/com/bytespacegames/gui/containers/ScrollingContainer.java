@@ -56,9 +56,8 @@ public class ScrollingContainer extends AbstractGuiContainer {
         }
         return Math.max(highest,height);
     }
-    public void render() {
+    public void render(GuiManager gui) {
         if (!visible) return;
-        GuiManager gui = GuiManager.INSTANCE;
         gui.fill(x + width,y,x + width + 3,y + height,scrollBarBackgroundColor);
         if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) {
             scrollOffset += (int) ((desiredScrollOffset - scrollOffset) * (1 - 1/1.3));
@@ -72,7 +71,7 @@ public class ScrollingContainer extends AbstractGuiContainer {
             int effectiveX = this.x + getEffectiveX(i);
             int effectiveY = this.y + getEffectiveY(i);
             e.setAbsolutePosition(effectiveX,effectiveY);
-            e.render();
+            e.render(gui);
         }
         gui.disableScissor();
     }

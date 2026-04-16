@@ -26,8 +26,7 @@ public class SliderElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
+    public void render(GuiManager gui) {
         hoverAnimator.setTarget(0);
         if (isHovering(GuiManager.getMouseX(), GuiManager.getMouseY())) {
             hoverAnimator.setTarget(1);

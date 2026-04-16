@@ -14,7 +14,9 @@ public class ClearChatElement extends AbstractGuiElement {
         super(x, y, width, height, visible);
     }
     @Override
-    public void render() {
+    public void render(GuiManager gui) {
+        float baseBackgroundOpacity = Minecraft.getInstance().options.textBackgroundOpacity().get().floatValue();
+
         int color = baseButtonColor;
         int iconColor = baseIconColor;
         boolean hovering = isHovering(GuiManager.getMouseX(), GuiManager.getMouseY());

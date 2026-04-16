@@ -21,7 +21,7 @@ public class DeleteElement extends AbstractGuiElement {
         messageIndex = index;
     }
     @Override
-    public void render() {
+    public void render(GuiManager graphics) {
         GuiManager graphics = GuiManager.INSTANCE;
         int color = 0xFFFFFFFF;
         int iconColor = 0xFFFFFFFF;

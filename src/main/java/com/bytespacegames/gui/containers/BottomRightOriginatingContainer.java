@@ -1,5 +1,7 @@
 package com.bytespacegames.gui.containers;
 
+import com.bytespacegames.gui.GuiManager;
+
 public class BottomRightOriginatingContainer extends AbstractGuiContainer {
     protected final int spacing;
     public BottomRightOriginatingContainer(int x, int y, int spacing, boolean visible) {
@@ -26,7 +28,7 @@ public class BottomRightOriginatingContainer extends AbstractGuiContainer {
     public int getBottomBound() {
         return 0;
     }
-    public void render() {
-        super.render();
+    public void render(GuiManager gui) {
+        super.render(gui);
     }
 }

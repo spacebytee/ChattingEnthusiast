@@ -24,8 +24,7 @@ public class InputFieldElement extends AbstractGuiElement {
     }
 
     @Override
-    public void render() {
-        GuiManager gui = GuiManager.INSTANCE;
+    public void render(GuiManager gui) {
         gui.fill(x, y, x + width, y + height, ConfigGui.PRIMARY_COLOR);
         gui.enableScissor(x, y, x + width, y + height);
         if (value.isEmpty()) {
