@@ -12,13 +12,13 @@ import java.util.List;
 
 public class ChatUtil {
     public static GuiMessage getMessageFromLine(GuiMessage.Line line) {
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
+        ChatComponent cc = Minecraft.getInstance().gui.hud.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) cc;
         List<GuiMessage> msgs = cca.getAllMessages();
         return getMessageFromLine(line, msgs);
     }
     public static List<GuiMessage.Line> getLinesFromMessage(GuiMessage msg) {
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
+        ChatComponent cc = Minecraft.getInstance().gui.hud.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) cc;
         List<GuiMessage.Line> msgs = cca.getTrimmedMessages();
         return getLinesFromMessage(msg, msgs);

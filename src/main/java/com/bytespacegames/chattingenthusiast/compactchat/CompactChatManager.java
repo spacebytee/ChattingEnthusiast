@@ -15,7 +15,7 @@ public class CompactChatManager {
         messages = new ArrayList<>();
     }
     private void clearOld() {
-        int now = Minecraft.getInstance().gui.getGuiTicks();
+        int now = Minecraft.getInstance().gui.hud.getGuiTicks();
         int maxAge = (int)(ChattingSettingsManager.INSTANCE
                 .getFloatValueById("compactchattime") * 20);
 
@@ -72,8 +72,8 @@ public class CompactChatManager {
         GuiMessage newMessage = new GuiMessage(m.addedTime(),modifiedComponent,m.signature(),m.source(),m.tag());
         tracker.setMessage(newMessage);
         // remove the old message that shares the contents of the new one
-        ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).getAllMessages().remove(oldMessage);
-        ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).getTrimmedMessages().removeAll(ChatUtil.getLinesFromMessage(oldMessage));
+        ((IChatComponentAccessor) Minecraft.getInstance().gui.hud.getChat()).getAllMessages().remove(oldMessage);
+        ((IChatComponentAccessor) Minecraft.getInstance().gui.hud.getChat()).getTrimmedMessages().removeAll(ChatUtil.getLinesFromMessage(oldMessage));
         return newMessage;
     }
 }

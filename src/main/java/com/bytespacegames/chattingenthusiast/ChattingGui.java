@@ -45,7 +45,7 @@ public class ChattingGui {
 
     public List<GuiMessage.Line> getEffectiveLines() {
         if (ChattingEnthusiast.filter().unfiltered()) {
-            IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+            IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
             return cca.getTrimmedMessages();
         }
         return ChattingEnthusiast.filter().getEffectiveLines();
@@ -79,7 +79,7 @@ public class ChattingGui {
     }
     public void renderCustomLine(GuiManager gui, int x, int mx, int nx, int lineIndex, float opacity) {
         if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
-        IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+        IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
         float baseBackgroundOpacity = mc.options.textBackgroundOpacity().get().floatValue();
         boolean messageHoverEnabled = ChattingSettingsManager.INSTANCE.getSettingToggledById("messagehover");
@@ -137,7 +137,7 @@ public class ChattingGui {
         }
         // render lineContainer (per-line controls) with the scaling/offset of the chat line
         GuiManager.INSTANCE.mouseTransformations = true;
-        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.hud.getChat()).mixin$getScale();
         lineContainer.render(gui);
         GuiManager.INSTANCE.mouseTransformations = false;
     }
@@ -169,14 +169,14 @@ public class ChattingGui {
         //smooth scrolling
         boolean smoothScroll = ChattingSettingsManager.INSTANCE.getSettingToggledById("smoothscroll");
         if (!scrollTimer.hasTimeElapsed((int) (GuiManager.ANIMATION_INTERVAL/ChattingSettingsManager.INSTANCE.getFloatValueById("scrollspeed")), true) || !smoothScroll) return;
-        IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+        IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
         if (System.currentTimeMillis() - lastScroll > 500 && ChattingSettingsManager.INSTANCE.getSettingToggledById("scrolltimeout")) {
             desiredScrollbarPos = cca.getChatScrollbarPos();
             return;
         }
         int scrollDelta = Math.min(ChattingEnthusiast.SCROLLING_INTERVAL,Math.max(-ChattingEnthusiast.SCROLLING_INTERVAL, desiredScrollbarPos - cca.getChatScrollbarPos()));
         ignoreScroll = true;
-        mc.gui.getChat().scrollChat(scrollDelta);
+        mc.gui.hud.getChat().scrollChat(scrollDelta);
     }
     public void onScroll() {
         lastScroll = System.currentTimeMillis();
@@ -184,7 +184,7 @@ public class ChattingGui {
 
     public void onClick() {
         GuiManager.INSTANCE.mouseTransformations = true;
-        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.getChat()).mixin$getScale();
+        GuiManager.INSTANCE.scale = ((IChatComponentAccessor) Minecraft.getInstance().gui.hud.getChat()).mixin$getScale();
         lineContainer.onClick();
         GuiManager.INSTANCE.mouseTransformations = false;
         chatContainer.onClick();
@@ -201,8 +201,8 @@ public class ChattingGui {
 
     public void tick() {
         if (search == null) return;
-        if (!(mc.screen instanceof ChatScreen)) return;
-        IChatScreenAccessor screen = (IChatScreenAccessor) mc.screen;
+        if (!(mc.gui.screen() instanceof ChatScreen)) return;
+        IChatScreenAccessor screen = (IChatScreenAccessor) mc.gui.screen();
         if (search.getWidget().isFocused()) {
             screen.getInput().setCanLoseFocus(true);
             screen.getInput().setFocused(false);

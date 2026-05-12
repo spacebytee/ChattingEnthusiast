@@ -40,10 +40,10 @@ public class ClearChatElement extends AbstractGuiElement {
     @Override
     public void onClick() {
         if (System.currentTimeMillis() - lastClicked > 3000) {
-            Minecraft.getInstance().gui.getChat().addClientSystemMessage(Component.translatable("chattingenthusiast.clear"));
+            Minecraft.getInstance().gui.hud.getChat().addClientSystemMessage(Component.translatable("chattingenthusiast.clear"));
             lastClicked = System.currentTimeMillis();
         } else {
-            Minecraft.getInstance().gui.getChat().clearMessages(false);
+            Minecraft.getInstance().gui.hud.getChat().clearMessages(false);
             ChattingEnthusiast.filter().clear();
         }
     }

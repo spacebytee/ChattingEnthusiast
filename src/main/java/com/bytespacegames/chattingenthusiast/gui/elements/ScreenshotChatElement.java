@@ -45,9 +45,9 @@ public class ScreenshotChatElement extends AbstractGuiElement {
     public void onClick() {
         ArrayList<GuiMessage.Line> lines = new ArrayList<>();
         List<GuiMessage.Line> effectiveLines = ChattingEnthusiast.filter().getEffectiveLines();
-        for (int i = ((IChatComponentAccessor)Minecraft.getInstance().gui.getChat()).getChatScrollbarPos();
+        for (int i = ((IChatComponentAccessor)Minecraft.getInstance().gui.hud.getChat()).getChatScrollbarPos();
              i < effectiveLines.size() &&
-                     i < Minecraft.getInstance().gui.getChat().getLinesPerPage() + ((IChatComponentAccessor)Minecraft.getInstance().gui.getChat()).getChatScrollbarPos();
+                     i < Minecraft.getInstance().gui.hud.getChat().getLinesPerPage() + ((IChatComponentAccessor)Minecraft.getInstance().gui.hud.getChat()).getChatScrollbarPos();
              i++) {
             lines.addFirst(effectiveLines.get(i));
         }

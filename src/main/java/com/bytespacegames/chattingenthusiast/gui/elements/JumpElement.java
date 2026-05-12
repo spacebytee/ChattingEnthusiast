@@ -44,7 +44,7 @@ public class JumpElement extends AbstractGuiElement {
         ((EditBox)ChattingEnthusiast.chatting().search.getWidget()).setValue("");
         ChattingEnthusiast.filter().clear();
         ChattingEnthusiast.chatting().ignoreScroll = true;
-        Minecraft.getInstance().gui.getChat().scrollChat(ChattingEnthusiast.filter().getEffectiveLines().indexOf(line));
+        Minecraft.getInstance().gui.hud.getChat().scrollChat(ChattingEnthusiast.filter().getEffectiveLines().indexOf(line));
         ChattingEnthusiast.chatting().ignoreScroll = false;
     }
 }

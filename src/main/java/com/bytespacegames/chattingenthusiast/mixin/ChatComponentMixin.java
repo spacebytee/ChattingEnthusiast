@@ -290,7 +290,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 			at = @At(value = "INVOKE",target = "Lnet/minecraft/client/gui/components/ChatComponent;scrollChat(I)V"))
 	private void filteredScrollFix(ChatComponent instance, int dir, GuiMessage msg) {
 		if (ChattingEnthusiast.filter().unfiltered() || ChattingEnthusiast.filter().matchesFilter(msg))
-			Minecraft.getInstance().gui.getChat().scrollChat(dir);
+			Minecraft.getInstance().gui.hud.getChat().scrollChat(dir);
 	}
 	//endregion
 
@@ -310,7 +310,7 @@ public abstract class ChatComponentMixin implements IChatComponentExt {
 		cancellable = true)
 	public void mixin$addMessage(Component component, MessageSignature messageSignature, final GuiMessageSource source, GuiMessageTag guiMessageTag, CallbackInfo ci) {
 		ci.cancel();
-		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.getGuiTicks(), component, messageSignature, source, guiMessageTag);
+		GuiMessage guiMessage = new GuiMessage(Minecraft.getInstance().gui.hud.getGuiTicks(), component, messageSignature, source, guiMessageTag);
 		// intentionally log these hidden messages. vanilla does not do this.
 		logChatMessage(guiMessage);
 		if (visibleMessageFilter.test(guiMessage)) {

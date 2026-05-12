@@ -171,7 +171,7 @@ public class ChattingSettingsManager extends ConfigManager {
     public void save() {
         super.save();
         try {
-            ((IChatComponentAccessor)Minecraft.getInstance().gui.getChat()).mixin$refreshTrimmedMessages();
+            ((IChatComponentAccessor)Minecraft.getInstance().gui.hud.getChat()).mixin$refreshTrimmedMessages();
         } catch (Exception ignored) {}
     }
 }

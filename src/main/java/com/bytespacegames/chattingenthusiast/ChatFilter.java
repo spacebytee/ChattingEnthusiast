@@ -48,7 +48,7 @@ public class ChatFilter {
     }
     public List<GuiMessage.Line> getEffectiveLines() {
         if (unfiltered()) {
-            return ((IChatComponentAccessor)mc.gui.getChat()).getTrimmedMessages();
+            return ((IChatComponentAccessor)mc.gui.hud.getChat()).getTrimmedMessages();
         }
         return effectiveLines;
     }
@@ -80,13 +80,13 @@ public class ChatFilter {
         if (matchesFilter(line)) {
             effectiveLines.addFirst(line);
             if (!((BooleanSetting)ChattingSettingsManager.INSTANCE.getSettingById("animation")).getValue()) return;
-            if (((IChatComponentExt)mc.gui.getChat()).getRefreshing()) return;
-            if (mc.gui.getChat().isChatFocused() && ((IChatComponentAccessor)mc.gui.getChat()).getChatScrollbarPos() != 0) return;
+            if (((IChatComponentExt)mc.gui.hud.getChat()).getRefreshing()) return;
+            if (mc.gui.hud.getChat().isChatFocused() && ((IChatComponentAccessor)mc.gui.hud.getChat()).getChatScrollbarPos() != 0) return;
             ChattingEnthusiast.chatting().setChatOffset(ChattingEnthusiast.chatting().getChatOffset() + 9);
         }
     }
     private boolean matchesFilter(GuiMessage.Line line) {
-        IChatComponentAccessor cca = (IChatComponentAccessor) mc.gui.getChat();
+        IChatComponentAccessor cca = (IChatComponentAccessor) mc.gui.hud.getChat();
         GuiMessage msg = ChatUtil.getMessageFromLine(line, cca.getAllMessages());
         if (msg == null) return false;
         return matchesFilter(msg);
@@ -116,7 +116,7 @@ public class ChatFilter {
             List<GuiMessage.Line> trimmedSnapshot;
             List<GuiMessage> allSnapshot;
             List<GuiMessage.Line> filtered = new ArrayList<>();
-            IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.getChat());
+            IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
             synchronized (chatTrimLock) {
                 trimmedSnapshot = new ArrayList<>(cca.getTrimmedMessages());
                 allSnapshot = new ArrayList<>(cca.getAllMessages());
@@ -145,7 +145,7 @@ public class ChatFilter {
         }
 
         if (resetScroll)
-            mc.gui.getChat().resetChatScroll();
+            mc.gui.hud.getChat().resetChatScroll();
     }
 
     public TabFilter getFilter() {
@@ -163,7 +163,7 @@ public class ChatFilter {
         filter = TabFilter.NONE;
         searchCriteria = "";
         searchCriteriaLower = "";
-        mc.gui.getChat().resetChatScroll();
+        mc.gui.hud.getChat().resetChatScroll();
     }
 
     public enum TabFilter {

@@ -45,7 +45,7 @@ public class DeleteElement extends AbstractGuiElement {
 
     @Override
     public void onClick() {
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
+        ChatComponent cc = Minecraft.getInstance().gui.hud.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         List<GuiMessage.Line> effLines = ChattingEnthusiast.chatting().getEffectiveLines();
         List<GuiMessage.Line> trimmedLines = cca.getTrimmedMessages();

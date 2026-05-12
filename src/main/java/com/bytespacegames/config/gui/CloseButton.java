@@ -18,7 +18,7 @@ public class CloseButton extends RectangleElement {
     }
 
     public void onClick() {
-        if (Minecraft.getInstance().screen == null) return;
-        Minecraft.getInstance().screen.onClose();
+        if (Minecraft.getInstance().gui.screen() == null) return;
+        Minecraft.getInstance().gui.screen().onClose();
     }
 }

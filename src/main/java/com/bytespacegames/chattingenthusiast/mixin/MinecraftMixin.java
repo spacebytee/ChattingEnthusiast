@@ -15,9 +15,9 @@ public class MinecraftMixin {
     @Inject(method="tick", at=@At("HEAD"))
     public void tick(CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
-        if (ChattingEnthusiast.INSTANCE.shouldOpenGui && mc.level != null && mc.screen == null) {
+        if (ChattingEnthusiast.INSTANCE.shouldOpenGui && mc.level != null && mc.gui.screen() == null) {
             ChattingEnthusiast.INSTANCE.shouldOpenGui = false;
-            mc.execute(() -> mc.setScreen(new ConfigGui(ChattingSettingsManager.INSTANCE)));
+            mc.execute(() -> mc.gui.setScreen(new ConfigGui(ChattingSettingsManager.INSTANCE)));
         }
         if (FabricLoader.getInstance().isModLoaded("nochatreports")) {
             ChattingEnthusiast.chatting().tick();

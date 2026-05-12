@@ -4,13 +4,13 @@ import com.bytespacegames.chattingenthusiast.ChatFilter;
 import com.bytespacegames.chattingenthusiast.ChattingEnthusiast;
 import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.config.settings.BooleanSetting;
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(Gui.class)
+@Mixin(Hud.class)
 public class GuiMixin {
     @Redirect(
             method = "onDisconnected",

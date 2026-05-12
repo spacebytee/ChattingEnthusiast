@@ -69,7 +69,7 @@ public class CopyElement extends AbstractGuiElement {
     @Override
     public void onClick() {
         Window window = Minecraft.getInstance().getWindow();
-        ChatComponent cc = Minecraft.getInstance().gui.getChat();
+        ChatComponent cc = Minecraft.getInstance().gui.hud.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // image
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {

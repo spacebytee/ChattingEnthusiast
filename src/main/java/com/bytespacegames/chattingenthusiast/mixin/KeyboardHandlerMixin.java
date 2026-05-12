@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardHandlerMixin {
     @Inject(method="charTyped", at=@At("HEAD"))
     public void mixin$charTyped(long l, CharacterEvent characterEvent, CallbackInfo ci) {
-        if (Minecraft.getInstance().screen instanceof ChatScreen) {
+        if (Minecraft.getInstance().gui.screen() instanceof ChatScreen) {
             ChattingEnthusiast.chatting().charTyped(characterEvent);
         }
     }

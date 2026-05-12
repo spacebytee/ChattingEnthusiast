@@ -95,10 +95,10 @@ public class ChattingEnthusiast implements ClientModInitializer {
 	}
 
 	public int getHoveredMessage(int mouseX, int mouseY) {
-		if (!(mc.screen instanceof ChatScreen)) {
+		if (!(mc.gui.screen() instanceof ChatScreen)) {
 			return -1;
 		}
-		ChatComponent cc = mc.gui.getChat();
+		ChatComponent cc = mc.gui.hud.getChat();
 		IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
 		int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
 		int effectiveWidth = scaleOffset + 8 + 4;
@@ -106,7 +106,7 @@ public class ChattingEnthusiast implements ClientModInitializer {
 		int buttons = ChattingSettingsManager.INSTANCE.getSettingToggledById("linecontrols") ? (filter.unfiltered() ? 2 : 3) : 0;
 		if (mouseX > effectiveWidth + (1 + cca.mixin$getLineHeight()) * buttons) return -1;
 		int scrollBarOffset = cca.getChatScrollbarPos();
-		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.getChat()).mixin$getScale();
+		double chatHeight = cca.mixin$getLineHeight() * ((IChatComponentAccessor)mc.gui.hud.getChat()).mixin$getScale();
 		// mouse offset is the pixels away from the bottom of the chat your mouse is at
 		int constantOffset = ChattingSettingsManager.INSTANCE.getSettingToggledById("raisedchat") ? ChattingEnthusiast.OFFSET_CHAT_HEIGHT : 0;
 		int mouseOffset = (mc.getWindow().getGuiScaledHeight() - mouseY) - 40 + constantOffset + (int) chatting.getChatOffset();
