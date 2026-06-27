@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import dev.dediamondpro.chatshot.util.ChatCopyUtil;
 
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
@@ -74,7 +75,7 @@ public class CopyElement extends AbstractGuiElement {
         // image
         if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {
             GuiMessage.Line line = ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos());
-            //ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
+            ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
             return;
         }
         // single line
