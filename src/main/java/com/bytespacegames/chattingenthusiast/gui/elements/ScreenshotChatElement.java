@@ -5,9 +5,9 @@ import com.bytespacegames.chattingenthusiast.ChattingSettingsManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.gui.elements.AbstractGuiElement;
+import dev.dediamondpro.chatshot.util.ChatCopyUtil;
 import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +51,6 @@ public class ScreenshotChatElement extends AbstractGuiElement {
              i++) {
             lines.addFirst(effectiveLines.get(i));
         }
-        //ChatCopyUtil.copyImage(lines, Minecraft.getInstance());
+        ChatCopyUtil.copyImage(lines, Minecraft.getInstance());
     }
 }
