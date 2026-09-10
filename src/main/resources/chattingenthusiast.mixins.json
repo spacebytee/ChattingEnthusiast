@@ -1,12 +1,8 @@
 {
   "required": true,
   "package": "com.bytespacegames.chattingenthusiast.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "plugin": "com.bytespacegames.chattingenthusiast.mixin.CompatibilityPlugin",
-  "mixins": [
-    "ChatComponentMixin",
-    "KeyboardHandlerMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   },
@@ -23,6 +19,8 @@
     "IChatComponentAccessor",
     "IChatScreenAccessor",
     "MinecraftMixin",
-    "ScreenMixin"
+    "ScreenMixin",
+    "ChatComponentMixin",
+    "KeyboardHandlerMixin"
   ]
 }

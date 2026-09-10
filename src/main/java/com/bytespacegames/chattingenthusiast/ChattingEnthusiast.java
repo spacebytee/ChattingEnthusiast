@@ -3,13 +3,14 @@ package com.bytespacegames.chattingenthusiast;
 import com.bytespacegames.chattingenthusiast.compactchat.CompactChatManager;
 import com.bytespacegames.gui.GuiManager;
 import com.bytespacegames.chattingenthusiast.mixin.IChatComponentAccessor;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+//import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+//import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+//import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+//import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,6 @@ import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,11 +53,11 @@ public class ChattingEnthusiast implements ClientModInitializer {
         KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("chattingenthusiast", "chattingenthusiast"));
 		chatPeekBind = new KeyMapping(
 				"key.chattingenthusiast.chatpeek",
-				GLFW.GLFW_KEY_Z,
+				InputConstants.KEY_Z,
                 CATEGORY
 		);
-		if (FabricLoader.getInstance().isModLoaded("fabric-api"))
-			KeyMappingHelper.registerKeyMapping(chatPeekBind);
+		/*if (FabricLoader.getInstance().isModLoaded("fabric-api"))
+			KeyMappingHelper.registerKeyMapping(chatPeekBind);*/
 	}
 
 	public KeyMapping getChatPeekBind() {
@@ -69,11 +69,11 @@ public class ChattingEnthusiast implements ClientModInitializer {
 			return;
 		}
 		try {
-			ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			/*ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 				LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal("chatting")
 						.executes(this::openGui);
 				dispatcher.register(cmd);
-			});
+			});*/
 		} catch (Throwable ignored) {
 
 		}

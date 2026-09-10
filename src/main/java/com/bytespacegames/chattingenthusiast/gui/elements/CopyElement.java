@@ -13,11 +13,10 @@ import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import dev.dediamondpro.chatshot.util.ChatCopyUtil;
+//import dev.dediamondpro.chatshot.util.ChatCopyUtil;
 
 import static com.bytespacegames.gui.GuiUtil.drawRect;
 
@@ -73,13 +72,13 @@ public class CopyElement extends AbstractGuiElement {
         ChatComponent cc = Minecraft.getInstance().gui.hud.getChat();
         IChatComponentAccessor cca = (IChatComponentAccessor) (cc);
         // image
-        if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_SHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {
+        if (InputConstants.isKeyDown(InputConstants.KEY_LSHIFT) && FabricLoader.getInstance().isModLoaded("chatshot")) {
             GuiMessage.Line line = ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos());
-            ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
+            //ChatCopyUtil.copyImage(ChatUtil.getLinesFromMessage(ChatUtil.getMessageFromLine(line)),Minecraft.getInstance());
             return;
         }
         // single line
-        if (InputConstants.isKeyDown(window, GLFW.GLFW_KEY_LEFT_CONTROL)) {
+        if (InputConstants.isKeyDown(InputConstants.KEY_LCONTROL)) {
             setClipboard(ChatUtil.cleanUpMessage(ChatUtil.getPlainText(ChattingEnthusiast.chatting().getEffectiveLines().get(messageIndex + cca.getChatScrollbarPos()).content())));
             return;
         }

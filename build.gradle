@@ -23,8 +23,8 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	implementation files("$buildDir/libs/chatshot.jar")
+	//implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	//implementation files("$buildDir/libs/chatshot.jar")
 }
 
 processResources {
@@ -86,4 +86,4 @@ tasks.register("downloadJarToLibs") {
 		}
 	}
 }
-build.dependsOn("downloadJarToLibs")
+//build.dependsOn("downloadJarToLibs")

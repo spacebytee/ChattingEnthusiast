@@ -43,6 +43,8 @@ public class ChattingGui {
     private final JumpElement jump;
     public WidgetElement search;
 
+    private long lastAnimationTime = 0;
+
     public List<GuiMessage.Line> getEffectiveLines() {
         if (ChattingEnthusiast.filter().unfiltered()) {
             IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
@@ -78,7 +80,11 @@ public class ChattingGui {
         chatContainer.addElement(chatTabs);
     }
     public void renderCustomLine(GuiManager gui, int x, int mx, int nx, int lineIndex, float opacity) {
-        if (animationTimer.hasTimeElapsed(GuiManager.ANIMATION_INTERVAL, true)) chatOffset /= 1.3;
+        float deltaTime = (System.currentTimeMillis() - lastAnimationTime) / 1000f;
+        lastAnimationTime = System.currentTimeMillis();
+        float exponentialBase = (float) Math.pow((1/1.3f),60);
+        chatOffset *= Math.pow(exponentialBase,deltaTime);
+
         IChatComponentAccessor cca = ((IChatComponentAccessor) mc.gui.hud.getChat());
         int scaleOffset = Mth.ceil(cca.mixin$getWidth() / mc.options.chatScale().get());
         float baseBackgroundOpacity = mc.options.textBackgroundOpacity().get().floatValue();
