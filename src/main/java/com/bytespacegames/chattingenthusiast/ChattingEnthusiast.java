@@ -7,10 +7,10 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-//import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-//import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
-//import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-//import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -56,8 +56,8 @@ public class ChattingEnthusiast implements ClientModInitializer {
 				InputConstants.KEY_Z,
                 CATEGORY
 		);
-		/*if (FabricLoader.getInstance().isModLoaded("fabric-api"))
-			KeyMappingHelper.registerKeyMapping(chatPeekBind);*/
+		if (FabricLoader.getInstance().isModLoaded("fabric-api"))
+			KeyMappingHelper.registerKeyMapping(chatPeekBind);
 	}
 
 	public KeyMapping getChatPeekBind() {
@@ -69,11 +69,11 @@ public class ChattingEnthusiast implements ClientModInitializer {
 			return;
 		}
 		try {
-			/*ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 				LiteralArgumentBuilder<FabricClientCommandSource> cmd = ClientCommands.literal("chatting")
 						.executes(this::openGui);
 				dispatcher.register(cmd);
-			});*/
+			});
 		} catch (Throwable ignored) {
 
 		}

@@ -43,7 +43,7 @@ public class ChattingGui {
     private final JumpElement jump;
     public WidgetElement search;
 
-    private long lastAnimationTime = 0;
+    private long lastAnimationTime = -1;
 
     public List<GuiMessage.Line> getEffectiveLines() {
         if (ChattingEnthusiast.filter().unfiltered()) {
@@ -80,6 +80,7 @@ public class ChattingGui {
         chatContainer.addElement(chatTabs);
     }
     public void renderCustomLine(GuiManager gui, int x, int mx, int nx, int lineIndex, float opacity) {
+        if (lastAnimationTime < 0) lastAnimationTime = System.currentTimeMillis();
         float deltaTime = (System.currentTimeMillis() - lastAnimationTime) / 1000f;
         lastAnimationTime = System.currentTimeMillis();
         float exponentialBase = (float) Math.pow((1/1.3f),60);

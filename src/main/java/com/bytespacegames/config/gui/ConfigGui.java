@@ -111,7 +111,7 @@ public class ConfigGui extends Screen {
         return false;
     }
     public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
-        if (mouseButtonEvent.button() == 0) {
+        if (mouseButtonEvent.button() == 1) {
             if (anyChildExpanded(container)) {
                 expandedChild.onClick();
             } else {

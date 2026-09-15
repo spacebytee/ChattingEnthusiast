@@ -29,7 +29,7 @@ public class ChatScreenMixin {
             at = @At("HEAD")
     )
     public void mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
-        if (mouseButtonEvent.button() == 0) {
+        if (mouseButtonEvent.button() == 1) {
             ChattingEnthusiast.chatting().onClick();
         }
     }
